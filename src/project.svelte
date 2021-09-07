@@ -5,6 +5,9 @@
     export let fileName;
     export let bucketName;
 
+    function update() {
+        alert("Not implemented");
+    }
 </script>
 
 <div class="card-container">
@@ -22,8 +25,7 @@
                 <Label>View</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>
-            <Button>
-            <!-- <Button> on:click={() => clicked++}> -->
+            <Button on:click={update}>
                 <Label>Update</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>

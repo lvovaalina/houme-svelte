@@ -5,14 +5,18 @@
     export let fileName;
     export let bucketName;
 
+    function update() {
+        alert("Not implemented");
+    }
+
 </script>
 
 <div class="card-container">
     <Card outline>
         <Content>
             <h2 class="mdc-typography--headline6" style="margin: 0;">
-				Project
-			</h2>
+                Project
+            </h2>
             <p>File: {fileName}</p>
             <p>Bucket: {bucketName}</p>
         </Content>
@@ -22,8 +26,7 @@
                 <Label>View</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>
-            <Button>
-            <!-- <Button> on:click={() => clicked++}> -->
+            <Button on:click={update}>
                 <Label>Update</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>
@@ -32,7 +35,4 @@
 </div>
 
 <style>
-    .card-container p, .card-container h2 {
-        text-align: start;
-    }
 </style>

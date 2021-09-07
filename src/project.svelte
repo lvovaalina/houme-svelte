@@ -8,14 +8,15 @@
     function update() {
         alert("Not implemented");
     }
+
 </script>
 
 <div class="card-container">
     <Card outline>
         <Content>
             <h2 class="mdc-typography--headline6" style="margin: 0;">
-				Project
-			</h2>
+                Project
+            </h2>
             <p>File: {fileName}</p>
             <p>Bucket: {bucketName}</p>
         </Content>
@@ -34,7 +35,4 @@
 </div>
 
 <style>
-    .card-container p, .card-container h2 {
-        text-align: start;
-    }
 </style>

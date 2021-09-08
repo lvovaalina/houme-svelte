@@ -1,12 +1,20 @@
 <script>
-import Dashboard from "./dashboard.svelte";
+	import Dashboard from "./dashboard.svelte";
+	import ForgeViewer from "./forge-viewer.svelte";
+	import { Router, Route, Link } from "svelte-navigator"
 
 	import Header from "./header.svelte"
+
+	export let url = "";
 </script>
 
 <main>
-	<Header/>
-	<Dashboard/>
+	
+	<Router url="{url}">
+		<Header/>
+		<Route path="view" component="{ForgeViewer}" />
+    	<Route path="/"><Dashboard/></Route>
+	</Router>
 </main>
 
 <style>

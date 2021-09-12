@@ -1,7 +1,7 @@
 <script>
 	import Dashboard from "./dashboard.svelte";
 	import ForgeViewer from "./forge-viewer.svelte";
-	import { Router, Route, Link } from "svelte-navigator"
+	import { Router, Route} from "svelte-navigator"
 
 	import Header from "./header.svelte"
 

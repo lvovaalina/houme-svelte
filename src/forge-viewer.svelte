@@ -6,6 +6,8 @@
     let forgeViewerElement;
     let viewer;
 
+    export let urn;
+
     function onDocumentLoadSuccess(doc) {
         let viewable = doc.getRoot().getDefaultGeometry();
         if (viewable) {
@@ -61,7 +63,7 @@
             viewer.start();
             // Load the document into the viewer.
             Autodesk.Viewing.Document.load(
-                'urn:'+ 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6aG91bWUtdGVzdC9tb2RlbC5ydnQ',
+                'urn:'+ urn,
                 onDocumentLoadSuccess.bind(this),
                 onDocumentLoadFailure.bind(this));
         });

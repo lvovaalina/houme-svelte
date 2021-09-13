@@ -1,21 +1,16 @@
 <script>
-    import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar"
-    import { Link } from "svelte-navigator"
+    import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
+    import IconButton from "@smui/icon-button";
+    import { Icon } from "@smui/common";
 </script>
-
 
 <div class="flexy">
     <div class="top-app-bar-container">
         <TopAppBar variant="static">
             <Row>
                 <Section>
-                    <Title>Houme Admin</Title>
-                </Section>
-                <Section align="end">
-                    <nav>
-                        <Link to="/">Home</Link>
-			            <Link to="view">View</Link>
-                    </nav>
+                    <IconButton href="/"><Icon class="material-icons">house</Icon></IconButton>
+                    <Title href="/">Houme Admin</Title>
                 </Section>
             </Row>
         </TopAppBar>
@@ -23,4 +18,7 @@
 </div>
 
 <style>
+    .top-app-bar-container button {
+        margin: 0;
+    }
 </style>

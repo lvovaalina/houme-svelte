@@ -4,6 +4,7 @@
 
     export let fileName;
     export let bucketName;
+    export let urn;
 
     function update() {
         alert("Not implemented");
@@ -21,8 +22,7 @@
             <p>Bucket: {bucketName}</p>
         </Content>
         <Actions fullBleed>
-            <Button>
-            <!-- <Button on:click={() => clicked++}> -->
+            <Button href="/view/{urn}">
                 <Label>View</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>
@@ -35,4 +35,7 @@
 </div>
 
 <style>
+    .card-container a{
+        text-decoration: none;
+    } 
 </style>

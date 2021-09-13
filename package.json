@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --host --no-clear"
+    "start": "node server.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
@@ -23,6 +23,8 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@smui/common": "^4.2.0",
+    "@smui/icon-button": "^4.2.0",
     "express": "^4.17.1",
     "sirv-cli": "^1.0.0",
     "svelte-file-dropzone": "^0.0.15",

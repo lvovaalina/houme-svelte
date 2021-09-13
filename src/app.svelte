@@ -1,7 +1,7 @@
 <script>
 	import Dashboard from "./dashboard.svelte";
 	import ForgeViewer from "./forge-viewer.svelte";
-	import { Router, Route} from "svelte-navigator"
+	import { Router, Route } from "svelte-navigator"
 
 	import Header from "./header.svelte"
 
@@ -9,10 +9,9 @@
 </script>
 
 <main>
-	
 	<Router url="{url}">
 		<Header/>
-		<Route path="view" component="{ForgeViewer}" />
+		<Route path="view/:urn" component="{ForgeViewer}" />
     	<Route path="/"><Dashboard/></Route>
 	</Router>
 </main>

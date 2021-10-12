@@ -4,7 +4,7 @@
     import Upload from "./upload.svelte";
     import { onMount } from 'svelte';
     
-    let apiURL = "https://houme-api.herokuapp.com/projects"
+    let apiURL = "http://localhost:10000/projects"
     export let projects = [];
 
     onMount(async function() {
@@ -15,13 +15,15 @@
     export let BaseBucketName = "houme";
 
     function addProject(event) {
-        const fileName = event.detail;
-        let newProject = {
-            fileName: fileName,
-            bucketName: BaseBucketName
-        }
+        if (event.detail) {
+            const fileName = event.detail.fileName;
+            let newProject = {
+                fileName: fileName,
+                bucketName: BaseBucketName
+            }
 
-        projects = projects.concat(newProject);
+            projects = projects.concat(newProject);
+        }
     }
 </script>
 
@@ -29,7 +31,10 @@
     <LayoutGrid>
         {#each projects as project}
             <Cell>
-                <Project fileName="{project.fileName}" bucketName="{project.bucketName}" urn="{project.urn}"/>
+                <Project
+                    fileName="{project.fileName}"
+                    bucketName="{project.bucketName}"
+                    urn="{project.urn}"/>
             </Cell>
         {/each}
         <Cell>

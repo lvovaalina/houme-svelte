@@ -10,6 +10,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
+    "@rollup/plugin-replace": "^3.0.0",
     "@smui/banner": "^4.2.0",
     "@smui/button": "^4.2.0",
     "@smui/card": "^4.2.0",
@@ -20,7 +21,8 @@
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
-    "svelte": "^3.0.0"
+    "svelte": "^3.0.0",
+    "svelte-loading-spinners": "^0.1.7"
   },
   "dependencies": {
     "@smui/common": "^4.2.0",

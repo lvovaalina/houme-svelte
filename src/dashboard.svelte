@@ -3,25 +3,32 @@
     import LayoutGrid, { Cell } from "@smui/layout-grid"
     import Upload from "./upload.svelte";
     import { onMount } from 'svelte';
+
+    const api = isProduction
+        ? "https://houme-api.herokuapp.com/projects"
+        : "http://localhost:10000/projects";
     
-    let apiURL = "https://houme-api.herokuapp.com/projects"
     export let projects = [];
 
     onMount(async function() {
-        const response = await fetch(apiURL);
+        const response = await fetch(api);
         projects = await response.json();
+
+        console.log(process.env);
     });
 
     export let BaseBucketName = "houme";
 
     function addProject(event) {
-        const fileName = event.detail;
-        let newProject = {
-            fileName: fileName,
-            bucketName: BaseBucketName
-        }
+        if (event.detail) {
+            const fileName = event.detail.fileName;
+            let newProject = {
+                fileName: fileName,
+                bucketName: BaseBucketName
+            }
 
-        projects = projects.concat(newProject);
+            projects = projects.concat(newProject);
+        }
     }
 </script>
 
@@ -29,7 +36,10 @@
     <LayoutGrid>
         {#each projects as project}
             <Cell>
-                <Project fileName="{project.fileName}" bucketName="{project.bucketName}" urn="{project.urn}"/>
+                <Project
+                    fileName="{project.fileName}"
+                    bucketName="{project.bucketName}"
+                    urn="{project.urn}"/>
             </Cell>
         {/each}
         <Cell>

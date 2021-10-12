@@ -5,7 +5,9 @@
     import Dropzone from "svelte-file-dropzone";
     import { Jumper } from 'svelte-loading-spinners'
 
-    const api = "http://localhost:10000";
+    const api = isProduction
+        ? "https://houme-api.herokuapp.com"
+        : "http://localhost:10000";
 
     let isLoading = false;
 

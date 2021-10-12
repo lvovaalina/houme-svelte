@@ -3,13 +3,18 @@
     import LayoutGrid, { Cell } from "@smui/layout-grid"
     import Upload from "./upload.svelte";
     import { onMount } from 'svelte';
+
+    const api = isProduction
+        ? "https://houme-api.herokuapp.com/projects"
+        : "http://localhost:10000/projects";
     
-    let apiURL = "http://localhost:10000/projects"
     export let projects = [];
 
     onMount(async function() {
-        const response = await fetch(apiURL);
+        const response = await fetch(api);
         projects = await response.json();
+
+        console.log(process.env);
     });
 
     export let BaseBucketName = "houme";

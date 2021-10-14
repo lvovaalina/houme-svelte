@@ -10,14 +10,12 @@
     const api = isProduction
         ? "https://houme-api.herokuapp.com/projects"
         : "http://localhost:10000/projects";
-    
+
     export let projects = [];
 
     onMount(async function() {
         const response = await fetch(api);
         projects = await response.json();
-
-        console.log(process.env);
     });
 
     export let BaseBucketName = "houme";
@@ -44,10 +42,22 @@
                 }
                 projects = projects.concat(newProject);
                 addNotification({
-                        text: fileName + ' added!',
-                        position: 'top-center',
-                    })
+                    text: fileName + ' added!',
+                    position: 'top-center',
+                });
             }
+        }
+    }
+
+    function deleteProject(event) {
+        if (event.detail) {
+            const fileName = event.detail.fileName;
+
+            projects = projects.filter(item => item.fileName != fileName);
+            addNotification({
+                text: fileName + ' deleted!',
+                position: 'top-center',
+            });
         }
     }
 </script>
@@ -56,7 +66,7 @@
     <LayoutGrid>
         {#each projects as project}
             <Cell>
-                <Project
+                <Project on:delete={deleteProject}
                     fileName="{project.fileName}"
                     bucketName="{project.bucketName}"
                     urn="{project.urn}"/>

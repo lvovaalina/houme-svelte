@@ -2,12 +2,31 @@
     import Button, { Label } from "@smui/button"
     import Card, { Content, Actions } from "@smui/card"
 
+    import { createEventDispatcher } from "svelte";
+
     export let fileName;
     export let bucketName;
     export let urn;
 
+    const api = isProduction
+        ? "https://houme-api.herokuapp.com"
+        : "http://localhost:10000";
+
+    const dispatch = createEventDispatcher();
+
     function deleteProject() {
-        alert("Not implemented");
+        fetch(api + '/deleteFile', {
+            method: 'DELETE',
+            body: JSON.stringify({ fileName : fileName })
+        })
+        .then((response) => {
+            if (response.ok) {
+                dispatch("delete", { fileName: fileName})
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     }
 
 </script>

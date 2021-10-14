@@ -3,6 +3,9 @@
     import LayoutGrid, { Cell } from "@smui/layout-grid"
     import Upload from "./upload.svelte";
     import { onMount } from 'svelte';
+    import { getNotificationsContext } from 'svelte-notifications';
+
+    const { addNotification } = getNotificationsContext();
 
     const api = isProduction
         ? "https://houme-api.herokuapp.com/projects"
@@ -22,12 +25,29 @@
     function addProject(event) {
         if (event.detail) {
             const fileName = event.detail.fileName;
-            let newProject = {
-                fileName: fileName,
-                bucketName: BaseBucketName
-            }
+            let isUpdated = false;
 
-            projects = projects.concat(newProject);
+            projects.forEach(element => {
+                if (element.fileName == fileName) {
+                    isUpdated = true;
+                    addNotification({
+                        text: fileName + ' updated!',
+                        position: 'top-center',
+                    })
+                }
+            });
+
+            if (!isUpdated) {
+                let newProject = {
+                    fileName: fileName,
+                    bucketName: BaseBucketName
+                }
+                projects = projects.concat(newProject);
+                addNotification({
+                        text: fileName + ' added!',
+                        position: 'top-center',
+                    })
+            }
         }
     }
 </script>

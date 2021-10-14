@@ -6,7 +6,7 @@
     export let bucketName;
     export let urn;
 
-    function update() {
+    function deleteProject() {
         alert("Not implemented");
     }
 
@@ -26,8 +26,8 @@
                 <Label>View</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>
-            <Button on:click={update}>
-                <Label>Update</Label>
+            <Button on:click={deleteProject}>
+                <Label>Delete</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>
         </Actions>

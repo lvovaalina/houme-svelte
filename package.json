@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "sirv-cli": "^1.0.0",
     "svelte-file-dropzone": "^0.0.15",
-    "svelte-navigator": "^3.1.5"
+    "svelte-navigator": "^3.1.5",
+    "svelte-notifications": "^0.9.91"
   }
 }

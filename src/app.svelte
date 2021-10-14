@@ -6,14 +6,17 @@
 	import Header from "./header.svelte"
 
 	export let url = "";
+	import Notifications from 'svelte-notifications';
 </script>
 
 <main>
+	<Notifications>
 	<Router url="{url}">
 		<Header/>
 		<Route path="view/:urn" component="{ForgeViewer}" />
     	<Route path="/"><Dashboard/></Route>
 	</Router>
+	</Notifications>
 </main>
 
 <style>

@@ -37,7 +37,7 @@
             return fetch(api + '/translate', {
                 method: 'POST',
                 body: JSON.stringify({ fileName : file.name })
-            })
+            });
         }).then((response) => {
             if (response.ok) {
                 return response.json();

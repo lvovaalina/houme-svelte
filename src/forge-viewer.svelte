@@ -1,6 +1,5 @@
 <script>
     import { onMount } from 'svelte';
-    import LayoutGrid, { Cell } from "@smui/layout-grid"
 
     let resp;
     let forgeViewerElement;
@@ -70,17 +69,8 @@
     });
 </script>
 
-<h1>Project view</h1>
-<LayoutGrid>
-    <Cell span={7}>
-        <div bind:this={forgeViewerElement} class="forge-viewer">
-        </div>
-    </Cell>
-    <Cell span={5}>
-        <h2>Project Information</h2>
-    </Cell>
-
-</LayoutGrid>
+<div bind:this={forgeViewerElement} class="forge-viewer">
+</div>
 
 
 

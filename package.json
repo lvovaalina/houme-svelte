@@ -14,7 +14,9 @@
     "@smui/banner": "^4.2.0",
     "@smui/button": "^4.2.0",
     "@smui/card": "^4.2.0",
+    "@smui/data-table": "^5.0.0-beta.7",
     "@smui/layout-grid": "^4.2.0",
+    "@smui/list": "^5.0.0-beta.7",
     "@smui/top-app-bar": "^4.2.0",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",
@@ -22,7 +24,8 @@
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "svelte": "^3.0.0",
-    "svelte-loading-spinners": "^0.1.7"
+    "svelte-loading-spinners": "^0.1.7",
+    "svelte-preprocess": "^4.9.8"
   },
   "dependencies": {
     "@smui/common": "^4.2.0",

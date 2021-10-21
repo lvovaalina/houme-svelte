@@ -1,12 +1,12 @@
 <script>
-	import Dashboard from "./dashboard.svelte";
+	import Dashboard from "./dashboard/dashboard.svelte";
 	import { Router, Route } from "svelte-navigator"
 
-	import Header from "./header.svelte"
+	import Header from "./common/header.svelte"
 
 	export let url = "";
 	import Notifications from 'svelte-notifications';
-import ProjectViewer from "./project-viewer.svelte";
+import ProjectViewer from "./project/project-viewer.svelte";
 </script>
 
 <main>

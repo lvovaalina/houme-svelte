@@ -4,7 +4,6 @@
     import Upload from "./upload.svelte";
     import { onMount } from 'svelte';
     import { getNotificationsContext } from 'svelte-notifications';
-    import List, { Item, Separator, Text } from '@smui/list';
 
     const { addNotification } = getNotificationsContext();
 

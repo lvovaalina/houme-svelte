@@ -72,11 +72,8 @@
 <div bind:this={forgeViewerElement} class="forge-viewer">
 </div>
 
-
-
 <style>
     .forge-viewer {
-        padding-left: 2em;
         position: relative;
         height: 450px;
     }

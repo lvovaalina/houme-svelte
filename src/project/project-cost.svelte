@@ -1,11 +1,27 @@
 <script>
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
     import LayoutGrid, { Cell as GridCell} from '@smui/layout-grid';
+    import { onMount } from "svelte";
 
     export let stages;
     export let projectProperties;
 
     let columns = ['Stage', 'Cost', 'Value', 'Unit', 'People', 'Duration'];
+    let jobsCost = 0;
+    let estimation = 0;
+    let materialsCost = 0;
+
+    onMount(() => {
+        stages.forEach(stage => {
+            jobsCost += stage.cost;
+            estimation += stage.time;
+        });
+
+        projectProperties.forEach(prop => {
+            materialsCost += prop.cost;
+        })
+    });
+    
 
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);
@@ -17,8 +33,14 @@
 
 <div class="project-cost">
     <LayoutGrid>
-        <GridCell span={6}>
-            <h2>Processes</h2>
+        <GridCell class="" span={6}>
+            <div class="table-caption">
+                <h2>Processes</h2>
+                <div>
+                    <p>Cost: {jobsCost}$ | Estimation: {estimation}days</p>
+                </div>
+            </div>
+            
             <DataTable
                 stickyHeader table$aria-label="Construction Stages"
                 class="project-stages">
@@ -56,7 +78,12 @@
             </DataTable>
         </GridCell>
         <GridCell span={6}>
-            <h2>Materials</h2>
+            <div class="table-caption">
+                <h2>Materials</h2>
+                <div>
+                    <p>Cost: {materialsCost}$</p>
+                </div>
+            </div>
             <DataTable
                 stickyHeader table$aria-label="House Parameters"
                 style="width:100%;"
@@ -83,6 +110,26 @@
 </div>
 
 <style>
+
+    .table-caption {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .table-caption p {
+        display: flex;
+    }
+
+    :global(.project-stages, .project-materials) {
+        width: 100%;
+    }
+
+    @media (max-width: 839px) {
+        :global(.project-stages, .project-materials) {
+            overflow: scroll;
+        }
+    }
     
     :global(.hidden-subtasks) {
         display: none;

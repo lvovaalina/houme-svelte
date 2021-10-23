@@ -1,12 +1,13 @@
 <script>
 	import Dashboard from "./dashboard/dashboard.svelte";
-	import { Router, Route } from "svelte-navigator"
+	import { Router, Route } from "svelte-navigator";
+	import "../node_modules/svelte-gantt/css/svelteGantt.css";
 
-	import Header from "./common/header.svelte"
+	import Header from "./common/header.svelte";
 
 	export let url = "";
 	import Notifications from 'svelte-notifications';
-import ProjectViewer from "./project/project-viewer.svelte";
+	import ProjectViewer from "./project/project-viewer.svelte";
 </script>
 
 <main>
@@ -22,7 +23,6 @@ import ProjectViewer from "./project/project-viewer.svelte";
 <style>
 	main {
 		text-align: center;
-		max-width: 240px;
 		margin: 0 auto;
 	}
 

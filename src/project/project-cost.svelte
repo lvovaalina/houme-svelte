@@ -17,8 +17,8 @@
 
 <div class="project-cost">
     <LayoutGrid>
-        <GridCell span={7}>
-            <h2>Stages</h2>
+        <GridCell span={6}>
+            <h2>Processes</h2>
             <DataTable
                 stickyHeader table$aria-label="Construction Stages"
                 class="project-stages">
@@ -55,7 +55,7 @@
                 </Body>
             </DataTable>
         </GridCell>
-        <GridCell span={5}>
+        <GridCell span={6}>
             <h2>Materials</h2>
             <DataTable
                 stickyHeader table$aria-label="House Parameters"

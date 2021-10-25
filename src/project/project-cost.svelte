@@ -1,12 +1,16 @@
 <script>
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
     import LayoutGrid, { Cell as GridCell} from '@smui/layout-grid';
+    import Tooltip, { Wrapper } from '@smui/tooltip';
+    import { Icon } from "@smui/common";
+
     import { onMount } from "svelte";
+    import IconButton from "@smui/icon-button/IconButton.svelte";
 
     export let stages;
     export let projectProperties;
 
-    let columns = ['Stage', 'Cost', 'Value', 'Unit', 'People', 'Duration'];
+    let columns = ['Color', 'Stage', 'Cost', 'Value', 'Unit', 'People', 'Duration'];
     let jobsCost = 0;
     let estimation = 0;
     let materialsCost = 0;
@@ -35,7 +39,7 @@
 
     <LayoutGrid class="costs-grid">
         <GridCell span={2}></GridCell>
-        <GridCell span={8} align='middle'>
+        <GridCell span={8}>
             <div class="table-caption">
                 <h2>Jobs</h2>
                 <div>
@@ -48,14 +52,25 @@
                 <Head>
                     <Row>
                     {#each columns as col}
-                        <Cell>{col}</Cell>
+                        {#if col == 'Color'}
+                            <Cell>
+                                {col}
+                                <Wrapper>
+                                    <Icon class="material-icons help-icon">help</Icon>
+                                    <Tooltip>Stage color in project timeline</Tooltip>
+                                </Wrapper>
+                            </Cell>
+                        {:else}
+                            <Cell>{col}</Cell>
+                        {/if}
                     {/each}
                     </Row>
                 </Head>
                 <Body>
                     {#each stages as stage}
-                        <Row on:click={rowClick(stage.code)} >
-                            <Cell class={stage.color}>{stage.name}</Cell>
+                        <Row on:click={rowClick(stage.code)}>
+                            <Cell class={stage.color}></Cell>
+                            <Cell>{stage.name}</Cell>
                             <Cell numeric>23</Cell>
                             <Cell numeric>33</Cell>
                             <Cell>sq.m</Cell>
@@ -65,7 +80,8 @@
                         {#if stage.tasks && stage.tasks.length !== 0}
                                 {#each stage.tasks as task}
                                     <Row class="hidden-subtasks {stage.code}">
-                                        <Cell class={stage.color}>{task.name}</Cell>
+                                        <Cell class={stage.color}></Cell>
+                                        <Cell>{task.name}</Cell>
                                         <Cell numeric>22</Cell>
                                         <Cell numeric>33</Cell>
                                         <Cell>sq.m</Cell>
@@ -84,6 +100,10 @@
 <style>
     :global(.costs-grid) {
         padding-top: 0;
+    }
+
+    :global(.help-icon) {
+        font-size: 14px;
     }
 
     .table-caption {

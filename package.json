@@ -21,6 +21,7 @@
     "@smui/select": "^5.0.0-beta.7",
     "@smui/tab": "^5.0.0-beta.7",
     "@smui/tab-bar": "^5.0.0-beta.7",
+    "@smui/tooltip": "^5.0.0-beta.7",
     "@smui/top-app-bar": "^4.2.0",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",

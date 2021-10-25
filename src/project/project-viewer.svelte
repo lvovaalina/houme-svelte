@@ -1,16 +1,18 @@
 <script lang="ts">
-    import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
     import LayoutGrid, { Cell as GridCell} from '@smui/layout-grid'
     import ForgeViewer from './forge-viewer.svelte';
     import { time } from '../utils';
-
+    import Button, { Label as ButtonLabel } from '@smui/button';
     import TabBar from '@smui/tab-bar';
     import Tab, { Label } from '@smui/tab';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
+import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte';
 
     export let urn;
     let active = 'Project View';
+    
+    let open = false;
 
     let projectProperties = [
         {
@@ -247,12 +249,17 @@
 
 <!-- svelte-ignore missing-declaration -->
 <div class="project-viewer">
-    <TabBar tabs={['Project View', 'Timeline', 'Costs']} let:tab bind:active>
+    <TabBar tabs={['Project View', 'Timeline', 'Jobs', 'Materials']} let:tab bind:active>
         <Tab {tab}>
             <Label>{tab}</Label>
         </Tab>
     </TabBar>
-    
+    <div class="manage-project-button-container">
+        <Button on:click={() => (open = true)}>
+            <ButtonLabel>Manage Project</ButtonLabel>
+        </Button>
+    </div>
+
     {#if active == 'Project View'}
     <LayoutGrid>
         <GridCell span={7}>
@@ -272,12 +279,18 @@
         <ProjectTimeline stages={stages}></ProjectTimeline>
     {/if}
 
-    {#if active == 'Costs'}
+    {#if active == 'Jobs'}
         <ProjectCost projectProperties={projectProperties} stages={stages}></ProjectCost>
     {/if}
+
+    <EditProjectPropertiesDialog bind:open={open} stages={stages} />
 </div>
 
 <style>
+    .manage-project-button-container {
+        text-align: center;
+    }
+
     h2 {
         margin-top: 0;
     }

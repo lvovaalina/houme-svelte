@@ -1,7 +1,6 @@
 <script>
     import { SvelteGantt, SvelteGanttDependencies, SvelteGanttExternal, SvelteGanttTable } from 'svelte-gantt';
     import { onMount } from 'svelte';
-    import { element, empty } from 'svelte/internal';
     import { time } from '../utils';
 
     export let stages;

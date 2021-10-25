@@ -22,7 +22,6 @@
 
 <style>
 	main {
-		text-align: center;
 		margin: 0 auto;
 	}
 

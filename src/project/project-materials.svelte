@@ -37,9 +37,9 @@
         <GridCell span={2}></GridCell>
         <GridCell span={8} align='middle'>
             <div class="table-caption">
-                <h2>Jobs</h2>
+                <h2>Materials</h2>
                 <div>
-                    <p>Cost: {jobsCost}$ | Estimation: {estimation}days</p>
+                    <p>Cost: {jobsCost}$</p>
                 </div>
             </div>
             <DataTable
@@ -54,7 +54,7 @@
                 </Head>
                 <Body>
                     {#each stages as stage}
-                        <Row on:click={rowClick(stage.code)} >
+                        <Row on:click={rowClick(stage.code)}>
                             <Cell class={stage.color}>{stage.name}</Cell>
                             <Cell numeric>23</Cell>
                             <Cell numeric>33</Cell>

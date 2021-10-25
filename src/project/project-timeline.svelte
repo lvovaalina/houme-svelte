@@ -30,14 +30,12 @@
         stages.forEach(element => {
             let parentRow = rows.find(row => row.label == element.name);
             if (element.tasks && element.tasks.length !== 0) {
-                let color = '';
                 element.tasks.forEach(task => {
                     let childRow = parentRow.children.find(child => child.label == task.name);
-                    let newTask = addTask(task, childRow.id, color);
-                    color = newTask.classes;
+                    addTask(task, childRow.id, element.color);
                 });
             } else {
-                addTask(element, parentRow.id);
+                addTask(element, parentRow.id, element.color);
             }
         });
     }
@@ -101,10 +99,7 @@
             props: options
         });
         translateStagesToRows();
-        console.log(rows);
-        console.log(tasks.length);
         translateStagesToTasks();
-        console.log(tasks);
 
         let data = {rows: rows, tasks: tasks};
 

@@ -2,6 +2,7 @@
 	import Dashboard from "./dashboard/dashboard.svelte";
 	import { Router, Route } from "svelte-navigator";
 	import "../node_modules/svelte-gantt/css/svelteGantt.css";
+	import "../public/material-colors.min.css";
 
 	import Header from "./common/header.svelte";
 

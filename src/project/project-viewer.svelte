@@ -7,7 +7,8 @@
     import Tab, { Label } from '@smui/tab';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
-import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte';
+    import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte';
+    import ProjectMaterials from './project-materials.svelte';
 
     export let urn;
     let active = 'Project View';
@@ -95,6 +96,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             cost: 600,
             time: 12,
             code: 'EXV',
+            color: 'bg-red-100',
             tasks: [
                 {
                     name: 'Removal of the fertile layer',
@@ -119,6 +121,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             cost: 600,
             time: 12,
             code: 'FND',
+            color: 'bg-pink-100',
             tasks: [
                 {
                     name: 'Backfilling of earth',
@@ -134,6 +137,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Walls',
             cost: 600,
             time: 12,
+            color: 'bg-purple-100',
             from: time('02-10'),
             to: time('02-16'),
         },
@@ -141,6 +145,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Roof',
             cost: 600,
             time: 12,
+            color: 'bg-deep-purple-100',
             from: time('02-10'),
             to: time('03-16'),
         },
@@ -148,6 +153,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Windows and windowsills',
             cost: 600,
             time: 12,
+            color: 'bg-indigo-100',
             from: time('03-10'),
             to: time('03-26'),
         },
@@ -155,6 +161,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'House insulation',
             cost: 600,
             time: 12,
+            color: 'bg-blue-100',
             from: time('03-20'),
             to: time('04-02'),
         },
@@ -162,6 +169,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Floor System',
             cost: 600,
             time: 12,
+            color: 'bg-light-blue-100',
             from: time('04-03'),
             to: time('04-16'),
         },
@@ -169,6 +177,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Stairs',
             cost: 600,
             time: 12,
+            color: 'bg-cyan-100',
             from: time('04-10'),
             to: time('05-30'), 
         },
@@ -176,6 +185,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Exterior decoration of the house',
             cost: 600,
             time: 12,
+            color: 'bg-teal-100',
             from: time('05-20'),
             to: time('06-16'),
         },
@@ -183,6 +193,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Floor',
             cost: 600,
             time: 12,
+            color: 'bg-green-100',
             from: time('06-10'),
             to: time('07-15'),
         },
@@ -190,6 +201,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Electrical wiring',
             cost: 600,
             time: 12,
+            color: 'bg-light-green-100',
             from: time('07-10'),
             to: time('07-28'),
         },
@@ -197,6 +209,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Interior decoration of the house',
             cost: 600,
             time: 12,
+            color: 'bg-lime-100',
             from: time('07-20'),
             to: time('08-15'),
         },
@@ -204,6 +217,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Doors',
             cost: 600,
             time: 12,
+            color: 'bg-yellow-100',
             from: time('08-20'),
             to: time('09-15'),
         },
@@ -211,6 +225,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Kitchen assembly, equipment installation',
             cost: 600,
             time: 12,
+            color: 'bg-amber-100',
             from: time('09-10'),
             to: time('10-30'),
         },
@@ -218,6 +233,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Lighting, switches',
             cost: 600,
             time: 12,
+            color: 'bg-orange-100',
             from: time('10-15'),
             to: time('11-15'),
         },
@@ -225,6 +241,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Furnishings',
             cost: 600,
             time: 12,
+            color: 'bg-deep-orange-100',
             from: time('11-14'),
             to: time('12-15'),
         },
@@ -232,6 +249,7 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
             name: 'Commissioning works',
             cost: 600,
             time: 12,
+            color: 'bg-brown-100',
             from: time('12-10'),
             to: time('12-25'),
         },
@@ -281,6 +299,10 @@ import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte
 
     {#if active == 'Jobs'}
         <ProjectCost projectProperties={projectProperties} stages={stages}></ProjectCost>
+    {/if}
+
+    {#if active == 'Materials'}
+        <ProjectMaterials projectProperties={projectProperties} stages={stages}></ProjectMaterials>
     {/if}
 
     <EditProjectPropertiesDialog bind:open={open} stages={stages} />

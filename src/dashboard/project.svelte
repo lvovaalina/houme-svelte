@@ -38,7 +38,7 @@
                 Project
             </h2>
             <p>File: {fileName}</p>
-            <p>Bucket: {bucketName}</p>
+            <p>Bucket: houmly</p>
         </Content>
         <Actions fullBleed>
             <Button href="/view/{urn}">

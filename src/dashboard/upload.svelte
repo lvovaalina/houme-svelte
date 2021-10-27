@@ -73,7 +73,7 @@
             <h2 class="mdc-typography--headline6" style="margin: 0;">
                 Upload Project
             </h2>
-            <p>Bucket: {bucketName}</p>
+            <p>Bucket: houmly</p>
 
             {#if isLoading}
             <div style="display: flex; justify-content: center">

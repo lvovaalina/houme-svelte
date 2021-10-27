@@ -5,6 +5,11 @@
     import { onMount } from 'svelte';
     import { getNotificationsContext } from 'svelte-notifications';
 
+    import AddProjectDialog from './add-project-dialog.svelte';
+
+    import Button, { Label as ButtonLabel } from '@smui/button';
+    export let openAddProjectDialog = false;
+
     const { addNotification } = getNotificationsContext();
 
     const api = isProduction
@@ -62,19 +67,24 @@
     }
 </script>
 
-<div class="card-display">
-    <LayoutGrid>
-        {#each projects as project}
+<div class="dashboard">
+    <Button on:click={() => (openAddProjectDialog = true)}>
+        <ButtonLabel>Add project</ButtonLabel>
+    </Button>
+    <div class="card-display">
+        <LayoutGrid>
+            {#each projects as project}
+                <Cell>
+                    <Project on:delete={deleteProject}
+                        fileName="{project.fileName}"
+                        bucketName="{project.bucketName}"
+                        urn="{project.urn}"/>
+                </Cell>
+            {/each}
             <Cell>
-                <Project on:delete={deleteProject}
-                    fileName="{project.fileName}"
-                    bucketName="{project.bucketName}"
-                    urn="{project.urn}"/>
+                <Upload bucketName="{BaseBucketName}" on:add={addProject}/>
             </Cell>
-        {/each}
-        <Cell>
-            <Upload bucketName="{BaseBucketName}" on:add={addProject}/>
-        </Cell>
-    </LayoutGrid>   
+        </LayoutGrid>
+    </div>
+    <AddProjectDialog open={openAddProjectDialog}></AddProjectDialog>
 </div>
-

@@ -1,84 +1,95 @@
 <script>
-    import Project from "./project.svelte";
     import LayoutGrid, { Cell } from "@smui/layout-grid"
-    import Upload from "./upload.svelte";
+    import Button, { Label as ButtonLabel } from '@smui/button';
+
+
     import { onMount } from 'svelte';
     import { getNotificationsContext } from 'svelte-notifications';
 
     import AddProjectDialog from './add-project-dialog.svelte';
+    import DeleteProjectDialog from './delete-project-dialog.svelte';
+    import Upload from "./upload.svelte";
+    import Project from "./project.svelte";
 
-    import Button, { Label as ButtonLabel } from '@smui/button';
     export let openAddProjectDialog = false;
+    export let deleteProjectDialogOpen = false;
+
+    export let deletedProjectId = 0;
 
     const { addNotification } = getNotificationsContext();
 
     const api = isProduction
-        ? "https://houme-api.herokuapp.com/projects"
-        : "http://localhost:10000/projects";
+        ? "https://houme-api.herokuapp.com"
+        : "http://localhost:10000";
 
     export let projects = [];
 
-    onMount(async function() {
-        const response = await fetch(api);
-        projects = await response.json();
+    onMount(function() {
+        fetch(api + '/getProjects')
+        .then((result) => {
+            if (result.ok) {
+                console.log("get projects successfully");
+            }
+
+            console.log(result);
+            return result.json();
+        })
+        .then((resp) => {
+            resp.data.forEach(element => {
+                element.PropertyValue = null;
+            });
+
+            projects = resp.data;
+        });
     });
 
     export let BaseBucketName = "houme";
 
     function addProject(event) {
         if (event.detail) {
-            const fileName = event.detail.fileName;
-            let isUpdated = false;
-
-            projects.forEach(element => {
-                if (element.fileName == fileName) {
-                    isUpdated = true;
-                    addNotification({
-                        text: fileName + ' updated!',
-                        position: 'top-center',
-                    })
-                }
+            const project = event.detail.project;
+            projects = projects.concat(project);
+            addNotification({
+                text: 'Project ' + project.Name + ' added!',
+                position: 'top-center',
             });
-
-            if (!isUpdated) {
-                let newProject = {
-                    fileName: fileName,
-                    bucketName: BaseBucketName
-                }
-                projects = projects.concat(newProject);
-                addNotification({
-                    text: fileName + ' added!',
-                    position: 'top-center',
-                });
-            }
         }
     }
 
     function deleteProject(event) {
         if (event.detail) {
-            const fileName = event.detail.fileName;
+            const projectId = event.detail.projectId;
 
-            projects = projects.filter(item => item.fileName != fileName);
+            projects = projects.filter(item => item.ProjectId != projectId);
             addNotification({
-                text: fileName + ' deleted!',
+                text: 'Project deleted!',
                 position: 'top-center',
             });
+        }
+    }
+
+    function openDeleteProjectDialog(event) {
+        if (event.detail && event.detail.projectId) {
+            deletedProjectId = event.detail.projectId;
+            deleteProjectDialogOpen = true;
         }
     }
 </script>
 
 <div class="dashboard">
-    <Button on:click={() => (openAddProjectDialog = true)}>
-        <ButtonLabel>Add project</ButtonLabel>
-    </Button>
+    <div class="page-header">
+        <h1>Projects</h1>
+        <Button variant="raised" on:click={() => (openAddProjectDialog = true)}>
+            <ButtonLabel>Add new project</ButtonLabel>
+            <i class="material-icons" aria-hidden="true">add</i>
+        </Button>
+    </div>
+
     <div class="card-display">
         <LayoutGrid>
             {#each projects as project}
                 <Cell>
-                    <Project on:delete={deleteProject}
-                        fileName="{project.fileName}"
-                        bucketName="{project.bucketName}"
-                        urn="{project.urn}"/>
+                    <Project on:openDeleteProjectDialog={openDeleteProjectDialog} project={project}/>
                 </Cell>
             {/each}
             <Cell>
@@ -86,5 +97,19 @@
             </Cell>
         </LayoutGrid>
     </div>
-    <AddProjectDialog open={openAddProjectDialog}></AddProjectDialog>
+    <AddProjectDialog bind:open={openAddProjectDialog} on:add={addProject}></AddProjectDialog>
+    <DeleteProjectDialog
+        bind:open={deleteProjectDialogOpen}
+        bind:projectId={deletedProjectId}
+        on:delete={deleteProject}>
+    </DeleteProjectDialog>
 </div>
+
+<style>
+    .page-header {
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        justify-content: space-between;
+    }
+</style>

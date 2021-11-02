@@ -4,57 +4,84 @@
 
     import { createEventDispatcher } from "svelte";
 
-    export let fileName;
-    export let bucketName;
-    export let urn;
-
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
+    export let project;
 
     const dispatch = createEventDispatcher();
 
     function deleteProject() {
-        fetch(api + '/deleteFile', {
-            method: 'DELETE',
-            body: JSON.stringify({ fileName : fileName })
-        })
-        .then((response) => {
-            if (response.ok) {
-                dispatch("delete", { fileName: fileName})
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        dispatch("openDeleteProjectDialog", { projectId: project.ProjectId});
     }
 
 </script>
 
 <div class="card-container">
-    <Card outline>
+    <Card class="project-card" outline>
         <Content>
             <h2 class="mdc-typography--headline6" style="margin: 0;">
-                Project
+                Project {project.Name}
             </h2>
-            <p>File: {fileName}</p>
-            <p>Bucket: houmly</p>
+            <div class="project-card-content">
+                <div>
+                    <div class="properties">
+                        <p>Rooms number: {project.RoomsNumber}</p>
+                        <p>Space: {project.LivingArea}</p>
+                        <p>Construction Cost: {project.ConstructionCost}</p>
+                        <p>Construction Duration: {project.ConstructionDuration}</p>
+                    </div>
+                </div>
+                <div>
+                    <img class="card-cover" src="/house.jpeg" alt="House">
+                </div>
+            </div>
         </Content>
-        <Actions fullBleed>
-            <Button href="/view/{urn}">
+        <Actions class="project-card-actions">
+            <Button class="project-card-button" variant="outlined" href="/view/{project.Urn}">
                 <Label>View</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>
-            <Button on:click={deleteProject}>
+            <Button class="project-card-button" variant="outlined" on:click={deleteProject}>
                 <Label>Delete</Label>
-                <i class="material-icons" aria-hidden="true">arrow_forward</i>
+                <i class="material-icons" aria-hidden="true">delete</i>
             </Button>
         </Actions>
     </Card>
 </div>
 
 <style>
-    .card-container a{
+    .project-card-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+    }
+
+    .card-cover {
+        height: 103px;
+        width: 163px;
+    }
+
+    .material-icons {
+        margin-left: 10px;
+    }
+
+    .properties p {
+        margin: 0;
+    }
+
+    :global(.project-card-actions) {
+        justify-content: space-between;
+    }
+
+    :global(.project-card-button) {
+        margin: 0 10px;
+        width: 45%;
+        border-color: #6200ee !important;
+    }
+
+    :global(.project-card) {
+        background-color: #F6F3F9;
+    }
+
+    :global(.card-container a) {
         text-decoration: none;
-    } 
+    }
 </style>

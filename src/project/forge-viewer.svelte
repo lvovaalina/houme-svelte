@@ -5,7 +5,7 @@
     let forgeViewerElement;
     let viewer;
 
-    export let urn;
+    export let urn = "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6aG91bWUvTHVrYS5ydnQ=";
 
     function onDocumentLoadSuccess(doc) {
         let viewable = doc.getRoot().getDefaultGeometry();
@@ -75,6 +75,6 @@
 <style>
     .forge-viewer {
         position: relative;
-        height: 450px;
+        height: 650px;
     }
 </style>

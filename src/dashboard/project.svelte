@@ -25,8 +25,8 @@
                     <div class="properties">
                         <p>Rooms number: {project.RoomsNumber}</p>
                         <p>Space: {project.LivingArea}</p>
-                        <p>Construction Cost: {project.ConstructionCost}</p>
-                        <p>Construction Duration: {project.ConstructionDuration}</p>
+                        <p>Construction Cost: {project.ConstructionCost}$</p>
+                        <p>Construction Duration: {project.ConstructionDuration} days</p>
                     </div>
                 </div>
                 <div>
@@ -35,7 +35,7 @@
             </div>
         </Content>
         <Actions class="project-card-actions">
-            <Button class="project-card-button" variant="outlined" href="/view/{project.Urn}">
+            <Button class="project-card-button" variant="outlined" href="/view/{project.ProjectId}">
                 <Label>View</Label>
                 <i class="material-icons" aria-hidden="true">arrow_forward</i>
             </Button>

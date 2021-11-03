@@ -1,314 +1,202 @@
-<script lang="ts">
+<script>
     import LayoutGrid, { Cell as GridCell} from '@smui/layout-grid'
     import ForgeViewer from './forge-viewer.svelte';
     import { time } from '../utils';
     import Button, { Label as ButtonLabel } from '@smui/button';
-    import TabBar from '@smui/tab-bar';
-    import Tab, { Label } from '@smui/tab';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
-    import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte';
+    import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
     import ProjectMaterials from './project-materials.svelte';
+    import { onMount } from 'svelte';
+    import Drawer, {
+        AppContent,
+        Content as DrawerContent,
+        Header,
+        Title as DrawerTitle,
+    } from '@smui/drawer';
+    import List, { Item, Text } from '@smui/list';
+    import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
 
-    export let urn;
+    export let projectId;
     let active = 'Project View';
+
+    let tabs = ['Project View', 'Timeline', 'Jobs']
+
+    const api = isProduction
+        ? "https://houme-api.herokuapp.com"
+        : "http://localhost:10000";
+    
+    function setActive(value) {
+        active = value;
+    }
+
+    let project = {};
+    export let propertiesMap = new Map();
     
     let open = false;
 
-    let projectProperties = [
-        {
-            name: 'Foundation volume',
-            amount: 51.84,
-            cost: 100,
-        },
-        {
-            name: 'Floor area at the base',
-            amount: 126,
-            cost: 100,
-            propertyCode: 'BFA',
-        },
-        {
-            name: 'Total floor area',
-            amount: 218,
-            cost: 100,
-            propertyCode: 'FA',
-        },
-        {
-            name: 'Walls volume',
-            amount: 95,
-            cost: 100,
-        },
-        {
-            name: 'Number of walls',
-            amount: 17,
-            cost: 100,
-        },
-        {
-            name: 'Roof area',
-            amount: 175,
-            cost: 100,
-        },
-        {
-            name: 'Number of windows',
-            amount: 3,
-            cost: 100,
-        },
-        {
-            name: 'Number of kitchens',
-            amount: 1,
-            cost: 100,
-        },
-        {
-            name: 'Number of doors',
-            amount: 7,
-            cost: 100,
-        },
-        {
-            name: 'Number of stairs',
-            amount: 2,
-            cost: 100,
-        },
-        {
-            name: 'House perimeter',
-            amount: 54,
-            cost: 100,
-        },
-        {
-            name: 'Exterior finishing area',
-            amount: 270,
-            cost: 100,
-        },
-        {
-            name: 'Interior finishing area',
-            amount: 300,
-            cost: 100,
-        },
-        {
-            name: 'Tile area',
-            amount: 28,
-            cost: 100,
-        },
-    ];
+    let openDeleteProjectDialog = false;
+    let projectIdToDelete = 0;
 
-    let stages = [
-        {
-            name: 'Excavation',
-            cost: 600,
-            time: 12,
-            code: 'EXV',
-            color: 'bg-red-100',
-            tasks: [
-                {
-                    name: 'Removal of the fertile layer',
-                    employeesEnvolved: 2,
-                    taskSpeed: 25, //sqrm in hour,
-                    from: time('01-01'),
-                    to: time('01-15'),
-                    propertyCode: 'FBA'
-                },
-                {
-                    name: 'Axis markings',
-                    employeesEnvolved: 2,
-                    taskSpeed: 25,
-                    from: time('01-10'),
-                    to: time('01-25'),
-                    propertyCode: 'FBA'
-                }
-            ]
-        },
-        {
-            name: 'Foundation',
-            cost: 600,
-            time: 12,
-            code: 'FND',
-            color: 'bg-pink-100',
-            tasks: [
-                {
-                    name: 'Backfilling of earth',
-                    employeesEnvolved: 2,
-                    from: time('01-20'),
-                    to: time('02-15'),
-                    taskSpeed: 25, //sqrm in hour
-                    propertyCode: 'FBA'
-                }
-            ] 
-        },
-        {
-            name: 'Walls',
-            cost: 600,
-            time: 12,
-            color: 'bg-purple-100',
-            from: time('02-10'),
-            to: time('02-16'),
-        },
-        {
-            name: 'Roof',
-            cost: 600,
-            time: 12,
-            color: 'bg-deep-purple-100',
-            from: time('02-10'),
-            to: time('03-16'),
-        },
-        {
-            name: 'Windows and windowsills',
-            cost: 600,
-            time: 12,
-            color: 'bg-indigo-100',
-            from: time('03-10'),
-            to: time('03-26'),
-        },
-        {
-            name: 'House insulation',
-            cost: 600,
-            time: 12,
-            color: 'bg-blue-100',
-            from: time('03-20'),
-            to: time('04-02'),
-        },
-        {
-            name: 'Floor System',
-            cost: 600,
-            time: 12,
-            color: 'bg-light-blue-100',
-            from: time('04-03'),
-            to: time('04-16'),
-        },
-        {
-            name: 'Stairs',
-            cost: 600,
-            time: 12,
-            color: 'bg-cyan-100',
-            from: time('04-10'),
-            to: time('05-30'), 
-        },
-        {
-            name: 'Exterior decoration of the house',
-            cost: 600,
-            time: 12,
-            color: 'bg-teal-100',
-            from: time('05-20'),
-            to: time('06-16'),
-        },
-        {
-            name: 'Floor',
-            cost: 600,
-            time: 12,
-            color: 'bg-green-100',
-            from: time('06-10'),
-            to: time('07-15'),
-        },
-        {
-            name: 'Electrical wiring',
-            cost: 600,
-            time: 12,
-            color: 'bg-light-green-100',
-            from: time('07-10'),
-            to: time('07-28'),
-        },
-        {
-            name: 'Interior decoration of the house',
-            cost: 600,
-            time: 12,
-            color: 'bg-lime-100',
-            from: time('07-20'),
-            to: time('08-15'),
-        },
-        {
-            name: 'Doors',
-            cost: 600,
-            time: 12,
-            color: 'bg-yellow-100',
-            from: time('08-20'),
-            to: time('09-15'),
-        },
-        {
-            name: 'Kitchen assembly, equipment installation',
-            cost: 600,
-            time: 12,
-            color: 'bg-amber-100',
-            from: time('09-10'),
-            to: time('10-30'),
-        },
-        {
-            name: 'Lighting, switches',
-            cost: 600,
-            time: 12,
-            color: 'bg-orange-100',
-            from: time('10-15'),
-            to: time('11-15'),
-        },
-        {
-            name: 'Furnishings',
-            cost: 600,
-            time: 12,
-            color: 'bg-deep-orange-100',
-            from: time('11-14'),
-            to: time('12-15'),
-        },
-        {
-            name: 'Commissioning works',
-            cost: 600,
-            time: 12,
-            color: 'bg-brown-100',
-            from: time('12-10'),
-            to: time('12-25'),
-        },
-    ];
+    export let dataLoaded;
 
-    let project = {
-        projectCost: 450000,
-        projectDuration: '350 days',
-        livingArea: '200 sq.m.',
-        roomsNumber: 5,
-        stages: stages,
-        projectProperties: projectProperties,
+    onMount(() => {
+        fetch(api + '/getProject/' + projectId)
+        .then((result) => {
+            if (result.ok) {
+                console.log("get project success");
+            }
+
+            return result.json();
+        })
+        .then((resp) => {
+            project = resp.data;
+
+            project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
+
+            propertiesMap = new Map(project.ProjectProperties.map(i => [i.PropertyCode, i]));
+            projectIdToDelete = project.ProjectId;
+
+            dataLoaded = true;
+        });
+    });
+
+    function onDelete() {
+        window.location.href = "/";
+    }
+
+    function onUpdate() {
+        dataLoaded = false;
+
+        // fetch new project jobs as they not preloaded on save
+        fetch(api + '/getProjectJobs/' + projectId)
+        .then((result) => {
+            if (result.ok) {
+                console.log("get project jobs successfully");
+            }
+
+            return result.json();
+        })
+        .then((resp) => {
+            let projectJobs = resp.data;
+            projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
+            project.ProjectJobs = projectJobs;
+            dataLoaded = true;
+        });
     }
 </script>
 
 <!-- svelte-ignore missing-declaration -->
 <div class="project-viewer">
-    <TabBar tabs={['Project View', 'Timeline', 'Jobs', 'Materials']} let:tab bind:active>
-        <Tab {tab}>
-            <Label>{tab}</Label>
-        </Tab>
-    </TabBar>
-    <div class="manage-project-button-container">
-        <Button on:click={() => (open = true)}>
-            <ButtonLabel>Manage Project</ButtonLabel>
-        </Button>
-    </div>
+    <Drawer class="project-view-drawer">
+        <Header>
+          <DrawerTitle>Project {project.Name}</DrawerTitle>
+          <!-- <Subtitle>Editing this properties will change cost and estimation of this project.</Subtitle> -->
+        </Header>
+        <DrawerContent>
+            <div class="project-actions">
+                <Button href="/" class="back-link project-actions-outline" variant="outlined" on:click={() => (open = true)}>
+                    <i class="material-icons" aria-hidden="true">arrow_backward</i>
+                    <ButtonLabel>Back</ButtonLabel>
+                </Button>
+                <Button variant="raised" on:click={() => (open = true)}>
+                    <ButtonLabel>Manage Project</ButtonLabel>
+                </Button>
+                <Button class="project-actions-outline" variant="outlined" on:click={() => (openDeleteProjectDialog = true)}>
+                    <ButtonLabel>Delete Project</ButtonLabel>
+                </Button>
+            </div>
+            <List>
+              {#each tabs as tab}
+              <Item
+                href="javascript:void(0)"
+                on:click={() => setActive(tab)}
+                activated={active === tab}
+                >
+                <Text>{tab}</Text>
+                </Item>
+              {/each}
+          </List>
+      </DrawerContent>
+    </Drawer>
 
-    {#if active == 'Project View'}
-    <LayoutGrid>
-        <GridCell span={7}>
-            <ForgeViewer urn={urn}></ForgeViewer>
-        </GridCell>
-        <GridCell span={5}>
-            <h2>Project Information</h2>
-            <p>Living area: {project.livingArea}</p>
-            <p>Rooms number: {project.roomsNumber}</p>
-            <p>Construction cost: {project.projectCost}</p>
-            <p>Construction duration: {project.projectDuration}</p>
-        </GridCell>
-    </LayoutGrid>
-    {/if}
+    <AppContent class="app-content">
+        <div><DrawerTitle>{active}</DrawerTitle></div>
+        {#if active == 'Project View'}
+        <LayoutGrid>
+            <GridCell span={9}>
+                <ForgeViewer></ForgeViewer>
+            </GridCell>
+            <GridCell span={3}>
+                <h2>Project Information</h2>
+                <p>Living area: {project.LivingArea}</p>
+                <p>Rooms number: {project.RoomsNumber}</p>
+                <p>Construction cost: {project.ConstructionCost}</p>
+                <p>Construction duration: {project.ConstructionDuration} days</p>
+            </GridCell>
+        </LayoutGrid>
+        {/if}
 
-    {#if active == 'Timeline'}
-        <ProjectTimeline stages={stages}></ProjectTimeline>
-    {/if}
+        {#if active == 'Timeline'}
+            <!-- <ProjectTimeline stages={stages}></ProjectTimeline> -->
+        {/if}
 
-    {#if active == 'Jobs'}
-        <ProjectCost projectProperties={projectProperties} stages={stages}></ProjectCost>
-    {/if}
+        {#if active == 'Jobs'}
+            <ProjectCost
+                jobs={project.ProjectJobs}
+                propertiesMap={propertiesMap}
+                estimation={project.ConstructionDuration}
+                bind:loaded={dataLoaded}></ProjectCost>
+        {/if}
 
-    {#if active == 'Materials'}
-        <ProjectMaterials projectProperties={projectProperties} stages={stages}></ProjectMaterials>
-    {/if}
-
-    <EditProjectPropertiesDialog bind:open={open} stages={stages} />
+        {#if active == 'Materials'}
+            <ProjectMaterials projectProperties={projectProperties} stages={stages} ></ProjectMaterials>
+        {/if}
+    </AppContent>
+    
+    <DeleteProjectDialog projectId={projectIdToDelete} bind:open={openDeleteProjectDialog} on:delete={onDelete}></DeleteProjectDialog>
+    <AddManageProjectDialog bind:open={open} bind:project={project} on:update={onUpdate} newProject={false}/>
 </div>
 
 <style>
+    :global(.project-actions) {
+        margin: 16px;
+    }
+
+    :global(.project-actions button) {
+        width: 100%;
+    }
+
+    :global(.project-actions .project-actions-outline) {
+        border-color: #6200ee !important;
+    }
+
+    :global(.project-actions i) {
+        width: 30px;
+    }
+
+    :global(.project-actions .back-link) {
+        width: 100%;
+        margin-bottom: 7px;
+    }
+
+    :global(.project-view-drawer) {
+        background-color: #F6F3F9;
+        border: none !important;
+    }
+
+    :global(.app-content) {
+        background-color: white;
+        padding: 25px;
+        width: 80%;
+    }
+
+    .project-viewer {
+        display: flex;
+        flex-grow: 1;
+        background-color: #F6F3F9;
+    }
+
     .manage-project-button-container {
         text-align: center;
     }

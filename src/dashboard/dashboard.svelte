@@ -6,8 +6,8 @@
     import { onMount } from 'svelte';
     import { getNotificationsContext } from 'svelte-notifications';
 
-    import AddProjectDialog from './add-project-dialog.svelte';
-    import DeleteProjectDialog from './delete-project-dialog.svelte';
+    import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
+    import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
     import Upload from "./upload.svelte";
     import Project from "./project.svelte";
 
@@ -31,7 +31,6 @@
                 console.log("get projects successfully");
             }
 
-            console.log(result);
             return result.json();
         })
         .then((resp) => {
@@ -92,12 +91,12 @@
                     <Project on:openDeleteProjectDialog={openDeleteProjectDialog} project={project}/>
                 </Cell>
             {/each}
-            <Cell>
+            <!-- <Cell>
                 <Upload bucketName="{BaseBucketName}" on:add={addProject}/>
-            </Cell>
+            </Cell> -->
         </LayoutGrid>
     </div>
-    <AddProjectDialog bind:open={openAddProjectDialog} on:add={addProject}></AddProjectDialog>
+    <AddManageProjectDialog bind:open={openAddProjectDialog} on:add={addProject} newProject={true}></AddManageProjectDialog>
     <DeleteProjectDialog
         bind:open={deleteProjectDialogOpen}
         bind:projectId={deletedProjectId}

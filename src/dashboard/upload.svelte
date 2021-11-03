@@ -45,7 +45,6 @@
                 return Promise.reject(response);
             }
         }).then((data) => {
-            console.log(data);
             files.accepted = [];
             dispatch("add", { fileName: file.name });
         })

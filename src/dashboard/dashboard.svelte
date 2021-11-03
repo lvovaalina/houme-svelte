@@ -31,7 +31,6 @@
                 console.log("get projects successfully");
             }
 
-            console.log(result);
             return result.json();
         })
         .then((resp) => {

@@ -11,12 +11,13 @@
     const dispatch = createEventDispatcher();
 
     let jobs = [];
+    export let properties = [];
 
     let errorMessage = '';
 
     export let open;
     export let newProject;
-    export let project;
+    export let project = {};
     project.Name= '';
     project.BucketName = 'houmly';
     project.LivingArea= '';
@@ -27,10 +28,10 @@
     project.FinishMaterial= '';
     project.RoofingMaterial= '';
     project.ConstructionCost= null;
-    project.ConstructionDuration= '';
+    project.ConstructionDuration= 0;
     project.ProjectProperties= [];
     project.ProjectJobs= [];
-    project.CompanyName= 'Construction';
+    project.ConstructionCompanyName= 'Construction';
 
     const api = isProduction
         ? "https://houme-api.herokuapp.com"
@@ -55,13 +56,9 @@
         
         let projectJobs = jobs.filter(j => j.Required == true);
         projectJobs = projectJobs.concat(wallJobs);
-        console.log(wallJobs.length + ' proj ' + projectJobs.length)
         projectJobs = projectJobs.concat(foundationJobs);
-        console.log(foundationJobs.length + ' proj ' + projectJobs.length)
         projectJobs = projectJobs.concat(roofingJobs);
-        console.log(roofingJobs.length + ' proj ' + projectJobs.length)
         projectJobs = projectJobs.concat(finishJobs);
-        console.log(finishJobs.length + ' proj ' + projectJobs.length)
 
         project.ProjectJobs = projectJobs;
     }
@@ -70,25 +67,14 @@
         event.preventDefault();
         event.stopPropagation();
 
-        let formData = {
-            name: name,
-            livingArea: livingArea,
-            filename: name + ".rvt",
-            roomsNumber: roomsNumber,
-            foundationMaterial: foundationMaterialValue,
-            wallMaterial: wallMaterialValue,
-            finishMaterial: finishMaterialValue,
-            roofingMaterial: roofingMaterialValue,
-            constructionCompanyName: companyName,
-            constructionWorkersNumber: constructionWorkersNumberValue,
-            projectProperties: properties,
-            projectJobs: projectJobs
-        }
+        setProjectJobs();
+
+        project.ProjectProperties = properties;
 
         await fetch(api + '/create',
         {
             method: 'POST',
-            body: JSON.stringify(formData)
+            body: JSON.stringify(project)
         })
         .then((result) => {
             if (result.ok) {
@@ -99,7 +85,6 @@
             return result.json();
         })
         .then((data) => {
-            console.log(data);
             let project = data.data;
             dispatch("add", {
                 project: {
@@ -126,7 +111,6 @@
                 console.log("get successfully");
             }
 
-            console.log(result);
             return result.json();
         })
         .then((resp) => {
@@ -134,7 +118,7 @@
                 element.PropertyValue = null;
             });
 
-            project.ProjectProperties = resp.data;
+            properties = resp.data;
         });
 
         fetch(api + '/getJobs')
@@ -143,7 +127,6 @@
                 console.log("get jobs successfully");
             }
 
-            console.log(result);
             return result.json();
         })
         .then((resp) => {
@@ -168,20 +151,24 @@
         .then((result) => {
             if (result.ok) {
                 console.log("Updated successfully");
+                dispatch("update");
             }
 
             return result.json();
         })
         .then((data) => {
-            console.log(data);
-            project = data.data;
+            let updatedProject = data.data;
+
+            //wait for all data to be loaded
+            updatedProject.ProjectJobs = [];
+
+            project = updatedProject;
             open = false;
         })
         .catch(error => {
             errorMessage = 'Something went wrong! Try again later';
             console.error(error);
         });
-        console.log(project);
     }
 
 </script>
@@ -215,9 +202,9 @@
         </ProjectSettings>
         <div class="project-properties">
             <p>Properties</p>
-            {#each project.ProjectProperties as prop}
-                {#if !!prop.Property}
-                    {#if prop.Property.PropertyUnit == 'sq.m.'}
+            {#if newProject}
+                {#each properties as prop}
+                {#if prop.PropertyUnit == 'sq.m.'}
                         <Textfield
                             required 
                             variant="filled"
@@ -225,7 +212,7 @@
                             type="number"
                             class="text-field"
                             bind:value={prop.PropertyValue}
-                            label="{prop.Property.PropertyName}"/>
+                            label="{prop.PropertyName}"/>
                     {:else}
                         <Textfield
                             required
@@ -233,11 +220,33 @@
                             type="number"
                             class="text-field"
                             bind:value={prop.PropertyValue}
-                            label="{prop.Property.PropertyName}"/>
-                    {/if}
+                            label="{prop.PropertyName}"/>
                 {/if}
-                
-            {/each}
+                {/each}
+            {:else}
+                {#each project.ProjectProperties as prop}
+                    {#if !!prop.Property}
+                        {#if prop.Property.PropertyUnit == 'sq.m.'}
+                            <Textfield
+                                required 
+                                variant="filled"
+                                input$step="0.01"
+                                type="number"
+                                class="text-field"
+                                bind:value={prop.PropertyValue}
+                                label="{prop.Property.PropertyName}"/>
+                        {:else}
+                            <Textfield
+                                required
+                                variant="filled"
+                                type="number"
+                                class="text-field"
+                                bind:value={prop.PropertyValue}
+                                label="{prop.Property.PropertyName}"/>
+                        {/if}
+                    {/if}
+                {/each}
+            {/if}
         </div>
     </Content>
     <Actions>
@@ -251,6 +260,9 @@
 </Dialog>
 
 <style>
+    :global(.material-select) {
+        margin: 10px;
+    }
     :global(.text-field) {
         margin: 10px;
     }

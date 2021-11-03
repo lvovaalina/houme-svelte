@@ -38,24 +38,26 @@
     let openDeleteProjectDialog = false;
     let projectIdToDelete = 0;
 
+    export let dataLoaded;
+
     onMount(() => {
         fetch(api + '/getProject/' + projectId)
         .then((result) => {
             if (result.ok) {
-                console.log("get projects successfully");
+                console.log("get project success");
             }
 
-            console.log(result);
             return result.json();
         })
         .then((resp) => {
             project = resp.data;
-            console.log(project);
 
             project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
 
             propertiesMap = new Map(project.ProjectProperties.map(i => [i.PropertyCode, i]));
             projectIdToDelete = project.ProjectId;
+
+            dataLoaded = true;
         });
     });
 
@@ -63,6 +65,25 @@
         window.location.href = "/";
     }
 
+    function onUpdate() {
+        dataLoaded = false;
+
+        // fetch new project jobs as they not preloaded on save
+        fetch(api + '/getProjectJobs/' + projectId)
+        .then((result) => {
+            if (result.ok) {
+                console.log("get project jobs successfully");
+            }
+
+            return result.json();
+        })
+        .then((resp) => {
+            let projectJobs = resp.data;
+            projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
+            project.ProjectJobs = projectJobs;
+            dataLoaded = true;
+        });
+    }
 </script>
 
 <!-- svelte-ignore missing-declaration -->
@@ -124,17 +145,17 @@
             <ProjectCost
                 jobs={project.ProjectJobs}
                 propertiesMap={propertiesMap}
-                estimation={project.ConstructionDuration}></ProjectCost>
+                estimation={project.ConstructionDuration}
+                bind:loaded={dataLoaded}></ProjectCost>
         {/if}
 
         {#if active == 'Materials'}
             <ProjectMaterials projectProperties={projectProperties} stages={stages} ></ProjectMaterials>
         {/if}
     </AppContent>
-
     
     <DeleteProjectDialog projectId={projectIdToDelete} bind:open={openDeleteProjectDialog} on:delete={onDelete}></DeleteProjectDialog>
-    <AddManageProjectDialog bind:open={open} bind:project={project} newProject={false}/>
+    <AddManageProjectDialog bind:open={open} bind:project={project} on:update={onUpdate} newProject={false}/>
 </div>
 
 <style>

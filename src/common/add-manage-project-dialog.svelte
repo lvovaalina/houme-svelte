@@ -7,56 +7,68 @@
 
     import { onMount } from 'svelte';
 
-    export let open;
-
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
 
-    let name = '', bucketName = 'houmly', livingArea = '';
-    let roomsNumber = null;
+    let jobs = [];
 
     let errorMessage = '';
 
-    export let foundationMaterialValue = null;
-    export let wallMaterialValue = null;
-    export let finishMaterialValue = null;
-    export let roofingMaterialValue = null;
-    export let constructionWorkersNumberValue = null;
-
-    export let properties = [];
-    let jobs = [];
-
-    let companyName = 'Construction';
+    export let open;
+    export let newProject;
+    export let project;
+    project.Name= '';
+    project.BucketName = 'houmly';
+    project.LivingArea= '';
+    project.RoomsNumber= null;
+    project.ConstructonWorkersNumber= '';
+    project.WallMaterial= '';
+    project.FoundationMaterial= '';
+    project.FinishMaterial= '';
+    project.RoofingMaterial= '';
+    project.ConstructionCost= null;
+    project.ConstructionDuration= '';
+    project.ProjectProperties= [];
+    project.ProjectJobs= [];
+    project.CompanyName= 'Construction';
 
     const api = isProduction
         ? "https://houme-api.herokuapp.com"
         : "http://localhost:10000";
 
-    async function addProject(event) {
-        event.preventDefault();
-        event.stopPropagation();
-
+    function setProjectJobs() {
         let wallJobs = jobs
             .filter(j => j.StageName.toLowerCase() == 'walls'
-                && j.WallMaterial.toLowerCase() == wallMaterialValue.toLowerCase());
+                && j.WallMaterial.toLowerCase() == project.WallMaterial.toLowerCase());
         
         let foundationJobs = jobs
             .filter(j => j.StageName.toLowerCase() == 'foundation'
-                && j.FoundationMaterial.toLowerCase() == foundationMaterialValue.toLowerCase());
+                && j.FoundationMaterial.toLowerCase() == project.FoundationMaterial.toLowerCase());
         
         let finishJobs = jobs
             .filter(j => j.StageName.toLowerCase() == 'exterior decoration of the house'
-                && j.FinishMaterial.toLowerCase() == foundationMaterialValue.toLowerCase());
+                && j.FinishMaterial.toLowerCase() == project.FinishMaterial.toLowerCase());
         
         let roofingJobs = jobs
             .filter(j => j.StageName.toLowerCase() == 'roof'
-                && j.RoofingMaterial.toLowerCase() == roofingMaterialValue)
+                && j.RoofingMaterial.toLowerCase() == project.RoofingMaterial.toLowerCase())
         
         let projectJobs = jobs.filter(j => j.Required == true);
-        projectJobs.concat(wallJobs);
-        projectJobs.concat(foundationJobs);
-        projectJobs.concat(roofingJobs);
-        projectJobs.concat(finishJobs);
+        projectJobs = projectJobs.concat(wallJobs);
+        console.log(wallJobs.length + ' proj ' + projectJobs.length)
+        projectJobs = projectJobs.concat(foundationJobs);
+        console.log(foundationJobs.length + ' proj ' + projectJobs.length)
+        projectJobs = projectJobs.concat(roofingJobs);
+        console.log(roofingJobs.length + ' proj ' + projectJobs.length)
+        projectJobs = projectJobs.concat(finishJobs);
+        console.log(finishJobs.length + ' proj ' + projectJobs.length)
+
+        project.ProjectJobs = projectJobs;
+    }
+
+    async function addProject(event) {
+        event.preventDefault();
+        event.stopPropagation();
 
         let formData = {
             name: name,
@@ -122,7 +134,7 @@
                 element.PropertyValue = null;
             });
 
-            properties = resp.data;
+            project.ProjectProperties = resp.data;
         });
 
         fetch(api + '/getJobs')
@@ -140,9 +152,37 @@
             });
 
             jobs = resp.data;
-            console.log(jobs);
         });
     });
+
+    async function updateProject(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        setProjectJobs();
+
+        await fetch(api + '/updateProject/'+ project.ProjectId,
+        {
+            method: 'PUT',
+            body: JSON.stringify(project)
+        })
+        .then((result) => {
+            if (result.ok) {
+                console.log("Updated successfully");
+            }
+
+            return result.json();
+        })
+        .then((data) => {
+            console.log(data);
+            project = data.data;
+            open = false;
+        })
+        .catch(error => {
+            errorMessage = 'Something went wrong! Try again later';
+            console.error(error);
+        });
+        console.log(project);
+    }
 
 </script>
 
@@ -160,41 +200,43 @@
             <div>{errorMessage}</div>
         {/if}
         <div>
-            <Textfield required variant="filled" invalid={name.isInvalid} class="text-field" bind:value={name} label="Name"/>
-            
-            <Textfield required variant="filled" disabled class="text-field" bind:value={bucketName} label="Bucket name"></Textfield>
-            <Textfield required variant="filled" class="text-field" bind:value={livingArea} label="Living area"></Textfield>
-            <Textfield required variant="filled" class="text-field" bind:value={roomsNumber} type="number" label="Rooms number"></Textfield>
+            <Textfield required variant="filled" class="text-field" bind:value={project.Name} label="Name"/>
+            <Textfield required variant="filled" disabled class="text-field" bind:value={project.BucketName} label="Bucket name"></Textfield>
+            <Textfield required variant="filled" class="text-field" bind:value={project.LivingArea} label="Living area"></Textfield>
+            <Textfield required variant="filled" class="text-field" bind:value={project.RoomsNumber} type="number" label="Rooms number"></Textfield>
         </div>
         
         <ProjectSettings
-            bind:foundationMaterialValue
-            bind:wallMaterialValue
-            bind:finishMaterialValue
-            bind:roofingMaterialValue
-            bind:constructionWorkersNumberValue>
+            bind:foundationMaterialValue={project.FoundationMaterial}
+            bind:wallMaterialValue={project.WallMaterial}
+            bind:finishMaterialValue={project.FinishMaterial}
+            bind:roofingMaterialValue={project.RoofingMaterial}
+            bind:constructionWorkersNumberValue={project.ConstructionWorkersNumber}>
         </ProjectSettings>
         <div class="project-properties">
             <p>Properties</p>
-            {#each properties as prop}
-                {#if prop.PropertyUnit == 'sq.m.'}
-                    <Textfield
-                        required 
-                        variant="filled"
-                        input$step="0.01"
-                        type="number"
-                        class="text-field"
-                        bind:value={prop.PropertyValue}
-                        label="{prop.PropertyName}"/>
-                {:else}
-                    <Textfield
-                        required
-                        variant="filled"
-                        type="number"
-                        class="text-field"
-                        bind:value={prop.PropertyValue}
-                        label="{prop.PropertyName}"/>
+            {#each project.ProjectProperties as prop}
+                {#if !!prop.Property}
+                    {#if prop.Property.PropertyUnit == 'sq.m.'}
+                        <Textfield
+                            required 
+                            variant="filled"
+                            input$step="0.01"
+                            type="number"
+                            class="text-field"
+                            bind:value={prop.PropertyValue}
+                            label="{prop.Property.PropertyName}"/>
+                    {:else}
+                        <Textfield
+                            required
+                            variant="filled"
+                            type="number"
+                            class="text-field"
+                            bind:value={prop.PropertyValue}
+                            label="{prop.Property.PropertyName}"/>
+                    {/if}
                 {/if}
+                
             {/each}
         </div>
     </Content>
@@ -202,7 +244,7 @@
         <Button>
             <ButtonLabel>Cancel</ButtonLabel>
         </Button>
-        <Button on:click$preventDefault={addProject}>
+        <Button on:click$preventDefault={newProject ? addProject : updateProject}>
             <ButtonLabel>Done</ButtonLabel>
         </Button>
     </Actions>

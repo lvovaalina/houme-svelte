@@ -3,11 +3,8 @@
     import ForgeViewer from './forge-viewer.svelte';
     import { time } from '../utils';
     import Button, { Label as ButtonLabel } from '@smui/button';
-    import TabBar from '@smui/tab-bar';
-    import Tab, { Label } from '@smui/tab';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
-    import EditProjectPropertiesDialog from './edit-project-properties-dialog.svelte';
     import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
     import ProjectMaterials from './project-materials.svelte';
     import { onMount } from 'svelte';
@@ -18,6 +15,7 @@
         Title as DrawerTitle,
     } from '@smui/drawer';
     import List, { Item, Text } from '@smui/list';
+    import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
 
     export let projectId;
     let active = 'Project View';
@@ -52,12 +50,12 @@
         })
         .then((resp) => {
             project = resp.data;
-            console.log(project.ProjectProperties);
+            console.log(project);
+
+            project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
 
             propertiesMap = new Map(project.ProjectProperties.map(i => [i.PropertyCode, i]));
             projectIdToDelete = project.ProjectId;
-
-            console.log(propertiesMap.get('FA'));
         });
     });
 
@@ -136,7 +134,7 @@
 
     
     <DeleteProjectDialog projectId={projectIdToDelete} bind:open={openDeleteProjectDialog} on:delete={onDelete}></DeleteProjectDialog>
-    <!-- <EditProjectPropertiesDialog bind:open={open} stages={stages} /> -->
+    <AddManageProjectDialog bind:open={open} bind:project={project} newProject={false}/>
 </div>
 
 <style>

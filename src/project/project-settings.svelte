@@ -1,22 +1,20 @@
 <script>
     import Select, { Option } from '@smui/select';
  
-    let foundationMaterial = ['Tape', 'Pile', 'Slab'];
-    export let foundationMaterialValue = 'Tape';
+    let foundationMaterial = ['Ribbon', 'Pile', 'Plate'];
+    export let foundationMaterialValue = '';
 
-    let wallMaterial = ['CLT', 'Foam Block', 'Brick', 'Frame'];
-    export let wallMaterialValue = 'CLT';
+    let wallMaterial = ['CLT', 'Foam block', 'Brick', 'Frame'];
+    export let wallMaterialValue = '';
 
-    let finishMaterial = ['Plaster', 'Ventilation Facade'];
-    export let finishMaterialValue = 'Plaster';
+    let finishMaterial = ['Plaster', 'Ventfacade'];
+    export let finishMaterialValue = '';
 
-    let roofingMaterial = ['Seam Roof', 'Soft Roofind', 'Roof Tiles']
-    export let roofingMaterialValue = 'Seam Roof';
+    let roofingMaterial = ['Fold', 'Soft Roof', 'Roof Tiles']
+    export let roofingMaterialValue = '';
 
     let constructionWorkersNumber = ['Maximum', 'Optimal', 'Minimum']
-    export let constructionWorkersNumberValue = 'Optimal';
-
-    let constructionCompanyName = ['Construction']
+    export let constructionWorkersNumberValue = '';
 </script>
 
 <div class="project-setting">

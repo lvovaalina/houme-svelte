@@ -97,7 +97,7 @@
             </Cell> -->
         </LayoutGrid>
     </div>
-    <AddManageProjectDialog bind:open={openAddProjectDialog} on:add={addProject}></AddManageProjectDialog>
+    <AddManageProjectDialog bind:open={openAddProjectDialog} on:add={addProject} newProject={true}></AddManageProjectDialog>
     <DeleteProjectDialog
         bind:open={deleteProjectDialogOpen}
         bind:projectId={deletedProjectId}

@@ -1,25 +1,35 @@
 <script>
-    import { SvelteGantt, SvelteGanttDependencies, SvelteGanttExternal, SvelteGanttTable } from 'svelte-gantt';
+    import { SvelteGantt, SvelteGanttDependencies, SvelteGanttTable } from 'svelte-gantt';
     import { onMount } from 'svelte';
     import { time } from '../utils';
 
-    export let stages;
+    let gantt;
+    let currentStart = time('01-01');
+    let currentEnd = time('12-31');
+
+    export let jobs = [];
     let rows = [];
     let tasks = [];
 
     let taskColors = ['orange', 'green', 'blue'];
 
     function translateStagesToTasks() {
+        let daysAddition = 0;
         function addTask(task, resourceId, color) {
             let id = rows.length + 1 + tasks.length;
             let colorClass = !!color ? color : taskColors[id % 3];
+
+            let taskFrom = currentStart.clone().add(daysAddition, 'days');
+            daysAddition += task.duration;
+            let taskTo =  currentStart.clone().add(daysAddition, 'days');
+
             let newTask = {
                 id: id,
                 label: task.name,
                 enableDragging: false,
                 classes: colorClass,
-                from: task.from,
-                to: task.to,
+                from: taskFrom,
+                to: taskTo,
                 resourceId: resourceId
             }
 
@@ -27,11 +37,13 @@
             return newTask;
         }
 
-        stages.forEach(element => {
+        jobs.forEach(element => {
             let parentRow = rows.find(row => row.label == element.name);
             if (element.tasks && element.tasks.length !== 0) {
                 element.tasks.forEach(task => {
                     let childRow = parentRow.children.find(child => child.label == task.name);
+                    console.log(childRow);
+                    console.log(task);
                     addTask(task, childRow.id, element.color);
                 });
             } else {
@@ -42,7 +54,7 @@
 
     function translateStagesToRows() {
         let index = 0;
-        stages.forEach(element => {
+        jobs.forEach(element => {
             let children = [];
             index++;
 
@@ -68,11 +80,30 @@
 
             rows.push(newRow);
         });
+        console.log(rows);
     }
 
-    let gantt;
-    const currentStart = time('01-01');
-    const currentEnd = time('12-31');
+    $: {
+        dataChanged(jobs);
+    }
+
+    function dataChanged(jobs) {
+        if (jobs.length && jobs.length !== 0) {
+            rows = [], tasks = [];
+            let data = {rows:[], tasks:[]}
+            gantt.$set({...data});
+
+            translateStagesToRows();
+            console.log(rows);
+            translateStagesToTasks();
+            console.log(tasks);
+
+            let to = tasks[tasks.length - 1].to;
+            data = {rows: rows, tasks: tasks, to: to};
+
+            gantt.$set({...data});
+        }
+    }
 
     const options = {
         rows: [],
@@ -84,7 +115,7 @@
         to: currentEnd,
         tableHeaders: [{ title: 'Label', property: 'label', width: 140, type: 'tree' }],
         tableWidth: 240,
-        minWidth: 5000,
+        minWidth: 1000,
         columnUnit: 'day',
         ganttTableModules: [SvelteGanttTable],
         ganttBodyModules: [SvelteGanttDependencies],
@@ -98,13 +129,6 @@
             // svelte-gantt options
             props: options
         });
-        translateStagesToRows();
-        translateStagesToTasks();
-
-        let data = {rows: rows, tasks: tasks};
-
-        // not sure why, will be fixed by fetching data from backend
-        setTimeout(() => gantt.$set({...data}), 1000);
     });
 
 </script>

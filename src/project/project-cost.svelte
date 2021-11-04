@@ -5,7 +5,6 @@
     import LinearProgress from '@smui/linear-progress';
 
     export let jobs = [];
-    export let propertiesMap = new Map();
     export let estimation = 0;
 
     export let loaded = false;
@@ -48,37 +47,31 @@
             </Row>
         </Head>
         <Body>
-            {#each jobs as projectJob}
-                {#if !!projectJob.Job}
-                <Row on:click={rowClick(projectJob.code)}>
-                    <Cell class={projectJob.color}></Cell>
-                    <Cell>{projectJob.Job.JobName}</Cell>
-                    <Cell numeric>{projectJob.ConstructionCost}</Cell>
-                    {#if propertiesMap.get(projectJob.PropertyCode)} 
-                    <Cell>{propertiesMap.get(projectJob.PropertyCode).Property.PropertyName}</Cell>
-                    <Cell numeric>{propertiesMap.get(projectJob.PropertyCode).PropertyValue}</Cell>
-                    <Cell>{propertiesMap.get(projectJob.PropertyCode).Property.PropertyUnit}</Cell>
-                    {:else}
-                    <Cell>-</Cell>
-                    <Cell numeric>-</Cell>
-                    <Cell>-</Cell>
-                    {/if}
-                    <Cell numeric>{projectJob.ConstructionWorkers}</Cell>
-                    <Cell numeric>{projectJob.ConstructionDurationInDays}</Cell>
+            {#each jobs as stage}
+
+                <Row on:click={rowClick(stage.code)}>
+                    <Cell class={stage.color}></Cell>
+                    <Cell>{stage.name}</Cell>
+                    <Cell numeric>{stage.stageCost}</Cell>
+                    <Cell>{stage.propertyName}</Cell>
+                    <Cell numeric>{stage.propertyValue}</Cell>
+                    <Cell>{stage.propertyUnit}</Cell>
+                    <Cell numeric>{stage.workersCount}</Cell>
+                    <Cell numeric>{stage.duration}</Cell>
                 </Row>
-                <!-- {#if stage.tasks && stage.tasks.length !== 0}
+                {#if stage.tasks && stage.tasks.length !== 0}
                         {#each stage.tasks as task}
                             <Row class="hidden-subtasks {stage.code}">
                                 <Cell class={stage.color}></Cell>
                                 <Cell>{task.name}</Cell>
-                                <Cell numeric>22</Cell>
-                                <Cell numeric>33</Cell>
-                                <Cell>sq.m</Cell>
-                                <Cell numeric>4</Cell>
-                                <Cell numeric>12</Cell>
+                                <Cell numeric>{task.cost}</Cell>
+                                <Cell>{task.propertyName}</Cell>
+                                <Cell numeric>{task.propertyValue}</Cell>
+                                <Cell>{task.propertyUnit}</Cell>
+                                <Cell numeric>{task.workersCount}</Cell>
+                                <Cell numeric>{task.duration}</Cell>
                             </Row>
                         {/each}
-                {/if} -->
                 {/if}
             {/each}
         </Body>

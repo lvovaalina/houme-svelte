@@ -102,7 +102,7 @@
                     tasks.push(newTask);
                 });
 
-                stageVM.stageDuration = stageDuration;
+                stageVM.duration = stageDuration;
                 stageVM.stageCost = stageCost;
                 stageVM.workersCount = stageWorkers;
                 stageVM.propertyName = '-';

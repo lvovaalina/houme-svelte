@@ -73,7 +73,6 @@ button:focus {
 
 
 .selected {
-    color: white;
     font-weight: 700;
 }
 
@@ -139,6 +138,50 @@ button:focus {
 
 .sg-table-row.row-group .sg-table-body-cell {
     background-color: #fbfbfb;
+	border-bottom: #efefef 1px solid;
+	font-weight: bold;
+}
+
+.sg-table-row .sg-table-body-cell {
+	border-bottom: #efefef 1px solid;
+}
+
+.sg-table-header {
+	font-weight: bold;
+    border-bottom: #efefef 1px solid;
+}
+
+.sg-table-header .sg-table-header-cell {
+	font-weight: bold;
+}
+
+.column-header-cell {
+	border-right: #efefef 1px solid;
+    border-bottom: #efefef 1px solid;
+}
+
+#example-gantt .sg-task:hover::before {
+	cursor: pointer;
+}
+
+#example-gantt .sg-task:hover::after {
+	cursor: pointer;
+}
+
+#example-gantt .sg-task:hover {
+	cursor: pointer;
+}
+
+#example-gantt .bottom-scrollbar-visible {
+	padding-bottom: 0;
+}
+
+#example-gantt .right-scrollbar-visible {
+	padding-right: 0;
+}
+
+#example-gantt .sg-task.selected:hover {
+	background-color: #ffebee;
 }
 
 .sg-external-indicator {

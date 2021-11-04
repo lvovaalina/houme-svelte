@@ -1,5 +1,5 @@
 <script>
-    import { SvelteGantt, SvelteGanttDependencies, SvelteGanttTable } from 'svelte-gantt';
+    import { SvelteGantt, SvelteGanttDependencies,  SvelteGanttTable } from 'svelte-gantt';
     import { onMount } from 'svelte';
     import { time } from '../utils';
 
@@ -10,6 +10,8 @@
     export let jobs = [];
     let rows = [];
     let tasks = [];
+
+    //let selectedTask = {};
 
     let taskColors = ['orange', 'green', 'blue'];
 
@@ -42,8 +44,6 @@
             if (element.tasks && element.tasks.length !== 0) {
                 element.tasks.forEach(task => {
                     let childRow = parentRow.children.find(child => child.label == task.name);
-                    console.log(childRow);
-                    console.log(task);
                     addTask(task, childRow.id, element.color);
                 });
             } else {
@@ -68,7 +68,7 @@
                     index++;
                     children.push({
                         id: index,
-                        label: task.name
+                        label: task.name,
                     });
                 });
             }
@@ -105,21 +105,24 @@
         }
     }
 
+    function onTaskClick(task) {
+        console.log(task);
+    }
+
     const options = {
         rows: [],
         tasks: [],
-        headers: [{ unit: 'year', format: 'YYYY', sticky: true }, { unit: 'month', format: 'MMMM YYYY', sticky: true }],
-        fitWidth: true,
+        headers: [{ sticky: true, unit: 'year', format: 'YYYY' }, { sticky: true, unit: 'month', format: 'MMMM' }],
+        fitWidth: false,
         from: currentStart.clone().startOf('year'),
-        to: currentStart.clone().endOf('year'),
         to: currentEnd,
-        tableHeaders: [{ title: 'Label', property: 'label', width: 140, type: 'tree' }],
+        tableHeaders: [{ title: 'Stages', property: 'label', width: 140, type: 'tree' }],
         tableWidth: 240,
         minWidth: 1000,
         columnUnit: 'day',
         ganttTableModules: [SvelteGanttTable],
         ganttBodyModules: [SvelteGanttDependencies],
-        //taskContent: (task) => `${task.label} ${task.from.format('MMMM Do')} - ${task.to.format('MMMM Do')}`
+        zoomLevel: [],
     }
 
     onMount(() => {
@@ -129,18 +132,41 @@
             // svelte-gantt options
             props: options
         });
+        //gantt.api.tasks.on.select(onTaskSelect);
     });
+
+    //let container;
+
+    // function onTaskSelect(task) {
+    //     selectedTask = task[0];
+    //     console.log(selectedTask.label);
+    //     container.style.top = selectedTask.top + 'px';
+    //     container.style.letf = selectedTask.left + 'px';
+    // }
 
 </script>
 
 <div class="container">
+    <!-- {#if !!selectedTask && !!selectedTask.model}
+    <div bind:this={container} class="task-prop" style="position:absolute;top:{selectedTask.model.top};left:{selectedTask.model.left};">
+        {selectedTask.top}
+        {selectedTask.left}
+        {selectedTask.model.label}
+    </div>
+    {/if} -->
+   
     <div id="example-gantt"></div>
 </div>
 
 <style>
+    .container {
+        height: 83vh;
+    }
     #example-gantt {
         flex-grow: 1;
         overflow: auto;
+	    border: #efefef 1px solid;
+        margin-top: 10px;
     }
     
     :global(.sg-task-reflected .sg-task-content) {

@@ -38,11 +38,15 @@
             {#each columns as col}
                 {#if col == 'Color'}
                     <Cell>
-                        {col}
+                        <div style="display:flex;align-items: center;">
+                        <div>
+                            {col}
+                        </div>
                         <Wrapper>
                             <Icon class="material-icons help-icon">help</Icon>
                             <Tooltip>Stage color in project timeline</Tooltip>
                         </Wrapper>
+                        </div>
                     </Cell>
                 {:else}
                     <Cell>{col}</Cell>
@@ -99,7 +103,9 @@
     }
 
     :global(.help-icon) {
-        font-size: 14px;
+        font-size: 16px;
+        margin-left: 5px;
+        color:#6200ee;
     }
 
     .table-caption {

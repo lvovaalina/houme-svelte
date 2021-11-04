@@ -43,7 +43,7 @@
                             {col}
                         </div>
                         <Wrapper>
-                            <Icon class="material-icons help-icon">help</Icon>
+                            <Icon style="z-index:7" class="material-icons help-icon">help</Icon>
                             <Tooltip>Stage color in project timeline</Tooltip>
                         </Wrapper>
                         </div>

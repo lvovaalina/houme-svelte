@@ -69,10 +69,11 @@
 
     :global(.project-card-actions) {
         justify-content: space-between;
+        padding: 8px 16px;
     }
 
     :global(.project-card-button) {
-        margin: 0 10px;
+        margin-right: 10px;
         width: 45%;
         border-color: #6200ee !important;
     }

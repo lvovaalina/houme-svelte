@@ -263,6 +263,7 @@
     :global(.project-view-drawer) {
         background-color: #F6F3F9;
         border: none !important;
+        width: 20%;
     }
 
     :global(.app-content) {

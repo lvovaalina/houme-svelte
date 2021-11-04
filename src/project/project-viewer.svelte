@@ -18,7 +18,7 @@
     import { stageColorMap } from '../utils';
 
     export let projectId;
-    let active = 'Timeline';
+    let active = 'Project View';
 
     let tabs = ['Project View', 'Timeline', 'Jobs']
 
@@ -201,31 +201,33 @@
 
     <AppContent class="app-content">
         <div><DrawerTitle>{active}</DrawerTitle></div>
-        {#if active == 'Project View'}
-            <LayoutGrid>
-                <GridCell span={9}>
-                    <ForgeViewer></ForgeViewer>
-                </GridCell>
-                <GridCell span={3}>
-                    <h2>Project Information</h2>
-                    <p>Living area: {project.LivingArea}</p>
-                    <p>Rooms number: {project.RoomsNumber}</p>
-                    <p>Construction cost: {project.ConstructionCost}</p>
-                    <p>Construction duration: {project.ConstructionDuration} days</p>
-                </GridCell>
-            </LayoutGrid>
-        {/if}
 
-        {#if active == 'Timeline'}
+        <div class="{active == 'Project View' ? '' : 'hidden'}">
+        <LayoutGrid>
+            <GridCell span={9}>
+                <ForgeViewer></ForgeViewer>
+            </GridCell>
+            <GridCell span={3}>
+                <h2>Project Information</h2>
+                <p>Living area: {project.LivingArea}</p>
+                <p>Rooms number: {project.RoomsNumber}</p>
+                <p>Construction cost: {project.ConstructionCost}</p>
+                <p>Construction duration: {project.ConstructionDuration} days</p>
+            </GridCell>
+        </LayoutGrid>
+        </div>
+
+        <div class="{active == 'Timeline' ? '' : 'hidden'}">
             <ProjectTimeline jobs={projectJobsVM}></ProjectTimeline>
-        {/if}
+        </div>
 
-        {#if active == 'Jobs'}
-            <ProjectCost
+        <div class="{active == 'Jobs' ? '' : 'hidden'}">
+        <ProjectCost
                 jobs={projectJobsVM}
                 estimation={project.ConstructionDuration}
-                bind:loaded={dataLoaded}></ProjectCost>
-        {/if}
+                bind:loaded={dataLoaded}>
+        </ProjectCost>
+        </div>
     </AppContent>
     
     <DeleteProjectDialog projectId={projectIdToDelete} bind:open={openDeleteProjectDialog} on:delete={onDelete}></DeleteProjectDialog>
@@ -233,6 +235,10 @@
 </div>
 
 <style>
+    .hidden {
+        display: none;
+    }
+
     :global(.project-actions) {
         margin: 16px;
     }

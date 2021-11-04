@@ -105,6 +105,7 @@
 
     :global(.project-stages, .project-materials) {
         width: 100%;
+        height: 77vh;
     }
 
     /*@media (max-width: 839px) {*/

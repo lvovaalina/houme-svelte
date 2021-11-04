@@ -60,7 +60,15 @@
         projectJobs = projectJobs.concat(roofingJobs);
         projectJobs = projectJobs.concat(finishJobs);
 
-        project.ProjectJobs = projectJobs;
+        let projectJobsModel = [];
+        projectJobs.forEach(element => {
+            projectJobsModel.push({
+                ...element,
+                Job: element,
+            })
+        });
+
+        project.ProjectJobs = projectJobsModel;
     }
 
     async function addProject(event) {
@@ -70,6 +78,7 @@
         setProjectJobs();
 
         project.ProjectProperties = properties;
+        project.Filename = project.Name + '.rvt';
 
         await fetch(api + '/create',
         {

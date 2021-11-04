@@ -6,6 +6,8 @@
     import ProjectCost from './project-cost.svelte';
     import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
     import ProjectMaterials from './project-materials.svelte';
+    import IconButton from "@smui/icon-button";
+    import Tooltip, { Wrapper } from '@smui/tooltip';
     import { onMount } from 'svelte';
     import Drawer, {
         AppContent,
@@ -168,23 +170,40 @@
 <!-- svelte-ignore missing-declaration -->
 <div class="project-viewer">
     <Drawer class="project-view-drawer">
-        <Header>
-          <DrawerTitle>Project {project.Name}</DrawerTitle>
+        <Header style="padding:0;">
+          <!-- <DrawerTitle>
+                
+            </DrawerTitle> -->
+            <div style="display:flex;justify-content: space-between; align-items: baseline;">
+                <div style="display:flex;align-items: baseline;">
+                    <Wrapper>
+                        <IconButton href="/">
+                            <i style="margin-right:10px;color:#6200ee;"  class="fa fa-arrow-left" aria-hidden="true"></i>
+                            <!-- <i style="margin-right:10px;color:#6200ee;" class="material-icons" aria-hidden="true">arrow_backward</i> -->
+                        </IconButton>
+                        <Tooltip style="z-index:7">Back to Project Dashboard</Tooltip>
+                    </Wrapper>
+                    <h1>Project {project.Name}</h1>
+                </div>
+                <div style="display:flex;">
+                    <Wrapper>
+                        <IconButton style="font-size: 18px; margin-right:-15px;" on:click={() => (open = true)}>
+                            <i style="color:#6200ee;" class="fa fa-cog" aria-hidden="true"></i>
+                        </IconButton>
+                        <Tooltip style="z-index:7">Manage Project</Tooltip>
+                    </Wrapper>
+
+                    <Wrapper>
+                        <IconButton style="font-size: 18px;" on:click={() => (openDeleteProjectDialog = true)}>
+                            <i style="color:#6200ee;" class="material-icons" aria-hidden="true">delete</i>
+                        </IconButton>
+                        <Tooltip style="z-index:7">Delete Project</Tooltip>
+                    </Wrapper>
+                </div>
+            </div>
           <!-- <Subtitle>Editing this properties will change cost and estimation of this project.</Subtitle> -->
         </Header>
         <DrawerContent>
-            <div class="project-actions">
-                <Button href="/" class="back-link project-actions-outline" variant="outlined" on:click={() => (open = true)}>
-                    <i class="material-icons" aria-hidden="true">arrow_backward</i>
-                    <ButtonLabel>Back</ButtonLabel>
-                </Button>
-                <Button variant="raised" on:click={() => (open = true)}>
-                    <ButtonLabel>Manage Project</ButtonLabel>
-                </Button>
-                <Button class="project-actions-outline" variant="outlined" on:click={() => (openDeleteProjectDialog = true)}>
-                    <ButtonLabel>Delete Project</ButtonLabel>
-                </Button>
-            </div>
             <List>
               {#each tabs as tab}
               <Item
@@ -237,27 +256,6 @@
 <style>
     .hidden {
         display: none;
-    }
-
-    :global(.project-actions) {
-        margin: 16px;
-    }
-
-    :global(.project-actions button) {
-        width: 100%;
-    }
-
-    :global(.project-actions .project-actions-outline) {
-        border-color: #6200ee !important;
-    }
-
-    :global(.project-actions i) {
-        width: 30px;
-    }
-
-    :global(.project-actions .back-link) {
-        width: 100%;
-        margin-bottom: 7px;
     }
 
     :global(.project-view-drawer) {

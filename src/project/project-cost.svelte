@@ -17,6 +17,10 @@
         rows.forEach(element => {
             element.classList.toggle("hidden-subtasks")
         });
+
+        let row = document.getElementsByClassName(className + '-icon')[0];
+        row.classList.toggle('fa-angle-down');
+        row.classList.toggle('fa-angle-right');
     }
 </script>
 
@@ -51,7 +55,12 @@
 
                 <Row on:click={rowClick(stage.code)}>
                     <Cell class={stage.color}></Cell>
-                    <Cell>{stage.name}</Cell>
+                    <Cell>
+                        {#if stage.tasks && stage.tasks.length !== 0}
+                        <i class={'fas fa-angle-right' + ' ' + stage.code + '-icon'} aria-hidden="true"></i>
+                        {/if}
+                        {stage.name}
+                    </Cell>
                     <Cell numeric>{stage.stageCost}</Cell>
                     <Cell>{stage.propertyName}</Cell>
                     <Cell numeric>{stage.propertyValue}</Cell>

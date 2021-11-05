@@ -16,22 +16,17 @@
     let taskColors = ['orange', 'green', 'blue'];
 
     function translateStagesToTasks() {
-        let daysAddition = 0;
         function addTask(task, resourceId, color) {
             let id = rows.length + 1 + tasks.length;
             let colorClass = !!color ? color : taskColors[id % 3];
-
-            let taskFrom = currentStart.clone().add(daysAddition, 'days');
-            daysAddition += task.duration;
-            let taskTo =  currentStart.clone().add(daysAddition, 'days');
 
             let newTask = {
                 id: id,
                 label: task.name,
                 enableDragging: false,
                 classes: colorClass,
-                from: taskFrom,
-                to: taskTo,
+                from: task.from,
+                to: task.to,
                 resourceId: resourceId
             }
 
@@ -44,7 +39,14 @@
             if (element.tasks && element.tasks.length !== 0) {
                 element.tasks.forEach(task => {
                     let childRow = parentRow.children.find(child => child.label == task.name);
-                    addTask(task, childRow.id, element.color);
+                    if (task.children && task.children.length !== 0) {
+                        task.children.forEach(ch => {
+                            let chRow = childRow.children.find(child => child.label == ch.name);
+                            addTask(ch, chRow.id, element.color);
+                        });
+                    } else {
+                        addTask(task, childRow.id, element.color);
+                    }
                 });
             } else {
                 addTask(element, parentRow.id, element.color);
@@ -66,10 +68,22 @@
             if (element.tasks && element.tasks.length !== 0) {
                 element.tasks.forEach((task) => {
                     index++;
-                    children.push({
+
+                    let newTask = {
                         id: index,
                         label: task.name,
-                    });
+                    }
+
+                    if (task.children && task.children.length !== 0) {
+                        let ch = [];
+                        task.children.forEach((chl) => {
+                            index++;
+                            ch.push({id: index, label: chl.name});
+                        });
+                        newTask.children = ch;
+                    }
+
+                    children.push(newTask);
                 });
             }
 
@@ -80,7 +94,6 @@
 
             rows.push(newRow);
         });
-        console.log(rows);
     }
 
     $: {
@@ -94,9 +107,8 @@
             gantt.$set({...data});
 
             translateStagesToRows();
-            console.log(rows);
             translateStagesToTasks();
-            console.log(tasks);
+            console.log('TASKS', tasks);
 
             let to = tasks[tasks.length - 1].to;
             data = {rows: rows, tasks: tasks, to: to};

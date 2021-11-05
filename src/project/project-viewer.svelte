@@ -41,19 +41,28 @@
     let projectIdToDelete = 0;
 
     export let dataLoaded;
-    export let projectJobsVM = [];
+    export let projectJobsCostVM = [];
+    export let projectJobsTimelineVM = [];
 
-    function createProjectJobsVM() {
-        let reducedJobsByStageName = project.ProjectJobs.reduce(function (r, a) {
-            r[a.Job.StageName] = r[a.Job.StageName] || [];
-            r[a.Job.StageName].push(a);
+    function reduceByPropertyValue(propName) {
+        return project.ProjectJobs.reduce(function (r, a) {
+            r[a.Job[propName]] = r[a.Job[propName]] || [];
+            r[a.Job[propName]].push(a);
             return r;
         }, Object.create(null));
+    }
+
+    function createProjectJobsVM() {
+        let reducedJobsByStageName = reduceByPropertyValue("StageName");
+        console.log(reducedJobsByStageName);
+
+        let reducedJobsBySubStageName = reduceByPropertyValue("SubStageName");
 
         let jobsVM = [];
 
-        Object.entries(reducedJobsByStageName).forEach(([stage, jobs]) => {
+        Object.entries(reducedJobsBySubStageName).forEach(([stage, jobs]) => {
             let props = stageColorMap.get(stage);
+            console.log(stage);
             let stageVM =  {
                 name: stage,
                 color: props.color,
@@ -115,7 +124,8 @@
 
             jobsVM.push(stageVM);
         });
-        projectJobsVM = jobsVM;
+        projectJobsTimelineVM = jobsVM;
+        projectJobsCostVM = jobsVM;
     }
 
     onMount(() => {
@@ -237,12 +247,12 @@
         </div>
 
         <div class="{active == 'Timeline' ? '' : 'hidden'}">
-            <ProjectTimeline jobs={projectJobsVM}></ProjectTimeline>
+            <ProjectTimeline jobs={projectJobsTimelineVM}></ProjectTimeline>
         </div>
 
         <div class="{active == 'Jobs' ? '' : 'hidden'}">
         <ProjectCost
-                jobs={projectJobsVM}
+                jobs={projectJobsCostVM}
                 estimation={project.ConstructionDuration}
                 bind:loaded={dataLoaded}>
         </ProjectCost>

@@ -14,13 +14,16 @@
 
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);
-        rows.forEach(element => {
-            element.classList.toggle("hidden-subtasks")
-        });
+        if (rows && rows.length !== 0) {
+            rows.forEach(element => {
+                element.classList.toggle("hidden-subtasks")
+            });
 
-        let row = document.getElementsByClassName(className + '-icon')[0];
-        row.classList.toggle('fa-angle-down');
-        row.classList.toggle('fa-angle-right');
+            let row = document.getElementsByClassName(className + '-icon')[0];
+            row.classList.toggle('fa-angle-down');
+            row.classList.toggle('fa-angle-right');
+        }
+        
     }
 </script>
 
@@ -56,7 +59,6 @@
         </Head>
         <Body>
             {#each jobs as stage}
-
                 <Row on:click={rowClick(stage.code)}>
                     <Cell class={stage.color}></Cell>
                     <Cell>

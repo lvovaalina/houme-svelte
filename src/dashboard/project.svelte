@@ -74,7 +74,7 @@
 </div>
 
 <style>
-    .property-table i {
+    :global(.property-table i) {
         color: #6200ee;
     }
 

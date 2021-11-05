@@ -434,6 +434,7 @@
         display: flex;
         flex-grow: 1;
         background-color: #F6F3F9;
+        height: 100%;
     }
 
     .manage-project-button-container {

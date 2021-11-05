@@ -17,7 +17,7 @@
     } from '@smui/drawer';
     import List, { Item, Text } from '@smui/list';
     import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
-    import { stageColorMap } from '../utils';
+    import { stageColorMap, stageMap } from '../utils';
 
     export let projectId;
     let active = 'Project View';
@@ -44,25 +44,30 @@
     export let projectJobsCostVM = [];
     export let projectJobsTimelineVM = [];
 
-    function reduceByPropertyValue(propName) {
-        return project.ProjectJobs.reduce(function (r, a) {
+    function reduceByPropertyValue(array, propName) {
+        return array.reduce(function (r, a) {
             r[a.Job[propName]] = r[a.Job[propName]] || [];
             r[a.Job[propName]].push(a);
             return r;
         }, Object.create(null));
     }
 
-    function createProjectJobsVM() {
-        let reducedJobsByStageName = reduceByPropertyValue("StageName");
-        console.log(reducedJobsByStageName);
+    function arrayMax(arr) {
+        return arr.reduce(function (p, v) {
+            return ( p > v ? p : v );
+        });
+    }
 
-        let reducedJobsBySubStageName = reduceByPropertyValue("SubStageName");
+    function createProjectJobsVM() {
+        let reducedJobsByStageName = reduceByPropertyValue(project.ProjectJobs, "StageName");
+
+        let reducedJobsBySubStageName = reduceByPropertyValue(project.ProjectJobs, "SubStageName");
 
         let jobsVM = [];
+        let jobsTinelineVM = [];
 
         Object.entries(reducedJobsBySubStageName).forEach(([stage, jobs]) => {
             let props = stageColorMap.get(stage);
-            console.log(stage);
             let stageVM =  {
                 name: stage,
                 color: props.color,
@@ -88,9 +93,9 @@
                 let stageDuration = 0, stageCost = 0, stageWorkers = 0;
                 let tasks = [];
                 jobs.forEach(job => {
-                    stageDuration += job.ConstructionDurationInDays;
                     stageCost += job.ConstructionCost;
                     stageWorkers += job.ConstructionWorkers;
+                    stageDuration += job.ConstructionDurationInDays;
 
                     let newTask = {
                         name: job.Job.JobName,
@@ -124,7 +129,100 @@
 
             jobsVM.push(stageVM);
         });
-        projectJobsTimelineVM = jobsVM;
+
+        Object.entries(reducedJobsByStageName).forEach(([stage, jobs]) => {
+            let props = stageMap.get(stage);
+            let stageVM =  {
+                name: stage,
+                color: props.color,
+                code: props.code,
+            }
+
+            if (jobs.length == 1) {
+                stageVM.duration = jobs[0].ConstructionDurationInDays;
+                stageVM.stageCost = jobs[0].ConstructionCost;
+                stageVM.workersCount = jobs[0].ConstructionWorkers;
+
+                let projectProperty = propertiesMap.get(jobs[0].PropertyCode);
+                if (projectProperty && projectProperty.Property) {
+                    stageVM.propertyName = projectProperty.Property.PropertyName;
+                    stageVM.propertyUnit = projectProperty.Property.PropertyUnit;
+                    stageVM.propertyValue = projectProperty.PropertyValue;
+                } else {
+                    stageVM.propertyName = '-';
+                    stageVM.propertyUnit = '-';
+                    stageVM.propertyValue = '-';
+                }
+            } else {
+                let stageDuration = 0, stageCost = 0, stageWorkers = 0;
+                let tasks = [];
+
+                let jobTaskMap = reduceByPropertyValue(jobs, "SubStageName");
+
+                Object.entries(jobTaskMap).forEach(([subStageName, subtasks]) => {
+                    let newTask = {
+                        name: subStageName,
+                    }
+                    let taskChildren = [];
+                    let dur = 0, cost = 0, workCount = 0;
+
+                    
+                    subtasks.forEach(st => {
+                        
+                        let subtask = {
+                            name: st.Job.JobName,
+                            duration: st.ConstructionDurationInDays,
+                            cost: st.ConstructionCost,
+                            workersCount: st.ConstructionWorkers
+                        }
+
+                        let projectProperty = propertiesMap.get(st.PropertyCode);
+                        if (projectProperty && projectProperty.Property) {
+                            subtask.propertyName = projectProperty.Property.PropertyName;
+                            subtask.propertyUnit = projectProperty.Property.PropertyUnit;
+                            subtask.propertyValue = projectProperty.PropertyValue;
+                        } else {
+                            subtask.propertyName = '-';
+                            subtask.propertyUnit = '-';
+                            subtask.propertyValue = '-';
+                        }
+
+                        stageDuration += subtask.duration;
+                        stageCost += subtask.cost;
+                        stageWorkers += subtask.workersCount;
+
+                        if (subStageName === stage || subtasks.length === 1) {
+                            tasks.push(subtask);
+                        } else {
+                            dur += subtask.duration;
+                            cost += subtask.cost;
+                            workCount = subtask.workersCount;
+                            taskChildren.push(subtask);
+                        }
+                    });
+
+                    if (subStageName !== stage && subtasks.length !== 1) {
+                        newTask.duration = dur;
+                        newTask.cost = cost;
+                        newTask.workersCount = workCount;
+                        newTask.children = taskChildren;
+                        tasks.push(newTask);
+                    }
+                });
+
+                stageVM.duration = stageDuration;
+                stageVM.stageCost = stageCost;
+                stageVM.workersCount = stageWorkers;
+                stageVM.propertyName = '-';
+                stageVM.propertyUnit = '-';
+                stageVM.propertyValue = '-';
+                stageVM.tasks = tasks;
+            }
+
+            jobsTinelineVM.push(stageVM);
+        });
+
+        projectJobsTimelineVM = jobsTinelineVM;
         projectJobsCostVM = jobsVM;
     }
 

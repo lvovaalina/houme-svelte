@@ -44,7 +44,14 @@
             if (element.tasks && element.tasks.length !== 0) {
                 element.tasks.forEach(task => {
                     let childRow = parentRow.children.find(child => child.label == task.name);
-                    addTask(task, childRow.id, element.color);
+                    if (task.children && task.children.length !== 0) {
+                        task.children.forEach(ch => {
+                            let chRow = childRow.children.find(child => child.label == ch.name);
+                            addTask(ch, chRow.id, element.color);
+                        });
+                    } else {
+                        addTask(task, childRow.id, element.color);
+                    }
                 });
             } else {
                 addTask(element, parentRow.id, element.color);
@@ -66,10 +73,22 @@
             if (element.tasks && element.tasks.length !== 0) {
                 element.tasks.forEach((task) => {
                     index++;
-                    children.push({
+
+                    let newTask = {
                         id: index,
                         label: task.name,
-                    });
+                    }
+
+                    if (task.children && task.children.length !== 0) {
+                        let ch = [];
+                        task.children.forEach((chl) => {
+                            index++;
+                            ch.push({id: index, label: chl.name});
+                        });
+                        newTask.children = ch;
+                    }
+
+                    children.push(newTask);
                 });
             }
 
@@ -80,7 +99,6 @@
 
             rows.push(newRow);
         });
-        console.log(rows);
     }
 
     $: {

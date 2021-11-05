@@ -288,6 +288,7 @@
             return result.json();
         })
         .then((resp) => {
+            resp.data.ConstructionCost = 350000;
             project = resp.data;
 
             project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
@@ -378,20 +379,40 @@
       </DrawerContent>
     </Drawer>
 
-    <AppContent class="app-content">
+    <AppContent style="padding-top:5px;" class="app-content">
         <div><DrawerTitle>{active}</DrawerTitle></div>
 
         <div class="{active == 'Project View' ? '' : 'hidden'}">
-        <LayoutGrid>
+        <LayoutGrid style="padding-left:0;">
             <GridCell span={9}>
                 <ForgeViewer></ForgeViewer>
             </GridCell>
             <GridCell span={3}>
                 <h2>Project Information</h2>
-                <p>Living area: {project.LivingArea}</p>
-                <p>Rooms number: {project.RoomsNumber}</p>
-                <p>Construction cost: {project.ConstructionCost}</p>
-                <p>Construction duration: {project.ConstructionDuration} days</p>
+                {#if dataLoaded}
+                <table class="property-table" aria-label="Project properties" style="max-width: 100%;">
+                    <tr>
+                        <td><i class="fas fa-key"></i></td>
+                        <td>Rooms Number</td>
+                        <td class="numeric-row">{project.RoomsNumber}</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-house-user"></i></td>
+                        <td>Space</td>
+                        <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-money-bill-wave"></i></td>
+                        <td>Project Cost</td>
+                        <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-calendar-alt"></i></td>
+                        <td>Project Duration</td>
+                        <td class="numeric-row">{project.ConstructionDuration} days</td>
+                    </tr>
+                </table>
+                {/if}
             </GridCell>
         </LayoutGrid>
         </div>
@@ -434,6 +455,7 @@
         display: flex;
         flex-grow: 1;
         background-color: #F6F3F9;
+        height: 100%;
     }
 
     .manage-project-button-container {

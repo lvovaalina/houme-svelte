@@ -16,22 +16,17 @@
     let taskColors = ['orange', 'green', 'blue'];
 
     function translateStagesToTasks() {
-        let daysAddition = 0;
         function addTask(task, resourceId, color) {
             let id = rows.length + 1 + tasks.length;
             let colorClass = !!color ? color : taskColors[id % 3];
-
-            let taskFrom = currentStart.clone().add(daysAddition, 'days');
-            daysAddition += task.duration;
-            let taskTo =  currentStart.clone().add(daysAddition, 'days');
 
             let newTask = {
                 id: id,
                 label: task.name,
                 enableDragging: false,
                 classes: colorClass,
-                from: taskFrom,
-                to: taskTo,
+                from: task.from,
+                to: task.to,
                 resourceId: resourceId
             }
 
@@ -112,9 +107,8 @@
             gantt.$set({...data});
 
             translateStagesToRows();
-            console.log(rows);
             translateStagesToTasks();
-            console.log(tasks);
+            console.log('TASKS', tasks);
 
             let to = tasks[tasks.length - 1].to;
             data = {rows: rows, tasks: tasks, to: to};

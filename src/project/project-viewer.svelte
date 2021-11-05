@@ -17,7 +17,7 @@
     } from '@smui/drawer';
     import List, { Item, Text } from '@smui/list';
     import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
-    import { stageColorMap, stageMap } from '../utils';
+    import { stageColorMap, stageMap, time } from '../utils';
 
     export let projectId;
     let active = 'Project View';
@@ -56,6 +56,46 @@
         return arr.reduce(function (p, v) {
             return ( p > v ? p : v );
         });
+    }
+
+    function getProjectJobsFromToTimestamps() {
+        let currentStart = time('01-01');
+
+        let timestamps = new Map();
+        let currentParallelGroupCode = ''; 
+        let currentDurationMax = Number.NEGATIVE_INFINITY;
+
+        project.ProjectJobs.forEach(job => {
+            let timestamp = {};
+            if (!job.Job.InParallel) {
+                if (currentParallelGroupCode !== '' && currentDurationMax != Number.NEGATIVE_INFINITY) {
+                    currentStart = currentStart.clone().add(currentDurationMax, 'days');
+                    currentDurationMax = Number.NEGATIVE_INFINITY;
+                    currentParallelGroupCode = '';
+                }
+
+                timestamp.from = currentStart.clone();
+                timestamp.to = currentStart.clone().add(job.ConstructionDurationInDays, 'days');
+                currentStart = timestamp.to.clone();
+            } else {
+                if (currentParallelGroupCode !== '' && currentParallelGroupCode != job.Job.ParallelGroupCode) {
+                    currentStart = currentStart.clone().add(currentDurationMax, 'days');
+                    currentDurationMax = Number.NEGATIVE_INFINITY;
+                }
+
+                currentParallelGroupCode = job.Job.ParallelGroupCode;
+                currentDurationMax = job.ConstructionDurationInDays > currentDurationMax
+                    ? job.ConstructionDurationInDays
+                    : currentDurationMax;
+
+                timestamp.from = currentStart.clone();
+                timestamp.to = currentStart.clone().add(job.ConstructionDurationInDays, 'days');
+            }
+
+            timestamps.set(job.Job.JobCode, timestamp);
+        });
+
+        return timestamps;
     }
 
     function createProjectJobsVM() {
@@ -130,6 +170,9 @@
             jobsVM.push(stageVM);
         });
 
+
+        let timestamps = getProjectJobsFromToTimestamps();
+
         Object.entries(reducedJobsByStageName).forEach(([stage, jobs]) => {
             let props = stageMap.get(stage);
             let stageVM =  {
@@ -139,9 +182,12 @@
             }
 
             if (jobs.length == 1) {
+                let timestamp = timestamps.get(jobs[0].Job.JobCode);
                 stageVM.duration = jobs[0].ConstructionDurationInDays;
                 stageVM.stageCost = jobs[0].ConstructionCost;
                 stageVM.workersCount = jobs[0].ConstructionWorkers;
+                stageVM.from = timestamp.from;
+                stageVM.to = timestamp.to;
 
                 let projectProperty = propertiesMap.get(jobs[0].PropertyCode);
                 if (projectProperty && projectProperty.Property) {
@@ -168,12 +214,16 @@
 
                     
                     subtasks.forEach(st => {
+
+                        let timestamp = timestamps.get(st.Job.JobCode);
                         
                         let subtask = {
                             name: st.Job.JobName,
                             duration: st.ConstructionDurationInDays,
                             cost: st.ConstructionCost,
-                            workersCount: st.ConstructionWorkers
+                            workersCount: st.ConstructionWorkers,
+                            from: timestamp.from,
+                            to: timestamp.to,
                         }
 
                         let projectProperty = propertiesMap.get(st.PropertyCode);
@@ -221,6 +271,8 @@
 
             jobsTinelineVM.push(stageVM);
         });
+
+        console.log("Jobs,", jobsTinelineVM);
 
         projectJobsTimelineVM = jobsTinelineVM;
         projectJobsCostVM = jobsVM;

@@ -2,6 +2,7 @@
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Button, { Label as ButtonLabel } from '@smui/button';
     import Textfield from '@smui/textfield';
+    import LayoutGrid, { Cell } from "@smui/layout-grid"
 
     import ProjectSettings from '../project/project-settings.svelte';
 
@@ -190,16 +191,26 @@
     class="manage-project-parameters-dialog"
     >
     <Content>
-        <Title class="project-settings-dialog-title">Add project</Title>
+        <Title style="padding-left:0;" class="project-settings-dialog-title">{newProject ? 'Add' : 'Manage' } project</Title>
         <p>General info</p>
         {#if errorMessage !== ''}
             <div>{errorMessage}</div>
         {/if}
         <div>
-            <Textfield required variant="filled" class="text-field" bind:value={project.Name} label="Name"/>
-            <Textfield required variant="filled" disabled class="text-field" bind:value={project.BucketName} label="Bucket name"></Textfield>
-            <Textfield required variant="filled" class="text-field" bind:value={project.LivingArea} label="Living area"></Textfield>
-            <Textfield required variant="filled" class="text-field" bind:value={project.RoomsNumber} type="number" label="Rooms number"></Textfield>
+            <LayoutGrid style="padding:0;">
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.Name} label="Name"/>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" disabled class="text-field" bind:value={project.BucketName} label="Bucket name"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.LivingArea} label="Living area"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.RoomsNumber} type="number" label="Rooms number"></Textfield>
+                </Cell>
+                </LayoutGrid>
         </div>
         
         <ProjectSettings
@@ -211,9 +222,12 @@
         </ProjectSettings>
         <div class="project-properties">
             <p>Properties</p>
+            <LayoutGrid style="padding:0;">
             {#if newProject}
                 {#each properties as prop}
+                <Cell span={6}>
                 {#if prop.PropertyUnit == 'sq.m.'}
+
                         <Textfield
                             required 
                             variant="filled"
@@ -231,9 +245,11 @@
                             bind:value={prop.PropertyValue}
                             label="{prop.PropertyName}"/>
                 {/if}
+                </Cell>
                 {/each}
             {:else}
                 {#each project.ProjectProperties as prop}
+                <Cell span={6}>
                     {#if !!prop.Property}
                         {#if prop.Property.PropertyUnit == 'sq.m.'}
                             <Textfield
@@ -254,11 +270,13 @@
                                 label="{prop.Property.PropertyName}"/>
                         {/if}
                     {/if}
+                    </Cell>
                 {/each}
             {/if}
+            </LayoutGrid>
         </div>
     </Content>
-    <Actions>
+    <Actions style="padding-right:20px;">
         <Button>
             <ButtonLabel>Cancel</ButtonLabel>
         </Button>
@@ -270,9 +288,29 @@
 
 <style>
     :global(.material-select) {
-        margin: 10px;
+        margin: 10px 0 10px 0;
     }
     :global(.text-field) {
-        margin: 10px;
+        margin: 10px 0 10px 0;
+    }
+
+    @media only screen and (min-width: 600px) and (max-width: 839px) {
+        :global(.manage-project-parameters-dialog .mdc-layout-grid__cell) {
+            grid-column-end: span 4;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        :global(.manage-project-parameters-dialog .mdc-layout-grid__cell) {
+            grid-column-end: span 6;
+        }
+
+        :global(.material-select) {
+            width: 100%;
+        }
+
+        :global(.text-field) {
+            width: 100%;
+        }
     }
 </style>

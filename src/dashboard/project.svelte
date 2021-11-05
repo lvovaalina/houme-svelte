@@ -15,7 +15,7 @@
 </script>
 
 <div class="card-container">
-    <Card style={ind % 2 == 0 ? "margin-right:25px;" : "margin-left:25px;"}  class="project-card" outline>
+    <Card class={ind % 2 == 0 ? "mar-right project-card" : "mar-left project-card"} outline>
         <Content style="padding:20px">
             <div class="card-details-container">
                 <div class="card-text-details-container">
@@ -78,6 +78,24 @@
         color: #6200ee;
     }
 
+    :global(.mar-right) {
+        margin-right: 25px;
+    }
+
+    :global(.mar-left) {
+        margin-left: 25px;
+    }
+
+    @media only screen and (min-width: 1500px) {
+        :global(.mar-right) {
+            margin-right: 50px;
+        }
+
+        :global(.mar-left) {
+            margin-left: 50px;
+        }
+    }
+
     .numeric-row {
         padding-left: 10px;
     }
@@ -100,12 +118,6 @@
     .card-cover {
         height: 210px;
         width: 315px;
-    }
-
-    @media only screen and (min-width: 1500px) {
-        .card-cover {
-            width: 203px;
-        }
     }
 
     .properties p {

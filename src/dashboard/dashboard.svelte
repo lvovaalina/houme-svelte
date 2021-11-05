@@ -36,6 +36,7 @@
         .then((resp) => {
             resp.data.forEach(element => {
                 element.PropertyValue = null;
+                element.ConstructionCost = 350000;
             });
 
             projects = resp.data;
@@ -85,11 +86,12 @@
     </div>
 
     <div class="card-display">
-        <LayoutGrid>
-            {#each projects as project}
-                <Cell>
-                    <Project on:openDeleteProjectDialog={openDeleteProjectDialog} project={project}/>
+        <LayoutGrid style="padding-top:0;">
+            {#each projects as project, index}
+                <Cell span={6}>
+                    <Project ind={index} on:openDeleteProjectDialog={openDeleteProjectDialog} project={project}/>
                 </Cell>
+                <!-- <Cell span={2}></Cell> -->
             {/each}
             <!-- <Cell>
                 <Upload bucketName="{BaseBucketName}" on:add={addProject}/>

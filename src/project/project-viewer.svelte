@@ -288,6 +288,7 @@
             return result.json();
         })
         .then((resp) => {
+            res.data.ConstructionCost = 350000;
             project = resp.data;
 
             project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);

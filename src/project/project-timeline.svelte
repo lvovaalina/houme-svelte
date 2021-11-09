@@ -172,7 +172,8 @@
 
 <style>
     .container {
-        height: 83vh;
+        /* -header height -tab header height */
+        height: calc(100vh - 64px - 56px);
     }
     #example-gantt {
         flex-grow: 1;

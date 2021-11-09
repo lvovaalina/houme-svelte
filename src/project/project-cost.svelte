@@ -138,7 +138,8 @@
 
     :global(.project-stages, .project-materials) {
         width: 100%;
-        height: 77vh;
+        /* -header height -tab header height - table header height */
+        height: calc(100vh - 64px - 56px - 50px);
     }
 
     /*@media (max-width: 839px) {*/

@@ -455,7 +455,8 @@
         display: flex;
         flex-grow: 1;
         background-color: #F6F3F9;
-        height: 100%;
+        /*header height*/
+        height: calc(100vh - 64px);
     }
 
     .manage-project-button-container {

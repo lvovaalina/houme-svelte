@@ -14,6 +14,7 @@
     "@smui/banner": "^4.2.0",
     "@smui/button": "^4.2.0",
     "@smui/card": "^4.2.0",
+    "@smui/circular-progress": "^5.0.0-beta.8",
     "@smui/data-table": "^5.0.0-beta.7",
     "@smui/dialog": "^5.0.0-beta.7",
     "@smui/drawer": "^5.0.0-beta.7",

@@ -1,6 +1,7 @@
 <script>
     import LayoutGrid, { Cell } from "@smui/layout-grid"
     import Button, { Label as ButtonLabel } from '@smui/button';
+    import CircularProgress from '@smui/circular-progress';
 
 
     import { onMount } from 'svelte';
@@ -24,6 +25,8 @@
 
     export let projects = [];
 
+    export let dataLoaded = false;
+
     onMount(function() {
         fetch(api + '/getProjects')
         .then((result) => {
@@ -40,6 +43,7 @@
             });
 
             projects = resp.data;
+            dataLoaded = true;
         });
     });
 
@@ -77,27 +81,29 @@
 </script>
 
 <div class="dashboard">
-    <div class="page-header">
-        <h1>Projects</h1>
-        <Button variant="raised" on:click={() => (openAddProjectDialog = true)}>
-            <ButtonLabel>Add new project</ButtonLabel>
-            <i class="material-icons" aria-hidden="true">add</i>
-        </Button>
-    </div>
+    {#if dataLoaded}
+        <div class="page-header">
+            <h1>Projects</h1>
+            <Button variant="raised" on:click={() => (openAddProjectDialog = true)}>
+                <ButtonLabel>Add new project</ButtonLabel>
+                <i class="material-icons" aria-hidden="true">add</i>
+            </Button>
+        </div>
 
-    <div class="card-display">
-        <LayoutGrid style="padding-top:0;">
-            {#each projects as project, index}
-                <Cell span={6}>
-                    <Project ind={index} on:openDeleteProjectDialog={openDeleteProjectDialog} project={project}/>
-                </Cell>
-                <!-- <Cell span={2}></Cell> -->
-            {/each}
-            <!-- <Cell>
-                <Upload bucketName="{BaseBucketName}" on:add={addProject}/>
-            </Cell> -->
-        </LayoutGrid>
-    </div>
+        <div class="card-display">
+            <LayoutGrid style="padding-top:0;">
+                {#each projects as project, index}
+                    <Cell span={6}>
+                        <Project ind={index} on:openDeleteProjectDialog={openDeleteProjectDialog} project={project}/>
+                    </Cell>
+                {/each}
+            </LayoutGrid>
+        </div>
+    {:else}
+        <div style="display: flex; justify-content: center">
+            <CircularProgress style="height: 90vh; width: 120px;" indeterminate />
+        </div>
+    {/if}
     <AddManageProjectDialog bind:open={openAddProjectDialog} on:add={addProject} newProject={true}></AddManageProjectDialog>
     <DeleteProjectDialog
         bind:open={deleteProjectDialogOpen}
@@ -107,6 +113,10 @@
 </div>
 
 <style>
+    .hide {
+        display: none;
+    }
+
     .page-header {
         display: flex;
         align-items: center;

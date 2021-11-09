@@ -75,6 +75,7 @@
 <style>
     .forge-viewer {
         position: relative;
-        height: 650px;
+        /* -header height -tab header height - view project padding */
+        height: calc(100vh - 64px - 56px - 24px);
     }
 </style>

@@ -25,7 +25,7 @@
 
     export let projects = [];
 
-    export let dataLoaded = false;
+    let dataLoaded = false;
 
     onMount(function() {
         fetch(api + '/getProjects')

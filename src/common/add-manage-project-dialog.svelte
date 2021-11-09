@@ -1,6 +1,7 @@
 <script>
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Button, { Label as ButtonLabel } from '@smui/button';
+    import CircularProgress from '@smui/circular-progress';
     import Textfield from '@smui/textfield';
     import LayoutGrid, { Cell } from "@smui/layout-grid"
 
@@ -10,6 +11,8 @@
 
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
+
+    let dataLoaded = true;
 
     let jobs = [];
     export let properties = [];
@@ -73,6 +76,7 @@
     }
 
     async function addProject(event) {
+        dataLoaded = false;
         event.preventDefault();
         event.stopPropagation();
 
@@ -106,6 +110,7 @@
                     ConstructionDuration: project.ConstructionDuration
                 }
             });
+            dataLoaded = true;
             open = false;
         })
         .catch(error => {
@@ -115,7 +120,7 @@
     }
 
     onMount(function() {
-        fetch(api + '/getProperties')
+        let getProperties = fetch(api + '/getProperties')
         .then((result) => {
             if (result.ok) {
                 console.log("get successfully");
@@ -131,7 +136,7 @@
             properties = resp.data;
         });
 
-        fetch(api + '/getJobs')
+        let getJobs = fetch(api + '/getJobs')
         .then((result) => {
             if (result.ok) {
                 console.log("get jobs successfully");
@@ -146,9 +151,15 @@
 
             jobs = resp.data;
         });
+
+        Promise.all([getProperties, getJobs])
+            .then(() => {
+                dataLoaded = true;
+            })
     });
 
     async function updateProject(event) {
+        dataLoaded = false;
         event.preventDefault();
         event.stopPropagation();
         setProjectJobs();
@@ -174,6 +185,7 @@
 
             project = updatedProject;
             open = false;
+            dataLoaded = true;
         })
         .catch(error => {
             errorMessage = 'Something went wrong! Try again later';
@@ -192,6 +204,12 @@
     >
     <Content>
         <Title style="padding-left:0;" class="project-settings-dialog-title">{newProject ? 'Add' : 'Manage' } project</Title>
+        {#if !dataLoaded}
+        <div style="display: flex; justify-content: center;position:absolute;height:90vh;background-color:rgba(255,255,255,0.5);width: 100%;margin-left:-24px;z-index:12;">
+            <CircularProgress style="position:absolute; height: 90vh;width:120px;z-index:12;" indeterminate />
+        </div>
+        {/if}
+        <div>
         <p>General info</p>
         {#if errorMessage !== ''}
             <div>{errorMessage}</div>
@@ -274,6 +292,7 @@
                 {/each}
             {/if}
             </LayoutGrid>
+            </div>
         </div>
     </Content>
     <Actions style="padding-right:20px;">

@@ -9,7 +9,7 @@
 
     export let loaded = false;
 
-    let columns = ['Color', 'Stage', 'Cost', 'Property Name', 'Property Value', 'Property Unit', 'People', 'Duration'];
+    let columns = ['Color', 'Stage', 'Cost',  'Duration', 'Property Name', 'Property Value', 'Property Unit', 'People'];
     let jobsCost = 350000;
 
     function rowClick(className) {
@@ -76,6 +76,7 @@
                         {stage.name}
                     </Cell>
                     <Cell numeric>{stage.stageCost}</Cell>
+                    <Cell numeric>{stage.duration}</Cell>
                     <Cell>{stage.propertyName}</Cell>
                     <Cell numeric>{stage.propertyValue}</Cell>
                     {#if stage.propertyUnit === 'sq.m.'}
@@ -84,7 +85,7 @@
                         <Cell>{stage.propertyUnit}</Cell>
                     {/if}
                     <Cell numeric>{stage.workersCount}</Cell>
-                    <Cell numeric>{stage.duration}</Cell>
+                    
                 </Row>
                 {#if stage.tasks && stage.tasks.length !== 0}
                         {#each stage.tasks as task}
@@ -92,6 +93,7 @@
                                 <Cell class={stage.color}></Cell>
                                 <Cell style="padding-left:50px;">{task.name}</Cell>
                                 <Cell numeric>{task.cost}</Cell>
+                                <Cell numeric>{task.duration}</Cell>
                                 <Cell>{task.propertyName}</Cell>
                                 <Cell numeric>{task.propertyValue}</Cell>
                                 {#if task.propertyUnit === 'sq.m.'}
@@ -100,7 +102,6 @@
                                     <Cell>{task.propertyUnit}</Cell>
                                 {/if}
                                 <Cell numeric>{task.workersCount}</Cell>
-                                <Cell numeric>{task.duration}</Cell>
                             </Row>
                         {/each}
                 {/if}

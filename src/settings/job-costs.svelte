@@ -4,6 +4,7 @@
     import { getNotificationsContext } from 'svelte-notifications';
 
     const { addNotification } = getNotificationsContext();
+    let create = false;
 
     const sortStore = [];
 
@@ -11,14 +12,22 @@
 
     let jobProperties = [];
 
+    let jobs = [];
+
+    let stageNames = [];
+    let subStageNames = [];
+    let jobNames = [];
+
     const api = isProduction
         ? "https://houme-api.herokuapp.com"
         : "http://localhost:10000";
 
-    onMount(() => {reload();})
+    onMount(() => {
+        reload();
+    })
 
-    function get() {
-        return fetch(api + '/getJobProperties')
+    function get(url) {
+        return fetch(api + url)
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");
@@ -29,12 +38,15 @@
     }
 
     function reload() {
-        get().then((resp) => {
+        get('/getJobProperties').then((resp) => {
             jobProperties = resp.data;
             resp.data.forEach(element => {
                 element.StageName = element.Job.StageName;
                 element.SubStageName = element.Job.SubStageName;
                 element.JobName = element.Job.JobName;
+                element.Currency = "$";
+                element.PropertyName = element.Job.Property.PropertyName;
+                element.PropertyUnit = element.Job.Property.PropertyUnit;
             });
             myData = resp.data;
 
@@ -149,6 +161,9 @@
         {name: 'SubStageName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'JobName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'ConstructionSpeed', show: true, edit: true, width: '50px', description: 'The job'},
+        {name: 'Currency', show: true, edit: false, width: '50px'},
+        {name: 'PropertyUnit', show: true, edit: false, width: '50px'},
+        {name: 'PropertyName', show: true, edit: false, with: '50px'},
         {name: 'ConstructionCost', show: true, edit: true, width: '50px'},
         {name: 'ConstructionFixDurationInHours', show: true, edit: true, width: '50px'},
         {name: 'MaxWorkers', show: true, edit: true, width: '50px'},

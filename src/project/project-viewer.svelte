@@ -1,11 +1,9 @@
 <script>
     import LayoutGrid, { Cell as GridCell} from '@smui/layout-grid'
     import ForgeViewer from './forge-viewer.svelte';
-    import Button, { Label as ButtonLabel } from '@smui/button';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
     import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
-    import ProjectMaterials from './project-materials.svelte';
     import IconButton from "@smui/icon-button";
     import Tooltip, { Wrapper } from '@smui/tooltip';
     import { onMount } from 'svelte';
@@ -34,6 +32,7 @@
 
     let project = {};
     export let propertiesMap = new Map();
+    let properties = [];
     
     let open = false;
 
@@ -119,8 +118,9 @@
                 stageVM.stageCost = jobs[0].ConstructionCost;
                 stageVM.workersCount = jobs[0].ConstructionWorkers;
 
-                let projectProperty = propertiesMap.get(jobs[0].PropertyCode);
-                if (projectProperty && projectProperty.Property) {
+                if (jobs[0].Job.Property && !!jobs[0].Job.Property.PropertyCode) {
+                    let projectProperty = propertiesMap.get(jobs[0].Job.Property.PropertyCode);
+                    console.log(jobs[0].Job.Property)
                     stageVM.propertyName = projectProperty.Property.PropertyName;
                     stageVM.propertyUnit = projectProperty.Property.PropertyUnit;
                     stageVM.propertyValue = projectProperty.PropertyValue;
@@ -144,8 +144,9 @@
                         workersCount: job.ConstructionWorkers
                     }
 
-                    let projectProperty = propertiesMap.get(job.PropertyCode);
-                    if (projectProperty && projectProperty.Property) {
+                    if (job.Job.Property && !!job.Job.Property.PropertyCode) {
+                        let projectProperty = propertiesMap.get(job.Job.Property.PropertyCode);
+                        console.log(projectProperty)
                         newTask.propertyName = projectProperty.Property.PropertyName;
                         newTask.propertyUnit = projectProperty.Property.PropertyUnit;
                         newTask.propertyValue = projectProperty.PropertyValue;
@@ -190,9 +191,9 @@
                 stageVM.to = timestamp.to;
 
                 let projectProperty = propertiesMap.get(jobs[0].PropertyCode);
-                if (projectProperty && projectProperty.Property) {
-                    stageVM.propertyName = projectProperty.Property.PropertyName;
-                    stageVM.propertyUnit = projectProperty.Property.PropertyUnit;
+                if (projectProperty && projectProperty.Job && projectProperty.Job.Property) {
+                    stageVM.propertyName = projectProperty.Job.Property.PropertyName;
+                    stageVM.propertyUnit = projectProperty.Job.Property.PropertyUnit;
                     stageVM.propertyValue = projectProperty.PropertyValue;
                 } else {
                     stageVM.propertyName = '-';
@@ -227,9 +228,9 @@
                         }
 
                         let projectProperty = propertiesMap.get(st.PropertyCode);
-                        if (projectProperty && projectProperty.Property) {
-                            subtask.propertyName = projectProperty.Property.PropertyName;
-                            subtask.propertyUnit = projectProperty.Property.PropertyUnit;
+                        if (projectProperty && projectProperty.Job.Property) {
+                            subtask.propertyName = projectProperty.Job.Property.PropertyName;
+                            subtask.propertyUnit = projectProperty.Job.Property.PropertyUnit;
                             subtask.propertyValue = projectProperty.PropertyValue;
                         } else {
                             subtask.propertyName = '-';
@@ -279,27 +280,59 @@
     }
 
     onMount(() => {
-        fetch(api + '/getProject/' + projectId)
+        let getProperties = fetch(api + '/getProperties')
         .then((result) => {
             if (result.ok) {
-                console.log("get project success");
+                console.log("get successfully");
             }
 
             return result.json();
         })
         .then((resp) => {
-            resp.data.ConstructionCost = 350000;
-            project = resp.data;
+            resp.data.forEach(element => {
+                element.PropertyValue = null;
+            });
 
-            project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
-
-            propertiesMap = new Map(project.ProjectProperties.map(i => [i.PropertyCode, i]));
-            projectIdToDelete = project.ProjectId;
-
-            createProjectJobsVM();
-
-            dataLoaded = true;
+            properties = resp.data;
         });
+
+        let getProject = () =>{
+            fetch(api + '/getProject/' + projectId)
+            .then((result) => {
+                if (result.ok) {
+                    console.log("get project success");
+                }
+
+                return result.json();
+            })
+            .then((resp) => {
+                resp.data.ConstructionCost = 350000;
+                project = resp.data;
+
+                project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
+
+                propertiesMap = new Map(project.ProjectProperties.map(i => [i.PropertyCode, i]));
+                projectIdToDelete = project.ProjectId;
+                properties.forEach((prop) => {
+                    let props = project.ProjectProperties.filter(p => p.Property.PropertyCode == prop.PropertyCode);
+                    if (props.length === 0) {
+                        console.log(prop);
+                        project.ProjectProperties.push({
+                            ProjectId: project.ProjectId,
+                            PropertyValue: null,
+                            Property: prop
+                        })
+                    }
+                });
+
+                createProjectJobsVM();
+
+                dataLoaded = true;
+            });
+
+        } 
+        getProperties.then(() => getProject());
+       
     });
 
     function onDelete() {
@@ -308,8 +341,7 @@
 
     function onUpdate() {
         dataLoaded = false;
-
-        // fetch new project jobs as they not preloaded on save
+        // // fetch new project jobs as they not preloaded on save
         fetch(api + '/getProjectJobs/' + projectId)
         .then((result) => {
             if (result.ok) {

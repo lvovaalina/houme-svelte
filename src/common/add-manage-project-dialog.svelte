@@ -12,6 +12,9 @@
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
 
+    import { getNotificationsContext } from 'svelte-notifications';
+    const { addNotification } = getNotificationsContext();
+
     let dataLoaded = true;
 
     let jobs = [];
@@ -189,7 +192,13 @@
         })
         .catch(error => {
             errorMessage = 'Something went wrong! Try again later';
+            addNotification({
+                text: errorMessage,
+                position: 'top-center',
+                type: 'danger'
+            });
             console.error(error);
+            dataLoaded = true;
         });
     }
 
@@ -203,7 +212,11 @@
     class="manage-project-parameters-dialog"
     >
     <Content>
-        <Title style="padding-left:0;" class="project-settings-dialog-title">{newProject ? 'Add' : 'Manage' } project</Title>
+        <Title style="padding-left:0;" class="project-settings-dialog-title">
+            {newProject ? 'Add' : 'Manage' } project
+            
+        </Title>
+        
         {#if !dataLoaded}
         <div style="display: flex; justify-content: center;position:absolute;height:90vh;background-color:rgba(255,255,255,0.5);width: 100%;margin-left:-24px;z-index:12;">
             <CircularProgress style="position:absolute; height: 90vh;width:120px;z-index:12;" indeterminate />
@@ -211,9 +224,6 @@
         {/if}
         <div>
         <p>General info</p>
-        {#if errorMessage !== ''}
-            <div>{errorMessage}</div>
-        {/if}
         <div>
             <LayoutGrid style="padding:0;">
                 <Cell span={6}>

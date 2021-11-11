@@ -108,7 +108,6 @@
 
             translateStagesToRows();
             translateStagesToTasks();
-            console.log('TASKS', tasks);
 
             let to = tasks[tasks.length - 1].to;
             data = {rows: rows, tasks: tasks, to: to};

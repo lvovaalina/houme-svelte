@@ -120,7 +120,6 @@
 
                 if (jobs[0].Job.Property && !!jobs[0].Job.Property.PropertyCode) {
                     let projectProperty = propertiesMap.get(jobs[0].Job.Property.PropertyCode);
-                    console.log(jobs[0].Job.Property)
                     stageVM.propertyName = projectProperty.Property.PropertyName;
                     stageVM.propertyUnit = projectProperty.Property.PropertyUnit;
                     stageVM.propertyValue = projectProperty.PropertyValue;
@@ -146,7 +145,6 @@
 
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
                         let projectProperty = propertiesMap.get(job.Job.Property.PropertyCode);
-                        console.log(projectProperty)
                         newTask.propertyName = projectProperty.Property.PropertyName;
                         newTask.propertyUnit = projectProperty.Property.PropertyUnit;
                         newTask.propertyValue = projectProperty.PropertyValue;
@@ -273,8 +271,6 @@
             jobsTinelineVM.push(stageVM);
         });
 
-        console.log("Jobs,", jobsTinelineVM);
-
         projectJobsTimelineVM = jobsTinelineVM;
         projectJobsCostVM = jobsVM;
     }
@@ -311,19 +307,18 @@
 
                 project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
 
-                propertiesMap = new Map(project.ProjectProperties.map(i => [i.PropertyCode, i]));
                 projectIdToDelete = project.ProjectId;
                 properties.forEach((prop) => {
                     let props = project.ProjectProperties.filter(p => p.Property.PropertyCode == prop.PropertyCode);
                     if (props.length === 0) {
-                        console.log(prop);
                         project.ProjectProperties.push({
-                            ProjectId: project.ProjectId,
+                            ...prop,
                             PropertyValue: null,
                             Property: prop
                         })
                     }
                 });
+                propertiesMap = new Map(project.ProjectProperties.map(i => [i.Property.PropertyCode, i]));
 
                 createProjectJobsVM();
 

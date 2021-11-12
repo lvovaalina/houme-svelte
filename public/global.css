@@ -223,6 +223,18 @@ input[type=button]:active {
 	background: #ee6e73;
 }
 
+.material-select {
+	margin: 10px 0 10px 0;
+}
+
+.text-field {
+	margin: 10px 0 10px 0;
+}
+
+.notifications .position-top-center {
+	z-index: 50;
+}
+
 @media only screen and (max-width: 900px) {
 	.header {
 		flex-direction: column;

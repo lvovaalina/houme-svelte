@@ -25,7 +25,7 @@
     export let open;
     export let newProject;
     export let project = {};
-    project.Name= '';
+    project.Name = '';
     project.BucketName = 'houmly';
     project.LivingArea= '';
     project.RoomsNumber= null;
@@ -72,7 +72,7 @@
             projectJobsModel.push({
                 ...element,
                 Job: element,
-            })
+            });
         });
 
         project.ProjectJobs = projectJobsModel;

@@ -16,6 +16,7 @@
     const { addNotification } = getNotificationsContext();
 
     let dataLoaded = true;
+    export let fullAccess = false;
 
     let jobs = [];
     export let properties = [];
@@ -25,6 +26,7 @@
     export let open;
     export let newProject;
     export let project = {};
+
     project.Name = '';
     project.BucketName = 'houmly';
     project.LivingArea= '';
@@ -78,6 +80,18 @@
         project.ProjectJobs = projectJobsModel;
     }
 
+    function setProjectProperties() {
+        let projectPropsModel = [];
+        properties.forEach(element => {
+            projectPropsModel.push({
+                ...element,
+                Property: element,
+            });
+        });
+
+        project.ProjectProperties = projectPropsModel;
+    }
+
     async function addProject(event) {
         dataLoaded = false;
         event.preventDefault();
@@ -126,7 +140,7 @@
         let getProperties = fetch(api + '/getProperties')
         .then((result) => {
             if (result.ok) {
-                console.log("get successfully");
+                console.log("get props successfully");
             }
 
             return result.json();
@@ -166,6 +180,9 @@
         event.preventDefault();
         event.stopPropagation();
         setProjectJobs();
+        //setProjectProperties();
+
+        console.log('BEFORE REQUEST', project.ProjectProperties);
 
         await fetch(api + '/updateProject/'+ project.ProjectId,
         {
@@ -175,13 +192,14 @@
         .then((result) => {
             if (result.ok) {
                 console.log("Updated successfully");
-                dispatch("update");
+                dispatch("update", { projectId: project.ProjectId});
             }
 
             return result.json();
         })
         .then((data) => {
             let updatedProject = data.data;
+            console.log('AFTER UPDATE', updatedProject.ProjectProperties);
 
             //wait for all data to be loaded
             updatedProject.ProjectJobs = [];
@@ -223,6 +241,7 @@
         </div>
         {/if}
         <div>
+        {#if fullAccess}
         <p>General info</p>
         <div>
             <LayoutGrid style="padding:0;">
@@ -240,6 +259,7 @@
                 </Cell>
                 </LayoutGrid>
         </div>
+        {/if}
         
         <ProjectSettings
             bind:foundationMaterialValue={project.FoundationMaterial}
@@ -248,6 +268,8 @@
             bind:roofingMaterialValue={project.RoofingMaterial}
             bind:constructionWorkersNumberValue={project.ConstructionWorkersNumber}>
         </ProjectSettings>
+
+        {#if fullAccess}
         <div class="project-properties">
             <p>Properties</p>
             <LayoutGrid style="padding:0;">
@@ -278,32 +300,31 @@
             {:else}
                 {#each project.ProjectProperties as prop}
                 <Cell span={6}>
-                    {#if !!prop.Property}
-                        {#if prop.Property.PropertyUnit == 'sq.m.'}
-                            <Textfield
-                                required 
-                                variant="filled"
-                                input$step="0.01"
-                                type="number"
-                                class="text-field"
-                                bind:value={prop.PropertyValue}
-                                label="{prop.Property.PropertyName}"/>
-                        {:else}
-                            <Textfield
-                                required
-                                variant="filled"
-                                type="number"
-                                class="text-field"
-                                bind:value={prop.PropertyValue}
-                                label="{prop.Property.PropertyName}"/>
-                        {/if}
+                    {#if prop.PropertyUnit == 'sq.m.'}
+                        <Textfield
+                            required 
+                            variant="filled"
+                            input$step="0.01"
+                            type="number"
+                            class="text-field"
+                            bind:value={prop.PropertyValue}
+                            label="{prop.PropertyName}"/>
+                    {:else}
+                        <Textfield
+                            required
+                            variant="filled"
+                            type="number"
+                            class="text-field"
+                            bind:value={prop.PropertyValue}
+                            label="{prop.PropertyName}"/>
                     {/if}
                     </Cell>
                 {/each}
             {/if}
             </LayoutGrid>
             </div>
-        </div>
+        {/if}
+    </div>
     </Content>
     <Actions style="padding-right:20px;">
         <Button>

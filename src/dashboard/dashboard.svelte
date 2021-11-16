@@ -1,18 +1,13 @@
 <script>
     import LayoutGrid, { Cell } from "@smui/layout-grid"
-    import Button, { Label as ButtonLabel } from '@smui/button';
     import CircularProgress from '@smui/circular-progress';
 
 
     import { onMount } from 'svelte';
     import { getNotificationsContext } from 'svelte-notifications';
-
-    import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
     import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
-    import Upload from "./upload.svelte";
     import Project from "./project.svelte";
 
-    export let openAddProjectDialog = false;
     export let deleteProjectDialogOpen = false;
 
     export let deletedProjectId = 0;
@@ -47,19 +42,6 @@
         });
     });
 
-    export let BaseBucketName = "houme";
-
-    function addProject(event) {
-        if (event.detail) {
-            const project = event.detail.project;
-            projects = projects.concat(project);
-            addNotification({
-                text: 'Project ' + project.Name + ' added!',
-                position: 'top-center',
-            });
-        }
-    }
-
     function deleteProject(event) {
         if (event.detail) {
             const projectId = event.detail.projectId;
@@ -84,10 +66,6 @@
     {#if dataLoaded}
         <div class="page-header">
             <h1>Projects</h1>
-            <Button variant="raised" on:click={() => (openAddProjectDialog = true)}>
-                <ButtonLabel>Add new project</ButtonLabel>
-                <i class="material-icons" aria-hidden="true">add</i>
-            </Button>
         </div>
 
         <div class="card-display">
@@ -104,7 +82,6 @@
             <CircularProgress style="height: 90vh; width: 120px;" indeterminate />
         </div>
     {/if}
-    <AddManageProjectDialog bind:open={openAddProjectDialog} on:add={addProject} newProject={true}></AddManageProjectDialog>
     <DeleteProjectDialog
         bind:open={deleteProjectDialogOpen}
         bind:projectId={deletedProjectId}

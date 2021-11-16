@@ -68,9 +68,7 @@
 
                 stageNames.forEach(stage => {
                     jobStageMap[stage] = jobsViewModel.filter(x => x.StageName == stage);
-                })
-
-                console.log(jobStageMap);
+                });
             });
     });
 
@@ -269,6 +267,7 @@
 
 </script>
 
+<h2>Material properties</h2>
 <div class="material-settings" style="margin-top:20px;">
     {#if create}
         <div>

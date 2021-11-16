@@ -176,6 +176,7 @@
 </script>
 
 <div>
+    <h2>Job Properties</h2>
     <SvelteGenericCrudTable
         on:update={handleUpdate}
         on:sort={handleSort}

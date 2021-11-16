@@ -36,9 +36,6 @@
     
     let open = false;
 
-    let openDeleteProjectDialog = false;
-    let projectIdToDelete = 0;
-
     export let dataLoaded;
     export let projectJobsCostVM = [];
     export let projectJobsTimelineVM = [];
@@ -49,12 +46,6 @@
             r[a.Job[propName]].push(a);
             return r;
         }, Object.create(null));
-    }
-
-    function arrayMax(arr) {
-        return arr.reduce(function (p, v) {
-            return ( p > v ? p : v );
-        });
     }
 
     function getProjectJobsFromToTimestamps() {
@@ -120,8 +111,8 @@
 
                 if (jobs[0].Job.Property && !!jobs[0].Job.Property.PropertyCode) {
                     let projectProperty = propertiesMap.get(jobs[0].Job.Property.PropertyCode);
-                    stageVM.propertyName = projectProperty.Property.PropertyName;
-                    stageVM.propertyUnit = projectProperty.Property.PropertyUnit;
+                    stageVM.propertyName = projectProperty.PropertyName;
+                    stageVM.propertyUnit = projectProperty.PropertyUnit;
                     stageVM.propertyValue = projectProperty.PropertyValue;
                 } else {
                     stageVM.propertyName = '-';
@@ -145,8 +136,8 @@
 
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
                         let projectProperty = propertiesMap.get(job.Job.Property.PropertyCode);
-                        newTask.propertyName = projectProperty.Property.PropertyName;
-                        newTask.propertyUnit = projectProperty.Property.PropertyUnit;
+                        newTask.propertyName = projectProperty.PropertyName;
+                        newTask.propertyUnit = projectProperty.PropertyUnit;
                         newTask.propertyValue = projectProperty.PropertyValue;
                     } else {
                         newTask.propertyName = '-';
@@ -275,7 +266,7 @@
         projectJobsCostVM = jobsVM;
     }
 
-    onMount(() => {
+    let getProject = function(projectId) {
         let getProperties = fetch(api + '/getProperties')
         .then((result) => {
             if (result.ok) {
@@ -307,18 +298,15 @@
 
                 project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
 
-                projectIdToDelete = project.ProjectId;
                 properties.forEach((prop) => {
                     let props = project.ProjectProperties.filter(p => p.Property.PropertyCode == prop.PropertyCode);
-                    if (props.length === 0) {
-                        project.ProjectProperties.push({
-                            ...prop,
-                            PropertyValue: null,
-                            Property: prop
-                        })
+                    if (props.length !== 0) {
+                        prop.PropertyValue = props[0].PropertyValue;
                     }
                 });
-                propertiesMap = new Map(project.ProjectProperties.map(i => [i.Property.PropertyCode, i]));
+
+                project.ProjectProperties = properties;
+                propertiesMap = new Map(project.ProjectProperties.map(i => [i.PropertyCode, i]));
 
                 createProjectJobsVM();
 
@@ -327,12 +315,11 @@
 
         } 
         getProperties.then(() => getProject());
-       
-    });
-
-    function onDelete() {
-        window.location.href = "/";
     }
+
+    onMount(() => {
+        getProject(projectId);
+    });
 
     function onUpdate() {
         dataLoaded = false;
@@ -379,13 +366,6 @@
                             <i style="color:#6200ee;" class="fa fa-cog" aria-hidden="true"></i>
                         </IconButton>
                         <Tooltip style="z-index:7">Manage Project</Tooltip>
-                    </Wrapper>
-
-                    <Wrapper>
-                        <IconButton style="font-size: 18px;" on:click={() => (openDeleteProjectDialog = true)}>
-                            <i style="color:#6200ee;" class="material-icons" aria-hidden="true">delete</i>
-                        </IconButton>
-                        <Tooltip style="z-index:7">Delete Project</Tooltip>
                     </Wrapper>
                 </div>
             </div>
@@ -456,9 +436,13 @@
         </ProjectCost>
         </div>
     </AppContent>
-    
-    <DeleteProjectDialog projectId={projectIdToDelete} bind:open={openDeleteProjectDialog} on:delete={onDelete}></DeleteProjectDialog>
-    <AddManageProjectDialog bind:open={open} bind:project={project} on:update={onUpdate} newProject={false}/>
+
+    <AddManageProjectDialog
+        bind:open={open}
+        bind:project={project}
+        on:update={onUpdate}
+        newProject={false}
+        fullAccess={false}/>
 </div>
 
 <style>

@@ -92,7 +92,6 @@
                 return result.json();
             })
             .then((resp) => {
-                resp.data.ConstructionCost = 350000;
                 let proj = resp.data;
 
                 proj.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
@@ -101,14 +100,12 @@
                     let props = proj.ProjectProperties.filter(p => p.Property.PropertyCode == prop.PropertyCode);
                     
                     if (props.length !== 0) {
-                        console.log(props[0].PropertyValue);
                         prop.PropertyValue = props[0].PropertyValue;
                     }
                 });
 
                 
                 proj.ProjectProperties = properties;
-                console.log('SEND TO DIALOG',proj.ProjectProperties);
 
                 projectToUpdate = proj;
                 update = true;
@@ -126,7 +123,7 @@
 
     function handleDetail(event) {
 
-        window.open(window.location.origin + '/view/' + event.detail.body.id, '_blank');
+        window.open(window.location.origin + '/view/' + event.detail.body.ProjectId, '_blank');
     }
 
     function addProject() {

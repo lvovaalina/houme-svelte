@@ -8,9 +8,9 @@
     export let estimation = 0;
 
     export let loaded = false;
+    let jobsCost = 0;
 
     let columns = ['Color', 'Stage', 'Cost',  'Duration', 'Property Name', 'Property Value', 'Property Unit', 'People'];
-    let jobsCost = 350000;
 
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);

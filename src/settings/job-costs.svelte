@@ -79,20 +79,22 @@
 
         let jobProp = event.detail.body;
 
-        let ConstructionCost = parseFloat(jobProp.ConstructionCost);
-        let ConstructionSpeed = parseFloat(jobProp.ConstructionSpeed);
-        let ConstructionFixDurationInHours = parseFloat(jobProp.ConstructionFixDurationInHours);
-        let MaxWorkers = parseInt(jobProp.MaxWorkers);
-        let MinWorkers = parseInt(jobProp.MinWorkers);
-        let OptWorkers = parseInt(jobProp.OptWorkers);
+        let constructionCost = parseFloat(jobProp.ConstructionCost);
+        let constructionSpeed = parseFloat(jobProp.ConstructionSpeed);
+        let constructionFixDurationInHours = parseFloat(jobProp.ConstructionFixDurationInHours);
+        let maxWorkers = parseInt(jobProp.MaxWorkers);
+        let minWorkers = parseInt(jobProp.MinWorkers);
+        let optWorkers = parseInt(jobProp.OptWorkers);
+        let constructionJobPropertyId = parseInt(jobProp.ConstructionJobPropertyId);
 
         let invalidProperties = getInvalidProperties([
-            {name: "ConstructionCost", value: ConstructionCost},
-            {name: "ConstructionFixDurationInHours", value: ConstructionFixDurationInHours},
-            {name: "ConstructionSpeed", value: ConstructionSpeed},
-            {name: "MaxWorkers", value: MaxWorkers},
-            {name: "MinWorkers", value: MinWorkers},
-            {name: "OptWorkers", value: OptWorkers},
+            {name: "ConstructionCost", value: constructionCost},
+            {name: "ConstructionFixDurationInHours", value: constructionFixDurationInHours},
+            {name: "ConstructionSpeed", value: constructionSpeed},
+            {name: "MaxWorkers", value: maxWorkers},
+            {name: "MinWorkers", value: minWorkers},
+            {name: "OptWorkers", value: optWorkers},
+            {name: "ConstructionJobPropertyId", value: constructionJobPropertyId}
         ])
 
         let updatedJobProperty = jobProperties.find(x => x.ID == event.detail.body.ID);
@@ -102,12 +104,13 @@
             return;
         }
 
-        updatedJobProperty.ConstructionCost = ConstructionCost;
-        updatedJobProperty.ConstructionSpeed = ConstructionSpeed;
-        updatedJobProperty.ConstructionFixDurationInHours = ConstructionFixDurationInHours;
-        updatedJobProperty.MaxWorkers = MaxWorkers;
-        updatedJobProperty.MinWorkers = MinWorkers;
-        updatedJobProperty.OptWorkers = OptWorkers;
+        updatedJobProperty.ConstructionCost = constructionCost;
+        updatedJobProperty.ConstructionSpeed = constructionSpeed;
+        updatedJobProperty.ConstructionFixDurationInHours = constructionFixDurationInHours;
+        updatedJobProperty.MaxWorkers = maxWorkers;
+        updatedJobProperty.MinWorkers = minWorkers;
+        updatedJobProperty.OptWorkers = optWorkers;
+        updatedJobProperty.ConstructionJobPropertyId = constructionJobPropertyId;
 
         fetch(api + '/updateJobProperty/'+ event.detail.body.ID,
         {
@@ -124,6 +127,8 @@
         .then(data => {
             if (data.success) {
                 reload();
+
+                //dispatch("projectReload");
             }
         })
     }
@@ -157,14 +162,15 @@
     options: ['EDIT'],
     columns_setting: [
         {name: 'ID', show: false, edit: false, width: '0px'},
+        {name: 'ConstructionJobPropertyId', show: true, edit: false, width: '50px'},
         {name: 'StageName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'SubStageName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'JobName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'ConstructionSpeed', show: true, edit: true, width: '50px', description: 'The job'},
+        {name: 'ConstructionCost', show: true, edit: true, width: '50px'},
         {name: 'Currency', show: true, edit: false, width: '50px'},
         {name: 'PropertyUnit', show: true, edit: false, width: '50px'},
         {name: 'PropertyName', show: true, edit: false, with: '50px'},
-        {name: 'ConstructionCost', show: true, edit: true, width: '50px'},
         {name: 'ConstructionFixDurationInHours', show: true, edit: true, width: '50px'},
         {name: 'MaxWorkers', show: true, edit: true, width: '50px'},
         {name: 'OptWorkers', show: true, edit: true, width: '50px'},

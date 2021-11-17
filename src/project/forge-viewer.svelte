@@ -1,12 +1,11 @@
 <script>
     import { onMount } from 'svelte';
-    import LayoutGrid, { Cell } from "@smui/layout-grid"
 
     let resp;
     let forgeViewerElement;
     let viewer;
 
-    export let urn;
+    export let urn = "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6aG91bWUvTHVrYS5ydnQ=";
 
     function onDocumentLoadSuccess(doc) {
         let viewable = doc.getRoot().getDefaultGeometry();
@@ -70,24 +69,13 @@
     });
 </script>
 
-<h1>Project view</h1>
-<LayoutGrid>
-    <Cell span={7}>
-        <div bind:this={forgeViewerElement} class="forge-viewer">
-        </div>
-    </Cell>
-    <Cell span={5}>
-        <h2>Project Information</h2>
-    </Cell>
-
-</LayoutGrid>
-
-
+<div bind:this={forgeViewerElement} class="forge-viewer">
+</div>
 
 <style>
     .forge-viewer {
-        padding-left: 2em;
         position: relative;
-        height: 450px;
+        /* -header height -tab header height - view project padding */
+        height: calc(100vh - 64px - 56px - 24px);
     }
 </style>

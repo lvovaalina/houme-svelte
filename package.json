@@ -14,7 +14,18 @@
     "@smui/banner": "^4.2.0",
     "@smui/button": "^4.2.0",
     "@smui/card": "^4.2.0",
+    "@smui/circular-progress": "^5.0.0-beta.8",
+    "@smui/data-table": "^5.0.0-beta.7",
+    "@smui/dialog": "^5.0.0-beta.7",
+    "@smui/drawer": "^5.0.0-beta.7",
     "@smui/layout-grid": "^4.2.0",
+    "@smui/linear-progress": "^5.0.0-beta.8",
+    "@smui/list": "^5.0.0-beta.7",
+    "@smui/select": "^5.0.0-beta.7",
+    "@smui/tab": "^5.0.0-beta.7",
+    "@smui/tab-bar": "^5.0.0-beta.7",
+    "@smui/textfield": "^5.0.0-beta.7",
+    "@smui/tooltip": "^5.0.0-beta.7",
     "@smui/top-app-bar": "^4.2.0",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",
@@ -22,14 +33,19 @@
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "svelte": "^3.0.0",
-    "svelte-loading-spinners": "^0.1.7"
+    "svelte-gantt": "^3.0.4-beta",
+    "svelte-generic-crud-table": "^1.5.92",
+    "svelte-loading-spinners": "^0.1.7",
+    "svelte-preprocess": "^4.9.8"
   },
   "dependencies": {
     "@smui/common": "^4.2.0",
     "@smui/icon-button": "^4.2.0",
     "express": "^4.17.1",
+    "moment": "^2.29.1",
     "sirv-cli": "^1.0.0",
     "svelte-file-dropzone": "^0.0.15",
-    "svelte-navigator": "^3.1.5"
+    "svelte-navigator": "^3.1.5",
+    "svelte-notifications": "^0.9.91"
   }
 }

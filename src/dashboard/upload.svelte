@@ -37,7 +37,7 @@
             return fetch(api + '/translate', {
                 method: 'POST',
                 body: JSON.stringify({ fileName : file.name })
-            })
+            });
         }).then((response) => {
             if (response.ok) {
                 return response.json();
@@ -45,7 +45,6 @@
                 return Promise.reject(response);
             }
         }).then((data) => {
-            console.log(data);
             files.accepted = [];
             dispatch("add", { fileName: file.name });
         })
@@ -73,7 +72,7 @@
             <h2 class="mdc-typography--headline6" style="margin: 0;">
                 Upload Project
             </h2>
-            <p>Bucket: {bucketName}</p>
+            <p>Bucket: houmly</p>
 
             {#if isLoading}
             <div style="display: flex; justify-content: center">

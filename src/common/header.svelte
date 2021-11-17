@@ -10,7 +10,7 @@
             <Row>
                 <Section>
                     <IconButton href="/"><Icon class="material-icons">house</Icon></IconButton>
-                    <Title href="/">Houme Admin</Title>
+                    <Title href="/">Houmly Admin</Title>
                 </Section>
             </Row>
         </TopAppBar>

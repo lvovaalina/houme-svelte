@@ -18,7 +18,7 @@
     let projectIdToDelete = 0;
 
     let projects = [];
-    let projectToUpdate = [];
+    let projectToUpdate = {};
 
     const sortStore = [];
 

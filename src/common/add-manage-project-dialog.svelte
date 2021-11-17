@@ -36,7 +36,7 @@
     project.FoundationMaterial= '';
     project.FinishMaterial= '';
     project.RoofingMaterial= '';
-    project.ConstructionCost= null;
+    project.ConstructionCost = 0;
     project.ConstructionDuration= 0;
     project.ProjectProperties= [];
     project.ProjectJobs= [];

@@ -80,18 +80,6 @@
         project.ProjectJobs = projectJobsModel;
     }
 
-    function setProjectProperties() {
-        let projectPropsModel = [];
-        properties.forEach(element => {
-            projectPropsModel.push({
-                ...element,
-                Property: element,
-            });
-        });
-
-        project.ProjectProperties = projectPropsModel;
-    }
-
     async function addProject(event) {
         dataLoaded = false;
         event.preventDefault();
@@ -101,6 +89,8 @@
 
         project.ProjectProperties = properties;
         project.Filename = project.Name + '.rvt';
+        console.log(typeof project);
+        console.log(project);
 
         await fetch(api + '/create',
         {
@@ -132,7 +122,13 @@
         })
         .catch(error => {
             errorMessage = 'Something went wrong! Try again later';
+            addNotification({
+                text: errorMessage,
+                position: 'top-center',
+                type: 'danger'
+            });
             console.error(error);
+            dataLoaded = true;
         });
     }
 

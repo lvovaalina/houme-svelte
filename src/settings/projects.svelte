@@ -2,14 +2,30 @@
     import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
     import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
     import SvelteGenericCrudTable from 'svelte-generic-crud-table';
+    import LinearProgress from '@smui/linear-progress';
     import { onMount } from 'svelte';
 
     import { getNotificationsContext } from 'svelte-notifications';
     const { addNotification } = getNotificationsContext();
 
+    let loaded = true;
+
     const api = isProduction
         ? "https://houme-api.herokuapp.com"
         : "http://localhost:10000";
+
+    function reloadonPropertyChange(reloadProj) {
+        // DIRTY SOLUTION
+        //todo: reload projects once all goroutines are done
+        loaded = false;
+        setTimeout(() => {
+            reload();
+            loaded = true;
+        }, 3000);
+    }
+
+    export let reloadProj = false;
+    $: r = reloadonPropertyChange(reloadProj);
 
     let openAddProjectDialog = false;
     let openDeleteProjectDialog = false;
@@ -177,6 +193,13 @@
 <div class="projects">
     <h2>Projects</h2>
 
+    <LinearProgress
+        indeterminate
+        bind:closed={loaded}
+        aria-label="Data is being loaded..."
+        slot="progress"
+    />
+
     <SvelteGenericCrudTable
         on:create={handleAdd}
         on:update={handleUpdate}
@@ -184,8 +207,8 @@
         on:delete={handleDelete}
         on:details={handleDetail}
         table_config={table_config}
-        table_data={projects}/>
-
+        table_data={projects}>
+    </SvelteGenericCrudTable>
 
     <AddManageProjectDialog
         bind:open={openAddProjectDialog}

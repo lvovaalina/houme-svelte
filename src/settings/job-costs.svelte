@@ -4,19 +4,15 @@
     import { getNotificationsContext } from 'svelte-notifications';
 
     const { addNotification } = getNotificationsContext();
-    let create = false;
+
+    import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher();
 
     const sortStore = [];
 
     let myData = [];
 
     let jobProperties = [];
-
-    let jobs = [];
-
-    let stageNames = [];
-    let subStageNames = [];
-    let jobNames = [];
 
     const api = isProduction
         ? "https://houme-api.herokuapp.com"
@@ -128,7 +124,7 @@
             if (data.success) {
                 reload();
 
-                //dispatch("projectReload");
+                dispatch("reloadProjects");
             }
         })
     }
@@ -171,7 +167,7 @@
         {name: 'Currency', show: true, edit: false, width: '50px'},
         {name: 'PropertyUnit', show: true, edit: false, width: '50px'},
         {name: 'PropertyName', show: true, edit: false, with: '50px'},
-        {name: 'ConstructionFixDurationInHours', show: true, edit: true, width: '50px'},
+        {name: 'ConstructionFixDurationInHours', show: true, edit: false, width: '50px'},
         {name: 'MaxWorkers', show: true, edit: true, width: '50px'},
         {name: 'OptWorkers', show: true, edit: true, width: '50px'},
         {name: 'MinWorkers', show: true, edit: true, width: '50px'}

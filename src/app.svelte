@@ -10,6 +10,8 @@
 	export let url = "";
 	import Notifications from 'svelte-notifications';
 	import ProjectViewer from "./project/project-viewer.svelte";
+
+	let envmt = env;
 </script>
 
 <main>
@@ -21,6 +23,10 @@
 		<Route path="/settings" component="{Settings}"></Route>
 	</Router>
 	</Notifications>
+
+	{#if (envmt != "production") } 
+	<div class="version-container">version: 0.2.0</div>
+	{/if}
 </main>
 
 <style>
@@ -32,5 +38,13 @@
 		main {
 			max-width: none;
 		}
+	}
+
+	.version-container {
+		position: -webkit-sticky;
+		position: absolute;
+		bottom: 0;
+		height: 30px;
+		width: 100vw;
 	}
 </style>

@@ -179,7 +179,7 @@
 
         console.log('BEFORE REQUEST', project.ProjectProperties);
 
-        await fetch(config.api + '/updateProject/'+ project.ProjectId,
+        await fetch(conf.api + '/updateProject/'+ project.ProjectId,
         {
             method: 'PUT',
             body: JSON.stringify(project)

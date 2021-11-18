@@ -8,7 +8,7 @@ import replace from '@rollup/plugin-replace';
 import sveltePreprocess from 'svelte-preprocess';
 
 const production = !process.env.ROLLUP_WATCH;
-const env = !!process.env.NODE_ENV ? process.env.NODE_ENV.toString() : process.env.NODE_ENV;
+const env = process.env.NODE_ENV;
 
 function serve() {
 	let server;
@@ -62,7 +62,7 @@ export default {
 		}),
 		replace({
 			isProduction: production,
-			env: env
+			env: JSON.stringify(env)
 		}),
 		commonjs(),
 

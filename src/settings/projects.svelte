@@ -10,10 +10,8 @@
 
     let loaded = true;
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
+    import { config } from '../config';
+    let conf = new config();
     function reloadonPropertyChange(reloadProj) {
         // DIRTY SOLUTION
         //todo: reload projects once all goroutines are done
@@ -39,7 +37,7 @@
     const sortStore = [];
 
     function reload() {
-        fetch(api + '/getProjects')
+        fetch(conf.api + '/getProjects')
         .then((result) => {
             if (result.ok) {
                 console.log("get projects successfully");

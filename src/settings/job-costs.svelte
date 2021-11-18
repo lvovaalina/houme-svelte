@@ -14,16 +14,14 @@
 
     let jobProperties = [];
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
+    import { config } from '../config';
+    let conf = new config();
     onMount(() => {
         reload();
     })
 
     function get(url) {
-        return fetch(api + url)
+        return fetch(conf.api + url)
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");

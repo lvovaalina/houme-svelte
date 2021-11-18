@@ -42,9 +42,8 @@
     project.ProjectJobs= [];
     project.ConstructionCompanyName= 'Construction';
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
+    import { config } from '../config';
+    let conf = new config();
 
     function setProjectJobs() {
         let wallJobs = jobs
@@ -92,7 +91,7 @@
         console.log(typeof project);
         console.log(project);
 
-        await fetch(api + '/create',
+        await fetch(conf.api + '/create',
         {
             method: 'POST',
             body: JSON.stringify(project)
@@ -133,7 +132,7 @@
     }
 
     onMount(function() {
-        let getProperties = fetch(api + '/getProperties')
+        let getProperties = fetch(conf.api + '/getProperties')
         .then((result) => {
             if (result.ok) {
                 console.log("get props successfully");
@@ -149,7 +148,7 @@
             properties = resp.data;
         });
 
-        let getJobs = fetch(api + '/getJobs')
+        let getJobs = fetch(conf.api + '/getJobs')
         .then((result) => {
             if (result.ok) {
                 console.log("get jobs successfully");
@@ -180,7 +179,7 @@
 
         console.log('BEFORE REQUEST', project.ProjectProperties);
 
-        await fetch(api + '/updateProject/'+ project.ProjectId,
+        await fetch(config.api + '/updateProject/'+ project.ProjectId,
         {
             method: 'PUT',
             body: JSON.stringify(project)

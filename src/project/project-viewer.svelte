@@ -21,11 +21,9 @@
     let active = 'Project View';
 
     let tabs = ['Project View', 'Timeline', 'Jobs']
-
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
     
+    import { config } from '../config';
+    let conf = new config();
     function setActive(value) {
         active = value;
     }
@@ -267,7 +265,7 @@
     }
 
     let getProject = function(projectId) {
-        let getProperties = fetch(api + '/getProperties')
+        let getProperties = fetch(conf.api  + '/getProperties')
         .then((result) => {
             if (result.ok) {
                 console.log("get successfully");
@@ -284,7 +282,7 @@
         });
 
         let getProject = () =>{
-            fetch(api + '/getProject/' + projectId)
+            fetch(conf.api  + '/getProject/' + projectId)
             .then((result) => {
                 if (result.ok) {
                     console.log("get project success");
@@ -323,7 +321,7 @@
     function onUpdate() {
         dataLoaded = false;
         // // fetch new project jobs as they not preloaded on save
-        fetch(api + '/getProjectJobs/' + projectId)
+        fetch(conf.api + '/getProjectJobs/' + projectId)
         .then((result) => {
             if (result.ok) {
                 console.log("get project jobs successfully");

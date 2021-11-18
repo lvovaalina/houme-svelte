@@ -7,13 +7,11 @@
 
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
-
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
+    
+    import { config } from '../config';
+    let conf = new config();
     function deleteProject() {
-        fetch(api + '/deleteProject/' + projectId, {
+        fetch(conf.api + '/deleteProject/' + projectId, {
             method: 'DELETE'
         })
         .then((response) => {

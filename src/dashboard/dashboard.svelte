@@ -14,16 +14,15 @@
 
     const { addNotification } = getNotificationsContext();
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
     export let projects = [];
 
     let dataLoaded = false;
 
+    import { config } from '../config';
+    let conf = new config();
+
     onMount(function() {
-        fetch(api + '/getProjects')
+        fetch(conf.api + '/getProjects')
         .then((result) => {
             if (result.ok) {
                 console.log("get projects successfully");
@@ -34,7 +33,6 @@
         .then((resp) => {
             resp.data.forEach(element => {
                 element.PropertyValue = null;
-                element.ConstructionCost = 350000;
             });
 
             projects = resp.data;

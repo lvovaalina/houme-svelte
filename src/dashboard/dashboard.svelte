@@ -62,9 +62,6 @@
 
 <div class="dashboard">
     {#if dataLoaded}
-        <div class="page-header">
-            <h1>Projects</h1>
-        </div>
 
         <div class="card-display">
             <LayoutGrid style="padding-top:0;">

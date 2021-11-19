@@ -1,16 +1,20 @@
 <script>
     import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
-    import IconButton from "@smui/icon-button";
-    import { Icon } from "@smui/common";
+
+    export let title;
 </script>
 
 <div class="flexy">
     <div class="top-app-bar-container">
-        <TopAppBar variant="static">
+        <TopAppBar class="header" variant="static">
             <Row>
-                <Section>
-                    <IconButton href="/"><Icon class="material-icons">house</Icon></IconButton>
-                    <Title href="/">Houmly Admin</Title>
+                <!--<Section>-->
+                    <a class="header-logo-link" target="_blink" href="https://houmly.com">
+                        <img class="header-logo" src="/img/houmly-logo.png" alt="Houmly logo"/>
+                    </a>
+                <!-- </Section> -->
+                <Section style="justify-content: center;">
+                    <Title class="page-title">{title}</Title>
                 </Section>
             </Row>
         </TopAppBar>
@@ -18,7 +22,26 @@
 </div>
 
 <style>
-    .top-app-bar-container button {
-        margin: 0;
+    :global(.top-app-bar-container .header) {
+        background-color: #fff;
+        height: 80px;
+        border-bottom: 1px solid #e0e1e2;
+    }
+
+    :global(.page-title) {
+        color: black;
+        text-transform: uppercase; 
+    }
+
+    .header-logo, .header-logo-link {
+        width: 200px;
+        height: 40px;
+    }
+
+    .header-logo-link {
+        position: absolute;
+        z-index: 10;
+        display: block;
+        top: 7px;
     }
 </style>

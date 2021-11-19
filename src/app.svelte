@@ -12,12 +12,14 @@
 	import ProjectViewer from "./project/project-viewer.svelte";
 
 	let envmt = env;
+	let title = 'Project Dashboard';
+	document.title = title + '| Houmly';
 </script>
 
 <main>
 	<Notifications>
 	<Router url="{url}">
-		<Header/>
+		<Header bind:title={title}/>
 		<Route path="view/:projectId" component="{ProjectViewer}" />
     	<Route path="/"><Dashboard/></Route>
 		<Route path="/settings" component="{Settings}"></Route>

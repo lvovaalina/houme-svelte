@@ -3,7 +3,7 @@
     import ForgeViewer from './forge-viewer.svelte';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
-    import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
+    import { navigate } from "svelte-navigator";
     import IconButton from "@smui/icon-button";
     import Tooltip, { Wrapper } from '@smui/tooltip';
     import { onMount } from 'svelte';
@@ -18,14 +18,14 @@
     import { stageColorMap, stageMap, time } from '../utils';
 
     export let projectId;
-    let active = 'Project View';
+    export let active = 'Project View';
 
-    let tabs = ['Project View', 'Timeline', 'Jobs']
+    let tabs = [{name: 'Project View', urlPart: 'model'},{name: 'Timeline', urlPart: 'timeline'}, {name: 'Jobs', urlPart:'jobs'}]
     
     import { config } from '../config';
     let conf = new config();
     function setActive(value) {
-        active = value;
+		navigate('/view/' + projectId + '/' + value.urlPart, { replace: true });
     }
 
     let project = {};
@@ -315,7 +315,9 @@
     }
 
     onMount(() => {
-        getProject(projectId);
+        if (project.Name == '') {
+            getProject(projectId);
+        }
     });
 
     function onUpdate() {
@@ -376,7 +378,7 @@
                 on:click={() => setActive(tab)}
                 activated={active === tab}
                 >
-                <Text>{tab}</Text>
+                <Text>{tab.name}</Text>
                 </Item>
               {/each}
           </List>

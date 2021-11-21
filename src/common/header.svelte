@@ -8,11 +8,9 @@
     <div class="top-app-bar-container">
         <TopAppBar class="header" variant="static">
             <Row>
-                <!--<Section>-->
-                    <a class="header-logo-link" target="_blink" href="https://houmly.com">
-                        <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
-                    </a>
-                <!-- </Section> -->
+                <a class="header-logo-link" target="_blink" href="https://houmly.com">
+                    <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
+                </a>
                 <Section style="justify-content: center;">
                     <Title class="page-title">{title}</Title>
                 </Section>
@@ -43,5 +41,8 @@
         z-index: 10;
         display: block;
         top: 7px;
+
+        /*content padding - header padding*/
+        margin-left: calc(150px - 16px);
     }
 </style>

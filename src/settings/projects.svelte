@@ -80,7 +80,7 @@
 
     function handleUpdate(event) {
         let properties = [];
-        let getProperties = fetch(api + '/getProperties')
+        let getProperties = fetch(conf.api + '/getProperties')
         .then((result) => {
             if (result.ok) {
                 console.log("get successfully");
@@ -97,7 +97,7 @@
         });
 
         let getProject = () =>{
-            fetch(api + '/getProject/' + event.detail.body.ProjectId)
+            fetch(conf.api + '/getProject/' + event.detail.body.ProjectId)
             .then((result) => {
                 if (result.ok) {
                     console.log("get project success");

@@ -1,18 +1,26 @@
 <script>
-    import LayoutGrid, { Cell } from "@smui/layout-grid"
     import CircularProgress from '@smui/circular-progress';
-
-
+    import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
+    import IconButton from '@smui/icon-button';
     import { onMount } from 'svelte';
-    import { getNotificationsContext } from 'svelte-notifications';
-    import DeleteProjectDialog from '../common/delete-project-dialog.svelte';
-    import Project from "./project.svelte";
 
-    export let deleteProjectDialogOpen = false;
+    import { Input } from '@smui/textfield';
+    import Paper from '@smui/paper';
+    import Fab from '@smui/fab';
+    import { Icon } from '@smui/common';
 
-    export let deletedProjectId = 0;
-
-    const { addNotification } = getNotificationsContext();
+    let loaded = true;
+    let titleSearch;
+    let columns = [
+        {name: 'Image', style: 'padding-left: 0'},
+        {name: 'Title'},
+        {name: 'Duration'},
+        {name: 'Area'},
+        {name: 'Margin', style:'text-align: right;'},
+        {name: 'Build cost', style:'text-align: right;'},
+        {name: 'Material cost', style:'text-align: right;'},
+        {name: 'People', style:'text-align: right;'},
+    ]
 
     export let projects = [];
 
@@ -40,59 +48,128 @@
         });
     });
 
-    function deleteProject(event) {
-        if (event.detail) {
-            const projectId = event.detail.projectId;
-
-            projects = projects.filter(item => item.ProjectId != projectId);
-            addNotification({
-                text: 'Project deleted!',
-                position: 'top-center',
-            });
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            doSearch();
         }
     }
 
-    function openDeleteProjectDialog(event) {
-        if (event.detail && event.detail.projectId) {
-            deletedProjectId = event.detail.projectId;
-            deleteProjectDialogOpen = true;
-        }
+    function doSearch() {
+        console.log(titleSearch);
     }
+
+    function navigateToProject(projectId) {
+        window.open(window.location.origin + '/view/' + projectId, '_blank');
+    }
+
 </script>
 
 <div class="dashboard">
     {#if dataLoaded}
-
-        <div class="card-display">
-            <LayoutGrid style="padding-top:0;">
-                {#each projects as project, index}
-                    <Cell span={6}>
-                        <Project ind={index} on:openDeleteProjectDialog={openDeleteProjectDialog} project={project}/>
+    <div class="project-table-header">
+        <span class="results-found-text">15 projects found</span>
+        <div class="solo-demo-container solo-container">
+            <Paper class="solo-paper" elevation={6}>
+              <Icon class="material-icons">search</Icon>
+              <Input
+                bind:titleSearch
+                on:keydown={handleKeyDown}
+                placeholder="Search by Title"
+                class="solo-input"
+              />
+            </Paper>
+          </div>
+    </div>
+    <DataTable
+        stickyHeader table$aria-label="Project dashboard"
+        class="projects-table">
+        <Head>
+            <Row>
+            {#each columns as col}
+                <Cell style={col.style}>{col.name}</Cell>
+            {/each}
+            </Row>
+        </Head>
+        <Body>
+            {#each projects as project}
+                <Row style="cursor: pointer" on:click={navigateToProject(project.ProjectId)}>
+                    <Cell style="padding-left:0;">
+                        <img class="project-image" src="/project.png" alt="Project mini version"/>
                     </Cell>
-                {/each}
-            </LayoutGrid>
-        </div>
+                    <Cell>
+                        {project.Name}
+                    </Cell>
+                    <Cell>{project.ConstructionDuration} days</Cell>
+                    <Cell>{project.LivingArea} &#13217;</Cell>
+                    <Cell numeric>{project.ConstructionCost * 0.15} $</Cell>
+                    <Cell numeric>{project.ConstructionCost} $</Cell>
+                    <Cell numeric>{project.ConstructionCost} $</Cell>
+                    <Cell numeric>50 p.</Cell>
+                </Row>
+            {/each}
+        </Body>
+        <!-- <LinearProgress
+            indeterminate
+            bind:closed={loaded}
+            aria-label="Data is being loaded..."
+            slot="progress"
+        /> -->
+    </DataTable>
     {:else}
         <div style="display: flex; justify-content: center">
             <CircularProgress style="height: 90vh; width: 120px;" indeterminate />
         </div>
     {/if}
-    <DeleteProjectDialog
-        bind:open={deleteProjectDialogOpen}
-        bind:projectId={deletedProjectId}
-        on:delete={deleteProject}>
-    </DeleteProjectDialog>
 </div>
 
 <style>
-    .hide {
-        display: none;
+    .solo-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 15px 0;
+        width: 50%;
     }
 
-    .page-header {
+    * :global(.solo-paper) {
         display: flex;
         align-items: center;
-        padding: 0 24px;
+        flex-grow: 1;
+        max-width: 600px;
+        height: 48px;
+        box-shadow: none;
+        border: 1px solid #e0e1e2;
+    }
+    * :global(.solo-paper > *) {
+        display: inline-block;
+        margin: 0 12px;
+    }
+    * :global(.solo-input) {
+        flex-grow: 1;
+        color: var(--mdc-theme-on-surface, #000);
+    }
+    * :global(.solo-input::placeholder) {
+        color: var(--mdc-theme-on-surface, #000);
+        opacity: 0.6;
+    }
+
+    .project-table-header {
+        display: flex;
         justify-content: space-between;
+        align-items: center;
+    }
+
+    :global(.projects-table) {
+        border: none;
+        width: 100%;
+    }
+    .project-image {
+        height: 50px;
+        width: 100px;
+        margin-top: 5px;
+    }
+
+    .dashboard {
+        padding: 0 150px;
     }
 </style>

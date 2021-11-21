@@ -43,5 +43,6 @@
         z-index: 10;
         display: block;
         top: 7px;
+        margin-left: 74px;
     }
 </style>

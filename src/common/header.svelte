@@ -10,7 +10,7 @@
             <Row>
                 <!--<Section>-->
                     <a class="header-logo-link" target="_blink" href="https://houmly.com">
-                        <img class="header-logo" src="/img/houmly-logo.png" alt="Houmly logo"/>
+                        <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
                     </a>
                 <!-- </Section> -->
                 <Section style="justify-content: center;">

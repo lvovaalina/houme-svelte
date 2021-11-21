@@ -123,7 +123,7 @@
         materialToUpdate.materialCost = materialCost;
         materialToUpdate.materialName = materialName;
 
-        fetch(api + '/updateJobNaterial/'+ event.detail.body.ID,
+        fetch(conf.api + '/updateJobNaterial/'+ event.detail.body.ID,
         {
             method: 'PUT',
             body: JSON.stringify(materialToUpdate)
@@ -214,7 +214,7 @@
         console.log(job);
         material.Job = {JobCode: job.JobCode};
 
-        fetch(api + '/createMaterial',
+        fetch(conf.api + '/createMaterial',
         {
             method: 'POST',
             body: JSON.stringify(material)
@@ -232,8 +232,7 @@
     }
 
     function handleDelete(event) {
-        console.log(event);
-        fetch(api + '/deleteJobMaterial/' + event.detail.body.ID, {
+        fetch(conf.api + '/deleteJobMaterial/' + event.detail.body.ID, {
             method: 'DELETE'
         })
         .then((response) => {

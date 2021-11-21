@@ -106,7 +106,7 @@
         updatedJobProperty.OptWorkers = optWorkers;
         updatedJobProperty.ConstructionJobPropertyId = constructionJobPropertyId;
 
-        fetch(api + '/updateJobProperty/'+ event.detail.body.ID,
+        fetch(conf.api + '/updateJobProperty/'+ event.detail.body.ID,
         {
             method: 'PUT',
             body: JSON.stringify(updatedJobProperty)

@@ -5,6 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
+    "qa": "rollup -c -w",
     "start": "node server.js"
   },
   "devDependencies": {
@@ -21,6 +22,7 @@
     "@smui/layout-grid": "^4.2.0",
     "@smui/linear-progress": "^5.0.0-beta.8",
     "@smui/list": "^5.0.0-beta.7",
+    "@smui/paper": "^6.0.0-beta.2",
     "@smui/select": "^5.0.0-beta.7",
     "@smui/tab": "^5.0.0-beta.7",
     "@smui/tab-bar": "^5.0.0-beta.7",

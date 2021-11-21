@@ -1,18 +1,25 @@
 <script>
     import CircularProgress from '@smui/circular-progress';
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
+    import IconButton from '@smui/icon-button';
     import { onMount } from 'svelte';
 
+    import { Input } from '@smui/textfield';
+    import Paper from '@smui/paper';
+    import Fab from '@smui/fab';
+    import { Icon } from '@smui/common';
+
     let loaded = true;
+    let titleSearch;
     let columns = [
-        {name: 'Image'},
+        {name: 'Image', style: 'padding-left: 0'},
         {name: 'Title'},
         {name: 'Duration'},
         {name: 'Area'},
-        {name: 'Margin'},
-        {name: 'Build cost'},
-        {name: 'Material cost'},
-        {name: 'People'},
+        {name: 'Margin', style:'text-align: right;'},
+        {name: 'Build cost', style:'text-align: right;'},
+        {name: 'Material cost', style:'text-align: right;'},
+        {name: 'People', style:'text-align: right;'},
     ]
 
     export let projects = [];
@@ -41,26 +48,52 @@
         });
     });
 
+    function handleKeyDown(event) {
+        if (event.key === 'Enter') {
+            doSearch();
+        }
+    }
+
+    function doSearch() {
+        console.log(titleSearch);
+    }
+
+    function navigateToProject(projectId) {
+        window.open(window.location.origin + '/view/' + projectId, '_blank');
+    }
 
 </script>
 
 <div class="dashboard">
     {#if dataLoaded}
-
+    <div class="project-table-header">
+        <span class="results-found-text">15 projects found</span>
+        <div class="solo-demo-container solo-container">
+            <Paper class="solo-paper" elevation={6}>
+              <Icon class="material-icons">search</Icon>
+              <Input
+                bind:titleSearch
+                on:keydown={handleKeyDown}
+                placeholder="Search by Title"
+                class="solo-input"
+              />
+            </Paper>
+          </div>
+    </div>
     <DataTable
         stickyHeader table$aria-label="Project dashboard"
         class="projects-table">
         <Head>
             <Row>
             {#each columns as col}
-                    <Cell>{col.name}</Cell>
+                <Cell style={col.style}>{col.name}</Cell>
             {/each}
             </Row>
         </Head>
         <Body>
             {#each projects as project}
-                <Row>
-                    <Cell>
+                <Row style="cursor: pointer" on:click={navigateToProject(project.ProjectId)}>
+                    <Cell style="padding-left:0;">
                         <img class="project-image" src="/project.png" alt="Project mini version"/>
                     </Cell>
                     <Cell>
@@ -68,10 +101,10 @@
                     </Cell>
                     <Cell>{project.ConstructionDuration} days</Cell>
                     <Cell>{project.LivingArea} &#13217;</Cell>
-                    <Cell>{project.ConstructionCost * 0.15} $</Cell>
-                    <Cell>{project.ConstructionCost} $</Cell>
-                    <Cell>{project.ConstructionCost} $</Cell>
-                    <Cell>50 p.</Cell>
+                    <Cell numeric>{project.ConstructionCost * 0.15} $</Cell>
+                    <Cell numeric>{project.ConstructionCost} $</Cell>
+                    <Cell numeric>{project.ConstructionCost} $</Cell>
+                    <Cell numeric>50 p.</Cell>
                 </Row>
             {/each}
         </Body>
@@ -90,6 +123,42 @@
 </div>
 
 <style>
+    .solo-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 15px 0;
+        width: 50%;
+    }
+
+    * :global(.solo-paper) {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        max-width: 600px;
+        height: 48px;
+        box-shadow: none;
+        border: 1px solid #e0e1e2;
+    }
+    * :global(.solo-paper > *) {
+        display: inline-block;
+        margin: 0 12px;
+    }
+    * :global(.solo-input) {
+        flex-grow: 1;
+        color: var(--mdc-theme-on-surface, #000);
+    }
+    * :global(.solo-input::placeholder) {
+        color: var(--mdc-theme-on-surface, #000);
+        opacity: 0.6;
+    }
+
+    .project-table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     :global(.projects-table) {
         border: none;
         width: 100%;
@@ -101,6 +170,6 @@
     }
 
     .dashboard {
-        padding: 0 90px;
+        padding: 0 150px;
     }
 </style>

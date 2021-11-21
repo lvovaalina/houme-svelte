@@ -1,12 +1,10 @@
 <script>
     import CircularProgress from '@smui/circular-progress';
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
-    import IconButton from '@smui/icon-button';
     import { onMount } from 'svelte';
 
     import { Input } from '@smui/textfield';
     import Paper from '@smui/paper';
-    import Fab from '@smui/fab';
     import { Icon } from '@smui/common';
 
     let loaded = true;

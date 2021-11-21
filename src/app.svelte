@@ -23,11 +23,20 @@
 		<Route path="view/:projectId" component="{ProjectViewer}" />
     	<Route path="/"><Dashboard/></Route>
 		<Route path="/settings" component="{Settings}"></Route>
+		<Route path="view/:projectId/model" let:params>
+			<ProjectViewer projectId={params.projectId} active='Project View'></ProjectViewer>
+		</Route>
+		<Route path="view/:projectId/timeline" let:params>
+			<ProjectViewer projectId={params.projectId} active='Timeline'></ProjectViewer>
+		</Route>
+		<Route path="view/:projectId/jobs" let:params>
+			<ProjectViewer projectId={params.projectId} active='Jobs'></ProjectViewer>
+		</Route>
 	</Router>
 	</Notifications>
 
 	{#if (envmt != "production") } 
-	<div class="version-container">version: 0.2.6</div>
+	<div class="version-container">version: 0.2.7</div>
 	{/if}
 </main>
 

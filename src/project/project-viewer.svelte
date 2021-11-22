@@ -378,13 +378,60 @@
                 </div>
             </Cell>
             <Cell span={3}>
-                <div>Project info</div>
+                <div class="project-card">
+                    {#if dataLoaded}
+                    <h2 class="card-header">{project.Name}</h2>
+                    <table class="property-table" aria-label="Project properties" style="width: 100%;">
+                        <tr>
+                            <td>Area</td>
+                            <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
+                        </tr>
+                        <tr>
+                            <td>Construction Cost</td>
+                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                        </tr>
+                        <tr>
+                            <td>Materials Cost</td>
+                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                        </tr>
+                        <tr>
+                            <td>Project Duration</td>
+                            <td class="numeric-row">{project.ConstructionDuration} days</td>
+                        </tr>
+                        <tr>
+                            <td>People</td>
+                            <td class="numeric-row">50</td>
+                        </tr>
+                        <tr>
+                            <td>Margin</td>
+                            <td class="numeric-row">{project.ConstructionCost * 0.15} $</td>
+                        </tr>
+                    </table>
+                    {/if}
+                </div>
             </Cell>
         </LayoutGrid>
     </div>
 </div>
 
 <style>
+    .card-header {
+        text-transform: uppercase;
+        text-align: center;
+        color: rgba(21, 40, 89);
+        font-weight: 500;
+        margin-top: 0;
+    }
+
+    .numeric-row {
+        text-align: right;
+        font-weight: 500;
+    }
+
+    .property-table tr {
+        height: 30px;
+    }
+
     .hidden {
         display: none;
     }

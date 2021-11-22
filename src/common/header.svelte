@@ -27,8 +27,9 @@
     }
 
     :global(.page-title) {
-        color: black;
+        color: rgba(21, 40, 89);
         text-transform: uppercase; 
+        padding-left: 0;
     }
 
     .header-logo, .header-logo-link {

@@ -175,7 +175,6 @@
         event.preventDefault();
         event.stopPropagation();
         setProjectJobs();
-        //setProjectProperties();
 
         console.log('BEFORE REQUEST', project.ProjectProperties);
 

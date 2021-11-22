@@ -7,6 +7,7 @@
     import Button, {Label} from '@smui/button';
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
+    import ProjectSettings from '../project/project-settings.svelte';
 
     export let projectId;
     export let active = 'Project View';
@@ -381,6 +382,7 @@
                 <div class="project-card">
                     {#if dataLoaded}
                     <h2 class="card-header">{project.Name}</h2>
+                    <div class="divider"/>
                     <table class="property-table" aria-label="Project properties" style="width: 100%;">
                         <tr>
                             <td>Area</td>
@@ -407,6 +409,21 @@
                             <td class="numeric-row">{project.ConstructionCost * 0.15} $</td>
                         </tr>
                     </table>
+                    <div class="divider"/>
+                    <div class="materials-block">
+                        <ProjectSettings
+                            bind:foundationMaterialValue={project.FoundationMaterial}
+                            bind:wallMaterialValue={project.WallMaterial}
+                            bind:finishMaterialValue={project.FinishMaterial}
+                            bind:roofingMaterialValue={project.RoofingMaterial}
+                            bind:constructionWorkersNumberValue={project.ConstructionWorkersNumber}>
+                        </ProjectSettings>
+                    </div>
+
+                    <Button style="text-align: left;background-color: #152859; color: white; align-self: flex-end;"
+                    variant="filled">
+                        <Label >APPLY</Label>
+                    </Button>
                     {/if}
                 </div>
             </Cell>
@@ -415,12 +432,16 @@
 </div>
 
 <style>
+    .divider {
+        border-bottom: 1px solid #e0e1e2;;
+    }
+
     .card-header {
         text-transform: uppercase;
-        text-align: center;
+        text-align: right;
         color: rgba(21, 40, 89);
         font-weight: 500;
-        margin-top: 0;
+        margin: 0;
     }
 
     .numeric-row {
@@ -449,6 +470,25 @@
         justify-content: space-between;
     }
 
+    .project-viewer {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+        padding: 0 100px 20px;
+    }
+
+    .project-card {
+        padding: 24px;
+        border: 1px solid rgba(21, 40, 89);
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        height: 100%;
+    }
+
     :global(.tab-button.back-button .mdc-button__ripple) {
         padding: 0 8px !important;
         left: -8px !important;
@@ -464,13 +504,6 @@
 
     :global(.tab-button.activated) {
         border-color: rgba(21, 40, 89);
-    }
-
-    .project-viewer {
-        display: flex;
-        flex-grow: 1;
-        flex-direction: column;
-        padding: 0 100px 20px;
     }
 
     :global(.project-view-content-details) {

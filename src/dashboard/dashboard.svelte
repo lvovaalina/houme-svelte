@@ -168,6 +168,6 @@
     }
 
     .dashboard {
-        padding: 0 150px;
+        padding: 0 100px;
     }
 </style>

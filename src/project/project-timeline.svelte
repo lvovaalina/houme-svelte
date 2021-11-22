@@ -171,14 +171,14 @@
 
 <style>
     .container {
-        /* -header height -tab header height */
-        height: calc(100vh - 64px - 56px);
+        /* -header height -tab header height container bottom padding */
+        height: calc(100vh - 80px - 76px - 20px);
     }
+
     #example-gantt {
         flex-grow: 1;
         overflow: auto;
 	    border: #efefef 1px solid;
-        margin-top: 10px;
     }
     
     :global(.sg-task-reflected .sg-task-content) {

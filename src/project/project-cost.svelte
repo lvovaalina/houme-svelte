@@ -36,11 +36,6 @@
 </script>
 
 <div class="project-cost">
-    <div class="table-caption">
-        <div>
-            <p>Cost: {jobsCost}$ | Estimation: {estimation} days</p>
-        </div>
-    </div>
     <DataTable
         stickyHeader table$aria-label="Construction Stages"
         class="project-stages">
@@ -139,8 +134,8 @@
 
     :global(.project-stages, .project-materials) {
         width: 100%;
-        /* -header height -tab header height - table header height */
-        height: calc(100vh - 64px - 56px - 50px);
+        /* -header height -tab header height container bottom padding */
+        height: calc(100vh - 80px - 76px - 20px);
     }
 
     /*@media (max-width: 839px) {*/

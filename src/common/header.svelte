@@ -43,6 +43,6 @@
         top: 7px;
 
         /*content padding - header padding*/
-        margin-left: calc(150px - 16px);
+        margin-left: calc(100px - 16px);
     }
 </style>

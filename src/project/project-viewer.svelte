@@ -1,20 +1,11 @@
 <script>
-    import LayoutGrid, { Cell as GridCell} from '@smui/layout-grid'
+    import LayoutGrid, { Cell} from '@smui/layout-grid'
     import ForgeViewer from './forge-viewer.svelte';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
     import { navigate } from "svelte-navigator";
-    import IconButton from "@smui/icon-button";
-    import Tooltip, { Wrapper } from '@smui/tooltip';
+    import Button, {Label} from '@smui/button';
     import { onMount } from 'svelte';
-    import Drawer, {
-        AppContent,
-        Content as DrawerContent,
-        Header,
-        Title as DrawerTitle,
-    } from '@smui/drawer';
-    import List, { Item, Text } from '@smui/list';
-    import AddManageProjectDialog from '../common/add-manage-project-dialog.svelte';
     import { stageColorMap, stageMap, time } from '../utils';
 
     export let projectId;
@@ -315,9 +306,7 @@
     }
 
     onMount(() => {
-        if (project.Name == '') {
-            getProject(projectId);
-        }
+        getProject(projectId);
     });
 
     function onUpdate() {
@@ -341,107 +330,58 @@
     }
 </script>
 
-<!-- svelte-ignore missing-declaration -->
 <div class="project-viewer">
-    <Drawer class="project-view-drawer">
-        <Header style="padding:0;">
-          <!-- <DrawerTitle>
-                
-            </DrawerTitle> -->
-            <div style="display:flex;justify-content: space-between; align-items: baseline;">
-                <div style="display:flex;align-items: baseline;">
-                    <Wrapper>
-                        <IconButton href="/">
-                            <i style="margin-right:10px;color:#6200ee;"  class="fa fa-arrow-left" aria-hidden="true"></i>
-                            <!-- <i style="margin-right:10px;color:#6200ee;" class="material-icons" aria-hidden="true">arrow_backward</i> -->
-                        </IconButton>
-                        <Tooltip style="z-index:7">Back to Project Dashboard</Tooltip>
-                    </Wrapper>
-                    <h1>Project {project.Name}</h1>
-                </div>
-                <div style="display:flex;">
-                    <Wrapper>
-                        <IconButton style="font-size: 18px; margin-right:-15px;" on:click={() => (open = true)}>
-                            <i style="color:#6200ee;" class="fa fa-cog" aria-hidden="true"></i>
-                        </IconButton>
-                        <Tooltip style="z-index:7">Manage Project</Tooltip>
-                    </Wrapper>
-                </div>
-            </div>
-          <!-- <Subtitle>Editing this properties will change cost and estimation of this project.</Subtitle> -->
-        </Header>
-        <DrawerContent>
-            <List>
-              {#each tabs as tab}
-              <Item
+    <div class="project-view-header">
+        <Button
+            style="color: #152859;margin-right: auto;padding:0"
+            href="javascript:void(0)"
+            on:click={() => navigate('/', {replace: true})}
+            class="tab-button back-button"
+            >
+            <Label>Back to Dashboard</Label>
+        </Button>
+        
+        <div class="project-view-buttons-container">
+            {#each tabs as tab}
+            <Button
+                style="width: 200px;color: #152859;"
+                variant="outlined"
                 href="javascript:void(0)"
                 on:click={() => setActive(tab)}
-                activated={active === tab}
+                class={active === tab.name ? 'activated button-shaped-round tab-button' : 'button-shaped-round tab-button'}
                 >
-                <Text>{tab.name}</Text>
-                </Item>
-              {/each}
-          </List>
-      </DrawerContent>
-    </Drawer>
+                <Label>{tab.name}</Label>
+            </Button>
+            {/each}
+        </div>
 
-    <AppContent style="padding-top:5px;" class="app-content">
-        <div><DrawerTitle>{active}</DrawerTitle></div>
+        <div class="position-helper" style="margin-left: auto;width: 157px;"></div>
+    </div>
 
-        <div class="{active == 'Project View' ? '' : 'hidden'}">
-        <LayoutGrid style="padding-left:0;">
-            <GridCell span={9}>
-                <ForgeViewer></ForgeViewer>
-            </GridCell>
-            <GridCell span={3}>
-                <h2>Project Information</h2>
-                {#if dataLoaded}
-                <table class="property-table" aria-label="Project properties" style="max-width: 100%;">
-                    <tr>
-                        <td><i class="fas fa-key"></i></td>
-                        <td>Rooms Number</td>
-                        <td class="numeric-row">{project.RoomsNumber}</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fas fa-house-user"></i></td>
-                        <td>Space</td>
-                        <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fas fa-money-bill-wave"></i></td>
-                        <td>Project Cost</td>
-                        <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fas fa-calendar-alt"></i></td>
-                        <td>Project Duration</td>
-                        <td class="numeric-row">{project.ConstructionDuration} days</td>
-                    </tr>
-                </table>
-                {/if}
-            </GridCell>
+    <div class="project-view-content">
+        <LayoutGrid class="project-content-grid">
+            <Cell span={9} class="project-view-content-details">
+                <div class="{active == 'Timeline' ? '' : 'hidden'}">
+                    <ProjectTimeline jobs={projectJobsTimelineVM}></ProjectTimeline>
+                </div>
+                
+                <div class="{active == 'Jobs' ? '' : 'hidden'}">
+                <ProjectCost
+                        jobs={projectJobsCostVM}
+                        estimation={project.ConstructionDuration}
+                        bind:loaded={dataLoaded}>
+                </ProjectCost>
+                </div>
+                
+                <div class="{active == 'Project View' ? '' : 'hidden'}">
+                    <ForgeViewer></ForgeViewer>
+                </div>
+            </Cell>
+            <Cell span={3}>
+                <div>Project info</div>
+            </Cell>
         </LayoutGrid>
-        </div>
-
-        <div class="{active == 'Timeline' ? '' : 'hidden'}">
-            <ProjectTimeline jobs={projectJobsTimelineVM}></ProjectTimeline>
-        </div>
-
-        <div class="{active == 'Jobs' ? '' : 'hidden'}">
-        <ProjectCost
-                jobs={projectJobsCostVM}
-                estimation={project.ConstructionDuration}
-                bind:loaded={dataLoaded}>
-        </ProjectCost>
-        </div>
-    </AppContent>
-
-    <AddManageProjectDialog
-        bind:open={open}
-        bind:project={project}
-        on:update={onUpdate}
-        newProject={false}
-        fullAccess={false}/>
+    </div>
 </div>
 
 <style>
@@ -449,31 +389,54 @@
         display: none;
     }
 
-    :global(.project-view-drawer) {
-        background-color: #F6F3F9;
-        border: none !important;
-        width: 20%;
+    .project-view-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 0;
     }
 
-    :global(.app-content) {
-        background-color: white;
-        padding: 25px;
-        width: 80%;
+    .project-view-buttons-container {
+        width: 50%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    :global(.tab-button.back-button .mdc-button__ripple) {
+        padding: 0 8px !important;
+        left: -8px !important;
+    }
+
+    :global(.tab-button .mdc-button__ripple) {
+        border-radius: 999px;
+    }
+
+    :global(.tab-button .mdc-button__ripple::before, .tab-button .mdc-button__ripple::after) {
+        background-color: rgba(21, 40, 89);
+    }
+
+    :global(.tab-button.activated) {
+        border-color: rgba(21, 40, 89);
     }
 
     .project-viewer {
         display: flex;
         flex-grow: 1;
-        background-color: #F6F3F9;
-        /*header height*/
-        height: calc(100vh - 64px);
+        flex-direction: column;
+        padding: 0 100px 20px;
     }
 
-    .manage-project-button-container {
-        text-align: center;
+    :global(.project-view-content-details) {
+        /* -header height -tab header height container bottom padding */
+        height: calc(100vh - 80px - 76px - 20px);
+        overflow: scroll;
     }
 
-    h2 {
-        margin-top: 0;
+    :global(.project-content-grid) {
+        padding: 0;
+    }
+
+    :global(.button-shaped-round) {
+        border-radius: 999px;
     }
 </style>

@@ -8,7 +8,7 @@
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
-    import { pageTitle } from '../store';
+    import { pageTitle, projectStored, propertiesStored } from '../store';
 
     export let projectId;
     export let active = 'Model';
@@ -28,8 +28,6 @@
     let open = false;
 
     export let dataLoaded;
-    export let projectJobsCostVM = [];
-    export let projectJobsTimelineVM = [];
 
     function reduceByPropertyValue(array, propName) {
         return array.reduce(function (r, a) {
@@ -253,8 +251,8 @@
             jobsTinelineVM.push(stageVM);
         });
 
-        projectJobsTimelineVM = jobsTinelineVM;
-        projectJobsCostVM = jobsVM;
+        project.projectJobsTimelineVM = jobsTinelineVM;
+        project.projectJobsCostVM = jobsVM;
     }
 
     let getProject = function(projectId) {
@@ -272,6 +270,7 @@
             });
 
             properties = resp.data;
+            propertiesStored.set(properties);
         });
 
         let getProject = () =>{
@@ -300,6 +299,8 @@
 
                 createProjectJobsVM();
 
+                projectStored.set(project);
+
                 dataLoaded = true;
             });
 
@@ -316,7 +317,15 @@
         pageTitle.set({
             title: 'Project View ' + active
         });
-        getProject(projectId);
+        console.log(projectStored);
+        if ($projectStored.ProjectId != projectId) {
+            getProject(projectId);
+        } else {
+            console.log($projectStored);
+            project = $projectStored;
+            properties = $propertiesStored;
+            dataLoaded = true;
+        }
     });
 
     function onUpdate() {
@@ -372,18 +381,18 @@
         <LayoutGrid class="project-content-grid">
             <Cell span={9} class="project-view-content-details">
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
-                    <ProjectTimeline jobs={projectJobsTimelineVM}></ProjectTimeline>
+                    <ProjectTimeline jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
                 
                 <div class="{active == 'Jobs' ? '' : 'hidden'}">
                 <ProjectCost
-                        jobs={projectJobsCostVM}
+                        jobs={project.projectJobsCostVM}
                         estimation={project.ConstructionDuration}
                         bind:loaded={dataLoaded}>
                 </ProjectCost>
                 </div>
 
-                <div class="{active == 'Model' ? '' : 'hidden'}">
+                <div class="{active == 'Model' ? '' : 'hidden-forge'}">
                     <ForgeViewer></ForgeViewer>
                 </div>
             </Cell>
@@ -441,6 +450,12 @@
 </div>
 
 <style>
+    /* do not hide forge component to allow reload forge model on tab change */
+    .hidden-forge {
+        position: absolute;
+        top: -500px;
+    }
+
     .divider {
         border-bottom: 1px solid #e0e1e2;;
     }

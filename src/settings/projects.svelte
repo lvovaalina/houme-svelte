@@ -178,7 +178,7 @@
             {name: 'ConstructionCost', show: true, edit: false, width: '150px'},
             {name: 'ConstructionDuration', show: true, edit: false, width: '150px'},
         ],
-        details_text: 'detail'   // replace the standard icon with an text-link
+        details_text: 'detail'
     }
 
     function handleAdd() {

@@ -1,5 +1,4 @@
 <script>
-    import LayoutGrid, { Cell } from "@smui/layout-grid"
     import Select, { Option } from '@smui/select';
  
     let foundationMaterial = ['Ribbon', 'Pile', 'Plate'];
@@ -72,7 +71,7 @@
     }
 
     :global(.project-settings .material-select) {
-        width: 50%;
+        width: 60%;
         margin: 5px 0;
     }
 

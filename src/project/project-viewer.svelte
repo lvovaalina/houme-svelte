@@ -10,6 +10,7 @@
     import ProjectSettings from '../project/project-settings.svelte';
     import { pageTitle, projectStored, propertiesStored, jobsStored } from '../store';
     import { setProjectJobs } from '../project-helper';
+    import { Icon } from '@smui/common'
 
     export let projectId;
     export let active = 'Model';
@@ -417,7 +418,7 @@
             on:click={() => navigate('/', {replace: true})}
             class="tab-button back-button"
             >
-            <Label>Back to Dashboard</Label>
+            <Label><Icon class="material-icons">arrow_backwards</Icon>Back to Dashboard</Label>
         </Button>
         
         <div class="project-view-buttons-container">
@@ -580,6 +581,11 @@
 
     :global(.tab-button .mdc-button__ripple) {
         border-radius: 999px;
+    }
+
+    :global(.back-button .mdc-button__label) {
+        display: flex;
+        align-items: center;
     }
 
     :global(.tab-button .mdc-button__ripple::before, .tab-button .mdc-button__ripple::after) {

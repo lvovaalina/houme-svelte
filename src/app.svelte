@@ -28,7 +28,7 @@
     	<Route path="/"><Dashboard/></Route>
 		<Route path="/settings" component="{Settings}"></Route>
 		<Route path="view/:projectId/model" let:params>
-			<ProjectViewer projectId={params.projectId} active='Project View'></ProjectViewer>
+			<ProjectViewer projectId={params.projectId} active='Model'></ProjectViewer>
 		</Route>
 		<Route path="view/:projectId/timeline" let:params>
 			<ProjectViewer projectId={params.projectId} active='Timeline'></ProjectViewer>

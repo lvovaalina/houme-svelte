@@ -1,6 +1,8 @@
 <script>
     import CircularProgress from '@smui/circular-progress';
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
+    import LinearProgress from '@smui/linear-progress';
+
     import { onMount } from 'svelte';
 
     import { Input } from '@smui/textfield';
@@ -21,8 +23,11 @@
     ]
 
     export let projects = [];
+    let projectsResult = [];
+    let projectsCount;
 
     let dataLoaded = false;
+    let dataLoadedForSearch = false;
 
     import { config } from '../config';
     let conf = new config();
@@ -42,18 +47,27 @@
             });
 
             projects = resp.data;
+            projectsResult = projects;
+            projectsCount = projects.length;
             dataLoaded = true;
+            dataLoadedForSearch = true;
         });
     });
 
     function handleKeyDown(event) {
         if (event.key === 'Enter') {
+            dataLoadedForSearch = false;
             doSearch();
         }
     }
 
     function doSearch() {
-        console.log(titleSearch);
+        var re = new RegExp(titleSearch+'.+$', 'i');
+        projectsResult = projects.filter(function(project, i, a){
+            return project.Name.search(re) != -1;
+        });
+        projectsCount = projectsResult.length;
+        dataLoadedForSearch = true;
     }
 
     function navigateToProject(projectId) {
@@ -65,18 +79,18 @@
 <div class="dashboard">
     {#if dataLoaded}
     <div class="project-table-header">
-        <span class="results-found-text">15 projects found</span>
         <div class="solo-demo-container solo-container">
             <Paper class="solo-paper" elevation={6}>
               <Icon class="material-icons">search</Icon>
               <Input
-                bind:titleSearch
+                bind:value={titleSearch}
                 on:keydown={handleKeyDown}
                 placeholder="Search by Title"
                 class="solo-input"
               />
             </Paper>
           </div>
+        <span class="results-found-text">{projectsCount} project(s) found</span>
     </div>
     <DataTable
         stickyHeader table$aria-label="Project dashboard"
@@ -89,7 +103,8 @@
             </Row>
         </Head>
         <Body>
-            {#each projects as project}
+            {#if projectsResult.length !== 0} 
+            {#each projectsResult as project}
                 <Row style="cursor: pointer" on:click={navigateToProject(project.ProjectId)}>
                     <Cell style="padding-left:0;">
                         <img class="project-image" src="/project.png" alt="Project mini version"/>
@@ -105,13 +120,17 @@
                     <Cell numeric>50 p.</Cell>
                 </Row>
             {/each}
+            {:else}
+            <div>No data</div>
+            {/if}
+            
         </Body>
-        <!-- <LinearProgress
+        <LinearProgress
             indeterminate
-            bind:closed={loaded}
+            bind:closed={dataLoadedForSearch}
             aria-label="Data is being loaded..."
             slot="progress"
-        /> -->
+        />
     </DataTable>
     {:else}
         <div style="display: flex; justify-content: center">

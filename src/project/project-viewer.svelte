@@ -8,7 +8,8 @@
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
-    import { pageTitle, projectStored, propertiesStored } from '../store';
+    import { pageTitle, projectStored, propertiesStored, jobsStored } from '../store';
+    import { setProjectJobs } from '../project-helper';
 
     export let projectId;
     export let active = 'Model';
@@ -24,6 +25,7 @@
     let project = {};
     export let propertiesMap = new Map();
     let properties = [];
+    let jobs = [];
     
     let open = false;
 
@@ -306,6 +308,25 @@
 
         } 
         getProperties.then(() => getProject());
+
+        if ($jobsStored.length == 0) {
+            fetch(conf.api + '/getJobs')
+            .then((result) => {
+                if (result.ok) {
+                    console.log("get jobs successfully");
+                }
+
+                return result.json();
+            })
+            .then((resp) => {
+                resp.data.forEach(element => {
+                    element.PropertyValue = null;
+                });
+
+                jobs = resp.data;
+                jobsStored.set(jobs);
+            });
+        }
     }
 
     $:newValActive = active
@@ -328,10 +349,51 @@
         }
     });
 
-    function onUpdate() {
+    async function updateProject(event) {
         dataLoaded = false;
+        event.preventDefault();
+        event.stopPropagation();
+        project = setProjectJobs(project, jobs);
+
+        await fetch(conf.api + '/updateProject/'+ project.ProjectId,
+        {
+            method: 'PUT',
+            body: JSON.stringify(project)
+        })
+        .then((result) => {
+            if (result.ok) {
+                console.log("Updated successfully");
+            }
+
+            return result.json();
+        })
+        .then((data) => {
+            let updatedProject = data.data;
+            onUpdate().then((projectJobs) => {
+                updatedProject.ProjectJobs = projectJobs;
+                updatedProject.projectJobsTimelineVM = [];
+                updatedProject.projectJobsCostVM = [];
+
+                project = updatedProject;
+                createProjectJobsVM();
+
+                dataLoaded = true;
+            });
+        })
+        .catch(error => {
+            errorMessage = 'Something went wrong! Try again later';
+            addNotification({
+                text: errorMessage,
+                position: 'top-center',
+                type: 'danger'
+            });
+            console.error(error);
+        });
+    }
+
+    function onUpdate() {
         // // fetch new project jobs as they not preloaded on save
-        fetch(conf.api + '/getProjectJobs/' + projectId)
+        return fetch(conf.api + '/getProjectJobs/' + projectId)
         .then((result) => {
             if (result.ok) {
                 console.log("get project jobs successfully");
@@ -342,9 +404,7 @@
         .then((resp) => {
             let projectJobs = resp.data;
             projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
-            project.ProjectJobs = projectJobs;
-            createProjectJobsVM();
-            dataLoaded = true;
+            return projectJobs;
         });
     }
 </script>
@@ -439,7 +499,7 @@
                     </div>
 
                     <Button style="text-align: left;background-color: #152859; color: white; align-self: flex-end;"
-                    variant="filled">
+                    variant="filled" on:click={updateProject}>
                         <Label >APPLY</Label>
                     </Button>
                     {/if}

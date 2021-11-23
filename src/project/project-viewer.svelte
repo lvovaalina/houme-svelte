@@ -8,11 +8,12 @@
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
+    import { pageTitle } from '../store';
 
     export let projectId;
-    export let active = 'Project View';
+    export let active = 'Model';
 
-    let tabs = [{name: 'Project View', urlPart: 'model'},{name: 'Timeline', urlPart: 'timeline'}, {name: 'Jobs', urlPart:'jobs'}]
+    let tabs = [{name: 'Model', urlPart: 'model'},{name: 'Timeline', urlPart: 'timeline'}, {name: 'Jobs', urlPart:'jobs'}]
     
     import { config } from '../config';
     let conf = new config();
@@ -306,7 +307,15 @@
         getProperties.then(() => getProject());
     }
 
+    $:newValActive = active
+    $:pageTitle.set({
+            title: 'Project View ' + newValActive
+        });
+
     onMount(() => {
+        pageTitle.set({
+            title: 'Project View ' + active
+        });
         getProject(projectId);
     });
 
@@ -373,8 +382,8 @@
                         bind:loaded={dataLoaded}>
                 </ProjectCost>
                 </div>
-                
-                <div class="{active == 'Project View' ? '' : 'hidden'}">
+
+                <div class="{active == 'Model' ? '' : 'hidden'}">
                     <ForgeViewer></ForgeViewer>
                 </div>
             </Cell>

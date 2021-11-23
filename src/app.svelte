@@ -4,6 +4,7 @@
 	import { Router, Route } from "svelte-navigator";
 	import "../node_modules/svelte-gantt/css/svelteGantt.css";
 	import "../public/material-colors.min.css";
+	import { pageTitle } from './store';
 
 	import Header from "./common/header.svelte";
 
@@ -12,8 +13,11 @@
 	import ProjectViewer from "./project/project-viewer.svelte";
 
 	let envmt = env;
-	let title = 'Project Dashboard';
-	document.title = title + '| Houmly';
+	export let title;
+	pageTitle.subscribe(value => {
+		title = value.title;
+		document.title = title + ' | Houmly';
+	});
 </script>
 
 <main>
@@ -36,7 +40,7 @@
 	</Notifications>
 
 	{#if (envmt != "production") } 
-	<div class="version-container">version: 0.2.11</div>
+	<div class="version-container">version: 0.2.12</div>
 	{/if}
 </main>
 

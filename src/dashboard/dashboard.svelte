@@ -4,6 +4,7 @@
     import LinearProgress from '@smui/linear-progress';
 
     import { onMount } from 'svelte';
+    import { pageTitle } from '../store';
 
     import { Input } from '@smui/textfield';
     import Paper from '@smui/paper';
@@ -20,7 +21,7 @@
         {name: 'Build cost', style:'text-align: right;'},
         {name: 'Material cost', style:'text-align: right;'},
         {name: 'People', style:'text-align: right;'},
-    ]
+    ];
 
     export let projects = [];
     let projectsResult = [];
@@ -51,6 +52,10 @@
             projectsCount = projects.length;
             dataLoaded = true;
             dataLoadedForSearch = true;
+        });
+
+        pageTitle.set({
+            title: 'Project Dashboard'
         });
     });
 

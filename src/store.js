@@ -4,4 +4,6 @@ export const pageTitle = writable({});
 
 export const projectStored = writable({});
 
-export const propertiesStored = writable({});
+export const propertiesStored = writable([]);
+
+export const jobsStored = writable([]);

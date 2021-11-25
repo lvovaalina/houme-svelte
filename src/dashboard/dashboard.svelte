@@ -1,6 +1,12 @@
 <script>
     import CircularProgress from '@smui/circular-progress';
-    import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
+    import DataTable, {
+        Head,
+        Body,
+        Row,
+        Cell,
+        Label,
+    } from '@smui/data-table';
     import LinearProgress from '@smui/linear-progress';
 
     import { onMount } from 'svelte';
@@ -10,13 +16,15 @@
     import Paper from '@smui/paper';
     import { Icon } from '@smui/common';
 
+    import IconButton from '@smui/icon-button';
+
     let loaded = true;
     let titleSearch;
     let columns = [
         {name: 'Image', style: 'padding-left: 0'},
-        {name: 'Title'},
-        {name: 'Duration'},
-        {name: 'Area'},
+        {name: 'Title', columnId: 'Name'},
+        {name: 'Duration', columnId: 'ConstructionDuration'},
+        {name: 'Area', columnId: 'LivingArea'},
         {name: 'Margin', style:'text-align: right;'},
         {name: 'Build cost', style:'text-align: right;'},
         {name: 'Material cost', style:'text-align: right;'},
@@ -32,6 +40,9 @@
 
     import { config } from '../config';
     let conf = new config();
+
+    let sort = 'title';
+    let sortDirection = 'ascending'; //ascending descending 
 
     onMount(function() {
         fetch(conf.api + '/getProjects')
@@ -79,6 +90,21 @@
         window.open(window.location.origin + '/view/' + projectId, '_blank');
     }
 
+    function handleSort(event) {
+        console.log(event);
+        console.log("SORT", sort);
+        projectsResult.sort((a, b) => {
+            const [aVal, bVal] = [a[sort], b[sort]][
+                sortDirection === 'ascending' ? 'slice' : 'reverse'
+            ]();
+            if (typeof aVal === 'string' && typeof bVal === 'string') {
+                return aVal.localeCompare(bVal);
+            }
+            return Number(aVal) - Number(bVal);
+        });
+        projectsResult = projectsResult;
+    }
+
 </script>
 
 <div class="dashboard">
@@ -98,12 +124,21 @@
         <span class="results-found-text">{projectsCount} project(s) found</span>
     </div>
     <DataTable
+        sortable
+        bind:sort
+        bind:sortDirection
+        on:MDCDataTable:sorted={handleSort}
         stickyHeader table$aria-label="Project dashboard"
         class="projects-table">
         <Head>
             <Row>
             {#each columns as col}
-                <Cell style={col.style}>{col.name}</Cell>
+                <Cell sortable={!!col.columnId ? 'true' : 'false'} style={col.style} columnId={col.columnId}>
+                    <Label>{col.name}</Label>
+                    {#if !!col.columnId}
+                        <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
+                    {/if}
+                </Cell>
             {/each}
             </Row>
         </Head>

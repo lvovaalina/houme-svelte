@@ -166,8 +166,8 @@
             
         </Body>
         <LinearProgress
-            indeterminate
             bind:closed={dataLoadedForSearch}
+            indeterminate
             aria-label="Data is being loaded..."
             slot="progress"
         />

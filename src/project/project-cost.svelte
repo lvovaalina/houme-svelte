@@ -5,10 +5,8 @@
     import LinearProgress from '@smui/linear-progress';
 
     export let jobs = [];
-    export let estimation = 0;
 
     export let loaded = false;
-    let jobsCost = 0;
 
     let columns = ['Color', 'Stage', 'Cost',  'Duration', 'Property Name', 'Property Value', 'Property Unit', 'People'];
 
@@ -103,6 +101,7 @@
             {/each}
         </Body>
         <LinearProgress
+            style="background-color:rgb(21, 40, 89);"
             indeterminate
             bind:closed={loaded}
             aria-label="Data is being loaded..."
@@ -119,17 +118,12 @@
     :global(.help-icon) {
         font-size: 16px;
         margin-left: 5px;
-        color:#6200ee;
     }
 
     .table-caption {
         display: flex;
         align-items: center;
         justify-content: space-between;
-    }
-
-    .table-caption p {
-        display: flex;
     }
 
     :global(.project-stages, .project-materials) {

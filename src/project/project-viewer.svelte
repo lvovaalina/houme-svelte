@@ -8,8 +8,7 @@
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
-    import { pageTitle, projectStored, propertiesStored, jobsStored } from '../store';
-    import { setProjectJobs } from '../project-helper';
+    import { pageTitle, projectStored, propertiesStored } from '../store';
     import { Icon } from '@smui/common'
 
     export let projectId;
@@ -26,7 +25,6 @@
     let project = {};
     export let propertiesMap = new Map();
     let properties = [];
-    let jobs = [];
     
     let open = false;
 
@@ -309,25 +307,6 @@
 
         } 
         getProperties.then(() => getProject());
-
-        if ($jobsStored.length == 0) {
-            fetch(conf.api + '/getJobs')
-            .then((result) => {
-                if (result.ok) {
-                    console.log("get jobs successfully");
-                }
-
-                return result.json();
-            })
-            .then((resp) => {
-                resp.data.forEach(element => {
-                    element.PropertyValue = null;
-                });
-
-                jobs = resp.data;
-                jobsStored.set(jobs);
-            });
-        }
     }
 
     $:newValActive = active
@@ -354,9 +333,8 @@
         dataLoaded = false;
         event.preventDefault();
         event.stopPropagation();
-        project = setProjectJobs(project, jobs);
 
-        await fetch(conf.api + '/updateProject/'+ project.ProjectId,
+        await fetch(conf.api + '/updateProjectProperties/'+ project.ProjectId,
         {
             method: 'PUT',
             body: JSON.stringify(project)
@@ -375,8 +353,11 @@
                 updatedProject.projectJobsTimelineVM = [];
                 updatedProject.projectJobsCostVM = [];
 
+                propertiesMap = new Map(updatedProject.ProjectProperties.map(i => [i.PropertyCode, i]));
+
                 project = updatedProject;
                 createProjectJobsVM();
+                projectStored.set(project);
 
                 dataLoaded = true;
             });

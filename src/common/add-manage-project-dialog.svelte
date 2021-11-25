@@ -5,8 +5,7 @@
     import Textfield from '@smui/textfield';
     import LayoutGrid, { Cell } from "@smui/layout-grid";
 
-    import { propertiesStored, jobsStored } from '../store';
-    import { setProjectJobs } from '../project-helper';
+    import { propertiesStored } from '../store';
 
     import ProjectSettings from '../project/project-settings.svelte';
 
@@ -21,7 +20,6 @@
     let dataLoaded = true;
     export let fullAccess = false;
 
-    let jobs = [];
     export let properties = [];
 
     let errorMessage = '';
@@ -52,8 +50,6 @@
         dataLoaded = false;
         event.preventDefault();
         event.stopPropagation();
-
-        project = setProjectJobs(project, jobs);
 
         project.ProjectProperties = properties;
         project.Filename = project.Name + '.rvt';
@@ -101,7 +97,7 @@
     }
 
     onMount(function() {
-        if ($propertiesStored.length == 0 && $jobsStored.length == 0) {
+        if ($propertiesStored.length == 0) {
             let getProperties = fetch(conf.api + '/getProperties')
             .then((result) => {
                 if (result.ok) {
@@ -117,30 +113,8 @@
 
                 properties = resp.data;
             });
-
-            let getJobs = fetch(conf.api + '/getJobs')
-            .then((result) => {
-                if (result.ok) {
-                    console.log("get jobs successfully");
-                }
-
-                return result.json();
-            })
-            .then((resp) => {
-                resp.data.forEach(element => {
-                    element.PropertyValue = null;
-                });
-
-                jobs = resp.data;
-            });
-
-            Promise.all([getProperties, getJobs])
-                .then(() => {
-                    dataLoaded = true;
-                });
         } else {
             properties = $propertiesStored;
-            jobs = $jobsStored;
             dataLoaded = true;
         }
     });
@@ -149,7 +123,6 @@
         dataLoaded = false;
         event.preventDefault();
         event.stopPropagation();
-        project = setProjectJobs(project, jobs);
 
         await fetch(conf.api + '/updateProject/'+ project.ProjectId,
         {

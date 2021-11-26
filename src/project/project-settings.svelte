@@ -72,7 +72,7 @@
 
     :global(.project-settings .material-select) {
         width: 60%;
-        margin: 5px 0;
+        margin: 10px 0;
     }
 
     :global(.project-settings .mdc-select__anchor) {

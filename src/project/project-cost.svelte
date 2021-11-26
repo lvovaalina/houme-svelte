@@ -41,7 +41,7 @@
             <Row>
             {#each columns as col}
                 {#if col == 'Color'}
-                    <Cell>
+                    <Cell style="padding:0;">
                         <div style="display:flex;align-items: center;">
                         <div>
                             {col}
@@ -61,7 +61,9 @@
         <Body>
             {#each jobs as stage}
                 <Row on:click={rowClick(stage.code)}>
-                    <Cell class={stage.color}></Cell>
+                    <Cell style="padding:0">
+                        <div style="height:51px" class={stage.color}></div>
+                    </Cell>
                     <Cell>
                         {#if stage.tasks && stage.tasks.length !== 0}
                         <i class={'fas fa-angle-right' + ' ' + stage.code + '-icon'} aria-hidden="true"></i>
@@ -83,8 +85,10 @@
                 {#if stage.tasks && stage.tasks.length !== 0}
                         {#each stage.tasks as task}
                             <Row class="hidden-subtasks {stage.code}">
-                                <Cell class={stage.color}></Cell>
-                                <Cell style="padding-left:50px;">{task.name}</Cell>
+                                <Cell style="padding:0">
+                                    <div style="height:51px" class={stage.color}></div>
+                                </Cell>
+                                <Cell style="padding-left:30px;">{task.name}</Cell>
                                 <Cell numeric>{task.cost}</Cell>
                                 <Cell numeric>{task.duration}</Cell>
                                 <Cell>{task.propertyName}</Cell>
@@ -130,6 +134,7 @@
         width: 100%;
         /* -header height -tab header height container bottom padding */
         height: calc(100vh - 80px - 76px - 20px);
+        border: none;
     }
 
     /*@media (max-width: 839px) {*/

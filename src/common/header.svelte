@@ -1,14 +1,41 @@
 <script>
-    import TopAppBar, { Row } from "@smui/top-app-bar";
+    import TopAppBar, { Row, Section } from "@smui/top-app-bar";
+    import { navigate } from "svelte-navigator";
+    import { Icon } from '@smui/common';
+    import Button, { Label } from "@smui/button";
+    import { pageTitle, projectStored } from '../store';
+
+    export let projectName = '';
+    pageTitle.subscribe(value => {
+        if (!!value.projectName) {
+            projectName = value.projectName;
+        }
+	});
 </script>
 
 <div class="flexy">
     <div class="top-app-bar-container">
         <TopAppBar class="header" variant="static">
             <Row>
-                <a class="header-logo-link" target="_blink" href="https://houmly.com">
-                    <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
-                </a>
+                <Section style="align-items: center;">
+                    <a class="header-logo-link" target="_blink" href="https://houmly.com">
+                        <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
+                    </a>
+                    {#if !!projectName}
+                    <Button style="color: rgba(21, 40, 89);margin-bottom: 0;margin-left: 20px;" on:click={() => navigate('/',{replace: true})}>
+                        <Label><h2>Project Dashboard</h2></Label>
+                    </Button>
+                    <Icon style="color: rgba(21, 40, 89)" class="material-icons">chevron_right</Icon>
+                    <Button
+                        style="color: rgba(21, 40, 89);margin-bottom: 0;"
+                        on:click={() => navigate('/view/' + $projectStored.projectId + '/model',{replace: true})}>
+                        <Label><h2>{projectName}</h2></Label>
+                    </Button>
+                    {/if}
+                </Section>
+                <Section>
+                    
+                </Section>
             </Row>
         </TopAppBar>
     </div>
@@ -33,12 +60,6 @@
     }
 
     .header-logo-link {
-        position: absolute;
-        z-index: 10;
         display: block;
-        top: 7px;
-
-        /*content padding - header padding*/
-        margin-left: calc(25px - 16px);
     }
 </style>

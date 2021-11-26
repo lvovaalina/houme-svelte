@@ -301,6 +301,10 @@
                 createProjectJobsVM();
 
                 projectStored.set(project);
+                pageTitle.set({
+                    title: 'Project View ' + newValActive,
+                    projectName: project.Name,
+                })
 
                 dataLoaded = true;
             });
@@ -316,7 +320,7 @@
 
     onMount(() => {
         pageTitle.set({
-            title: 'Project View ' + active
+            title: 'Project View ' + active,
         });
         console.log(projectStored);
         if ($projectStored.ProjectId != projectId) {
@@ -325,6 +329,10 @@
             console.log($projectStored);
             project = $projectStored;
             properties = $propertiesStored;
+            pageTitle.set({
+                    title: 'Project View ' + newValActive,
+                    projectName: project.Name,
+                })
             dataLoaded = true;
         }
     });
@@ -392,36 +400,24 @@
 </script>
 
 <div class="project-viewer">
-    <div class="project-view-header">
-        <Button
-            style="color: #152859;margin-right: auto;padding:0"
-            href="javascript:void(0)"
-            on:click={() => navigate('/', {replace: true})}
-            class="tab-button back-button"
-            >
-            <Label><Icon class="material-icons">arrow_backwards</Icon>Back to Dashboard</Label>
-        </Button>
-        
-        <div class="project-view-buttons-container">
-            {#each tabs as tab}
-            <Button
-                style="width: 200px;color: #152859;"
-                variant="outlined"
-                href="javascript:void(0)"
-                on:click={() => setActive(tab)}
-                class={active === tab.name ? 'activated button-shaped-round tab-button' : 'button-shaped-round tab-button'}
-                >
-                <Label>{tab.name}</Label>
-            </Button>
-            {/each}
-        </div>
-
-        <div class="position-helper" style="margin-left: auto;width: 157px;"></div>
-    </div>
-
     <div class="project-view-content">
         <LayoutGrid class="project-content-grid">
             <Cell span={9} class="project-view-content-details">
+                <div class="project-view-header">
+                    <div class="project-view-buttons-container">
+                        {#each tabs as tab}
+                        <Button
+                            style="width: 200px;color: #152859;"
+                            variant="outlined"
+                            href="javascript:void(0)"
+                            on:click={() => setActive(tab)}
+                            class={active === tab.name ? 'activated tab-button' : 'tab-button'}
+                            >
+                            <Label>{tab.name}</Label>
+                        </Button>
+                        {/each}
+                    </div>
+                </div>
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
                     <ProjectTimeline jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
@@ -441,8 +437,7 @@
             <Cell span={3}>
                 <div class="project-card">
                     {#if dataLoaded}
-                    <h2 class="card-header">{project.Name}</h2>
-                    <div class="divider"/>
+                    <h3 class="card-header" style="margin-top: 0;">Project Details</h3>
                     <table class="property-table" aria-label="Project properties" style="width: 100%;">
                         <tr>
                             <td>Area</td>
@@ -471,6 +466,7 @@
                     </table>
                     <div class="divider"/>
                     <div class="materials-block">
+                        <h3 class="card-header">Options</h3>
                         <ProjectSettings
                             bind:foundationMaterialValue={project.FoundationMaterial}
                             bind:wallMaterialValue={project.WallMaterial}
@@ -480,8 +476,9 @@
                         </ProjectSettings>
                     </div>
 
-                    <Button style="text-align: left;background-color: #152859; color: white; align-self: flex-end;"
-                    variant="filled" on:click={updateProject}>
+                    <Button
+                        style="margin-top: 10px;text-align: left;background-color: #152859; color: white; align-self: flex-end;"
+                        variant="filled" on:click={updateProject}>
                         <Label >APPLY</Label>
                     </Button>
                     {/if}
@@ -503,11 +500,7 @@
     }
 
     .card-header {
-        text-transform: uppercase;
-        text-align: right;
-        color: rgba(21, 40, 89);
-        font-weight: 500;
-        margin: 0;
+        margin-bottom: 10px;
     }
 
     .numeric-row {
@@ -519,6 +512,10 @@
         height: 30px;
     }
 
+    .property-table {
+        margin-bottom: 10px;
+    }
+
     .hidden {
         display: none;
     }
@@ -526,14 +523,13 @@
     .project-view-header {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         padding: 20px 0;
     }
 
     .project-view-buttons-container {
         width: 50%;
         display: flex;
-        justify-content: space-between;
     }
 
     .project-viewer {
@@ -544,13 +540,10 @@
     }
 
     .project-card {
-        padding: 24px;
-        border: 1px solid rgba(21, 40, 89);
-        border-radius: 12px;
+        padding: 20px 24px 0;
 
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
 
         height: 100%;
     }
@@ -558,10 +551,6 @@
     :global(.tab-button.back-button .mdc-button__ripple) {
         padding: 0 8px !important;
         left: -8px !important;
-    }
-
-    :global(.tab-button .mdc-button__ripple) {
-        border-radius: 999px;
     }
 
     :global(.back-button .mdc-button__label) {
@@ -579,15 +568,11 @@
 
     :global(.project-view-content-details) {
         /* -header height -tab header height container bottom padding */
-        height: calc(100vh - 80px - 76px - 20px);
-        overflow: scroll;
+        height: calc(100vh - 80px - 76px);
+        border-right: 1px solid #d3d3d1;
     }
 
     :global(.project-content-grid) {
         padding: 0;
-    }
-
-    :global(.button-shaped-round) {
-        border-radius: 999px;
     }
 </style>

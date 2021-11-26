@@ -13,17 +13,15 @@
 	import ProjectViewer from "./project/project-viewer.svelte";
 
 	let envmt = env;
-	export let title;
 	pageTitle.subscribe(value => {
-		title = value.title;
-		document.title = title + ' | Houmly';
+		document.title = value.title + ' | Houmly';
 	});
 </script>
 
 <main>
 	<Notifications>
 	<Router url="{url}">
-		<Header bind:title={title}/>
+		<Header />
 		<Route path="view/:projectId" let:params>
 			<ProjectViewer projectId={params.projectId} active='Model'></ProjectViewer>
 		</Route>

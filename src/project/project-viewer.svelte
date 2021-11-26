@@ -540,7 +540,7 @@
         display: flex;
         flex-grow: 1;
         flex-direction: column;
-        padding: 0 100px 20px;
+        padding: 0 25px 20px;
     }
 
     .project-card {

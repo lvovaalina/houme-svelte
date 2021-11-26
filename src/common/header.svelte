@@ -1,7 +1,5 @@
 <script>
-    import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
-
-    export let title;
+    import TopAppBar, { Row } from "@smui/top-app-bar";
 </script>
 
 <div class="flexy">
@@ -11,9 +9,6 @@
                 <a class="header-logo-link" target="_blink" href="https://houmly.com">
                     <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
                 </a>
-                <Section style="justify-content: center;">
-                    <Title class="page-title">{title}</Title>
-                </Section>
             </Row>
         </TopAppBar>
     </div>
@@ -44,6 +39,6 @@
         top: 7px;
 
         /*content padding - header padding*/
-        margin-left: calc(100px - 16px);
+        margin-left: calc(25px - 16px);
     }
 </style>

@@ -74,7 +74,8 @@
         });
 
         pageTitle.set({
-            title: 'Project Dashboard'
+            title: 'Project Dashboard',
+            projectName: ''
         });
     });
 

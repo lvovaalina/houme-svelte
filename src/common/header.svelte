@@ -7,9 +7,7 @@
 
     export let projectName = '';
     pageTitle.subscribe(value => {
-        if (!!value.projectName) {
-            projectName = value.projectName;
-        }
+        projectName = value.projectName;
 	});
 </script>
 

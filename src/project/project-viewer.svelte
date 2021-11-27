@@ -101,8 +101,8 @@
 
                 if (jobs[0].Job.Property && !!jobs[0].Job.Property.PropertyCode) {
                     let projectProperty = propertiesMap.get(jobs[0].Job.Property.PropertyCode);
-                    stageVM.propertyName = projectProperty.PropertyName;
-                    stageVM.propertyUnit = projectProperty.PropertyUnit;
+                    stageVM.propertyName = jobs[0].Job.Property.PropertyName;
+                    stageVM.propertyUnit = jobs[0].Job.Property.PropertyUnit;
                     stageVM.propertyValue = projectProperty.PropertyValue;
                 } else {
                     stageVM.propertyName = '-';
@@ -126,8 +126,8 @@
 
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
                         let projectProperty = propertiesMap.get(job.Job.Property.PropertyCode);
-                        newTask.propertyName = projectProperty.PropertyName;
-                        newTask.propertyUnit = projectProperty.PropertyUnit;
+                        newTask.propertyName = job.Job.Property.PropertyName;
+                        newTask.propertyUnit = job.Job.Property.PropertyUnit;
                         newTask.propertyValue = projectProperty.PropertyValue;
                     } else {
                         newTask.propertyName = '-';
@@ -326,7 +326,6 @@
         if ($projectStored.ProjectId != projectId) {
             getProject(projectId);
         } else {
-            console.log($projectStored);
             project = $projectStored;
             properties = $propertiesStored;
             pageTitle.set({
@@ -356,19 +355,19 @@
         })
         .then((data) => {
             let updatedProject = data.data;
-            onUpdate().then((projectJobs) => {
-                updatedProject.ProjectJobs = projectJobs;
-                updatedProject.projectJobsTimelineVM = [];
-                updatedProject.projectJobsCostVM = [];
+            let projectJobs = updatedProject.ProjectJobs;
+            updatedProject.projectJobsTimelineVM = [];
+            updatedProject.projectJobsCostVM = [];
+            projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
+            updatedProject.ProjectJobs = projectJobs;
 
-                propertiesMap = new Map(updatedProject.ProjectProperties.map(i => [i.PropertyCode, i]));
+            propertiesMap = new Map(updatedProject.ProjectProperties.map(i => [i.PropertyCode, i]));
+            
+            project = updatedProject;
+            createProjectJobsVM();
+            projectStored.set(project);
 
-                project = updatedProject;
-                createProjectJobsVM();
-                projectStored.set(project);
-
-                dataLoaded = true;
-            });
+            dataLoaded = true;
         })
         .catch(error => {
             errorMessage = 'Something went wrong! Try again later';
@@ -378,23 +377,6 @@
                 type: 'danger'
             });
             console.error(error);
-        });
-    }
-
-    function onUpdate() {
-        // // fetch new project jobs as they not preloaded on save
-        return fetch(conf.api + '/getProjectJobs/' + projectId)
-        .then((result) => {
-            if (result.ok) {
-                console.log("get project jobs successfully");
-            }
-
-            return result.json();
-        })
-        .then((resp) => {
-            let projectJobs = resp.data;
-            projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
-            return projectJobs;
         });
     }
 </script>

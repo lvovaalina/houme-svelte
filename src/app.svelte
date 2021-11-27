@@ -5,6 +5,7 @@
 	import "../node_modules/svelte-gantt/css/svelteGantt.css";
 	import "../public/material-colors.min.css";
 	import { pageTitle } from './store';
+	import Analytics from './common/analytics.svelte';
 
 	import Header from "./common/header.svelte";
 
@@ -19,6 +20,7 @@
 </script>
 
 <main>
+	<Analytics></Analytics>
 	<Notifications>
 	<Router url="{url}">
 		<Header />
@@ -40,7 +42,7 @@
 	</Notifications>
 
 	{#if (envmt != "production") } 
-	<div class="version-container">version: 0.2.21</div>
+	<div class="version-container">version: 0.2.22</div>
 	{/if}
 </main>
 

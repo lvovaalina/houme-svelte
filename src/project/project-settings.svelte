@@ -10,7 +10,7 @@
     let finishMaterial = ['Plaster', 'Ventfacade'];
     export let finishMaterialValue = '';
 
-    let roofingMaterial = ['Fold', 'Soft Roof', 'Roof Tiles']
+    let roofingMaterial = ['Fold', 'Soft roof', 'Roof tiles']
     export let roofingMaterialValue = '';
 
     let constructionWorkersNumber = ['Maximum', 'Optimal', 'Minimum']

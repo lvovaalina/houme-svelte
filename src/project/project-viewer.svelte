@@ -94,29 +94,18 @@
                 code: props.code,
             }
 
-            if (jobs.length == 1) {
-                stageVM.duration = jobs[0].ConstructionDurationInDays;
-                stageVM.stageCost = jobs[0].ConstructionCost;
-                stageVM.workersCount = jobs[0].ConstructionWorkers;
+            let stageDuration = 0, stageCost = 0, stageWorkers = 0;
+            let tasks = [];
+            let isPropertySetForStage = false;
 
-                if (jobs[0].Job.Property && !!jobs[0].Job.Property.PropertyCode) {
-                    let projectProperty = propertiesMap.get(jobs[0].Job.Property.PropertyCode);
-                    stageVM.propertyName = jobs[0].Job.Property.PropertyName;
-                    stageVM.propertyUnit = jobs[0].Job.Property.PropertyUnit;
-                    stageVM.propertyValue = projectProperty.PropertyValue;
-                } else {
-                    stageVM.propertyName = '-';
-                    stageVM.propertyUnit = '-';
-                    stageVM.propertyValue = '-';
-                }
-            } else {
-                let stageDuration = 0, stageCost = 0, stageWorkers = 0;
-                let tasks = [];
-                jobs.forEach(job => {
-                    stageCost += job.ConstructionCost;
-                    stageWorkers += job.ConstructionWorkers;
-                    stageDuration += job.ConstructionDurationInDays;
+            jobs.forEach(job => {
 
+                stageCost += job.ConstructionCost;
+                stageWorkers += job.ConstructionWorkers;
+                stageDuration += job.ConstructionDurationInDays;
+
+                let projectProperty = propertiesMap.get(job.Job.Property.PropertyCode);
+                if (job.Job.JobName != stage) {
                     let newTask = {
                         name: job.Job.JobName,
                         duration: job.ConstructionDurationInDays,
@@ -125,7 +114,6 @@
                     }
 
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
-                        let projectProperty = propertiesMap.get(job.Job.Property.PropertyCode);
                         newTask.propertyName = job.Job.Property.PropertyName;
                         newTask.propertyUnit = job.Job.Property.PropertyUnit;
                         newTask.propertyValue = projectProperty.PropertyValue;
@@ -136,16 +124,29 @@
                     }
 
                     tasks.push(newTask);
-                });
+                } 
+                
+                if (jobs.length == 1) {
+                    if (job.Job.Property && !!job.Job.Property.PropertyCode) {
+                        stageVM.propertyName = job.Job.Property.PropertyName;
+                        stageVM.propertyUnit = job.Job.Property.PropertyUnit;
+                        stageVM.propertyValue = projectProperty.PropertyValue;
+                        isPropertySetForStage = true;
+                    }
+                }
+            });
 
-                stageVM.duration = stageDuration;
-                stageVM.stageCost = stageCost;
-                stageVM.workersCount = stageWorkers;
+            stageVM.duration = stageDuration;
+            stageVM.stageCost = stageCost;
+            stageVM.workersCount = stageWorkers;
+
+            if (!isPropertySetForStage) {
                 stageVM.propertyName = '-';
                 stageVM.propertyUnit = '-';
                 stageVM.propertyValue = '-';
-                stageVM.tasks = tasks;
             }
+            
+            stageVM.tasks = tasks;
 
             jobsVM.push(stageVM);
         });
@@ -413,7 +414,7 @@
                 </div>
 
                 <div class="{active == 'Model' ? '' : 'hidden-forge'}">
-                    <ForgeViewer></ForgeViewer>
+                    <!-- <ForgeViewer></ForgeViewer> -->
                 </div>
             </Cell>
             <Cell span={3}>

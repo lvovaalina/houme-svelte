@@ -342,6 +342,9 @@
         event.preventDefault();
         event.stopPropagation();
 
+        let projectToUpdate = project;
+        projectToUpdate.ProjectJobs = [];
+
         await fetch(conf.api + '/updateProjectProperties/'+ project.ProjectId,
         {
             method: 'PUT',

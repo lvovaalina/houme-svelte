@@ -417,7 +417,7 @@
                 </div>
 
                 <div class="{active == 'Model' ? '' : 'hidden-forge'}">
-                    <!-- <ForgeViewer></ForgeViewer> -->
+                    <ForgeViewer></ForgeViewer>
                 </div>
             </Cell>
             <Cell span={3}>

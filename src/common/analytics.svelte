@@ -1,5 +1,5 @@
 <script>
-    import { config } from './config';
+    import { config } from '../config';
 
     let conf = new config();
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};

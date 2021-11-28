@@ -10,6 +10,9 @@
 
     let loaded = true;
 
+    let selectedProjectId;
+    let selectedProjectJobs = [];
+
     import { config } from '../config';
     let conf = new config();
     function reloadonPropertyChange(reloadProj) {
@@ -46,6 +49,9 @@
             return result.json();
         })
         .then((resp) => {
+            resp.data.forEach(element => {
+                element.Link = '<a target="blank" href="'+window.location.origin + '/view/' + element.ProjectId +'">'+ element.Name +' Link</a>'
+            });
             projects = resp.data;
         });
     }
@@ -136,8 +142,33 @@
     }
 
     function handleDetail(event) {
+        selectedProjectJobs = [];
 
-        window.open(window.location.origin + '/view/' + event.detail.body.ProjectId, '_blank');
+        selectedProjectId = event.detail.body.ProjectId;
+
+        fetch(conf.api + '/getProjectJobs/'+ selectedProjectId)
+        .then((result) => {
+            if (result.ok) {
+                console.log("get projects successfully");
+            }
+
+            return result.json();
+        })
+        .then((resp) => {
+            resp.data.ProjectJobs.forEach(element => {
+                element.StageName = element.Job.StageName;
+                element.SubStageName = element.Job.SubStageName;
+                element.JobName = element.Job.JobName;
+                element.JobDurationInDays = element.ConstructionDurationInDays;
+                element.JobDurationInHours = element.ConstructionDurationInHours;
+                element.JobCost = element.ConstructionCost;
+                element.JobWorkers = element.ConstructionWorkers;
+                let jobProps = resp.data.ProjectJobValues.find(x => x.JobCode == element.Job.JobCode);
+                element.JobWorkVolume = jobProps.JobValue;
+                element.JobSpeedUnitInHour = jobProps.JobSpeed;
+            })
+            selectedProjectJobs = resp.data.ProjectJobs;
+        });
     }
 
     function addProject() {
@@ -177,8 +208,28 @@
             {name: 'Name', show: true, edit: false, width: '150px', tooltip: true},
             {name: 'ConstructionCost', show: true, edit: false, width: '150px'},
             {name: 'ConstructionDuration', show: true, edit: false, width: '150px'},
+            {name: 'Link', show: true, type: 'html', edit: false, width: '150px'},
         ],
         details_text: 'detail'
+    }
+
+    const project_job_table_config = {
+        name: 'Project jobs',
+        options: [],
+        columns_setting: [
+            {name: 'ProjectRefer', show: true, width: '50px'},
+            {name: 'ProjectJobId', show: true, width: '100px', tooltip: true},
+            {name: 'JobId', show: true, edit: false, width: '50px'},
+            {name: 'StageName', show: true, width: '150px', tooltip: true},
+            {name: 'SubStageName',show: true, width: '150px', tooltip: true},
+            {name: 'JobName',show: true, width: '150px', tooltip: true},
+            {name: 'JobDurationInDays', show: true, edit: false, width: '150px'},
+            {name: 'JobDurationInHours', show: true, edit: false, width: '150px', tooltip: true},
+            {name: 'JobWorkVolume', show: true, edit:false, width: '150px'},
+            {name: 'JobSpeedUnitInHour', show: true, edit: false, width: '150px'},
+            {name: 'JobWorkers', show: true, edit: false, width: '30px'},
+            {name: 'JobCost', show: true, edit:false, width: '150px'},
+        ],
     }
 
     function handleAdd() {
@@ -208,6 +259,13 @@
         table_data={projects}>
     </SvelteGenericCrudTable>
 
+    <div class="project-jobs-table">
+    <SvelteGenericCrudTable
+        table_config={project_job_table_config}
+        table_data={selectedProjectJobs}>
+    </SvelteGenericCrudTable>
+    </div>
+
     <AddManageProjectDialog
         bind:open={openAddProjectDialog}
         on:add={addProject}
@@ -226,6 +284,10 @@
     :global(.projects .table) {
         height: auto;
         overflow: scroll;
+    }
+
+    :global(.project-jobs-table .table) {
+        margin-top: 20px;
     }
 </style>
 

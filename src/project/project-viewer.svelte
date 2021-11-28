@@ -374,7 +374,7 @@
             dataLoaded = true;
         })
         .catch(error => {
-            errorMessage = 'Something went wrong! Try again later';
+            let errorMessage = 'Something went wrong! Try again later';
             addNotification({
                 text: errorMessage,
                 position: 'top-center',

@@ -5,10 +5,8 @@
     import LinearProgress from '@smui/linear-progress';
 
     export let jobs = [];
-    export let estimation = 0;
 
     export let loaded = false;
-    let jobsCost = 0;
 
     let columns = ['Color', 'Stage', 'Cost',  'Duration', 'Property Name', 'Property Value', 'Property Unit', 'People'];
 
@@ -36,11 +34,6 @@
 </script>
 
 <div class="project-cost">
-    <div class="table-caption">
-        <div>
-            <p>Cost: {jobsCost}$ | Estimation: {estimation} days</p>
-        </div>
-    </div>
     <DataTable
         stickyHeader table$aria-label="Construction Stages"
         class="project-stages">
@@ -48,7 +41,7 @@
             <Row>
             {#each columns as col}
                 {#if col == 'Color'}
-                    <Cell>
+                    <Cell style="padding:0;">
                         <div style="display:flex;align-items: center;">
                         <div>
                             {col}
@@ -68,7 +61,9 @@
         <Body>
             {#each jobs as stage}
                 <Row on:click={rowClick(stage.code)}>
-                    <Cell class={stage.color}></Cell>
+                    <Cell style="padding:0">
+                        <div style="height:51px" class={stage.color}></div>
+                    </Cell>
                     <Cell>
                         {#if stage.tasks && stage.tasks.length !== 0}
                         <i class={'fas fa-angle-right' + ' ' + stage.code + '-icon'} aria-hidden="true"></i>
@@ -90,8 +85,10 @@
                 {#if stage.tasks && stage.tasks.length !== 0}
                         {#each stage.tasks as task}
                             <Row class="hidden-subtasks {stage.code}">
-                                <Cell class={stage.color}></Cell>
-                                <Cell style="padding-left:50px;">{task.name}</Cell>
+                                <Cell style="padding:0">
+                                    <div style="height:51px" class={stage.color}></div>
+                                </Cell>
+                                <Cell style="padding-left:30px;">{task.name}</Cell>
                                 <Cell numeric>{task.cost}</Cell>
                                 <Cell numeric>{task.duration}</Cell>
                                 <Cell>{task.propertyName}</Cell>
@@ -108,6 +105,7 @@
             {/each}
         </Body>
         <LinearProgress
+            style="background-color:rgb(21, 40, 89);"
             indeterminate
             bind:closed={loaded}
             aria-label="Data is being loaded..."
@@ -124,7 +122,6 @@
     :global(.help-icon) {
         font-size: 16px;
         margin-left: 5px;
-        color:#6200ee;
     }
 
     .table-caption {
@@ -133,14 +130,11 @@
         justify-content: space-between;
     }
 
-    .table-caption p {
-        display: flex;
-    }
-
     :global(.project-stages, .project-materials) {
         width: 100%;
-        /* -header height -tab header height - table header height */
-        height: calc(100vh - 64px - 56px - 50px);
+        /* -header height -tab header height container bottom padding */
+        height: calc(100vh - 80px - 76px - 20px);
+        border: none;
     }
 
     /*@media (max-width: 839px) {*/

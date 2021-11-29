@@ -3,7 +3,9 @@
     import Button, { Label as ButtonLabel } from '@smui/button';
     import CircularProgress from '@smui/circular-progress';
     import Textfield from '@smui/textfield';
-    import LayoutGrid, { Cell } from "@smui/layout-grid"
+    import LayoutGrid, { Cell } from "@smui/layout-grid";
+
+    import { propertiesStored } from '../store';
 
     import ProjectSettings from '../project/project-settings.svelte';
 
@@ -18,7 +20,6 @@
     let dataLoaded = true;
     export let fullAccess = false;
 
-    let jobs = [];
     export let properties = [];
 
     let errorMessage = '';
@@ -42,57 +43,20 @@
     project.ProjectJobs= [];
     project.ConstructionCompanyName= 'Construction';
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
-    function setProjectJobs() {
-        let wallJobs = jobs
-            .filter(j => j.StageName.toLowerCase() == 'walls'
-                && j.WallMaterial.toLowerCase() == project.WallMaterial.toLowerCase());
-        
-        let foundationJobs = jobs
-            .filter(j => j.StageName.toLowerCase() == 'foundation'
-                && j.FoundationMaterial.toLowerCase() == project.FoundationMaterial.toLowerCase());
-        
-        let finishJobs = jobs
-            .filter(j => j.StageName.toLowerCase() == 'exterior decoration of the house'
-                && j.FinishMaterial.toLowerCase() == project.FinishMaterial.toLowerCase());
-        
-        let roofingJobs = jobs
-            .filter(j => j.StageName.toLowerCase() == 'roof'
-                && j.RoofingMaterial.toLowerCase() == project.RoofingMaterial.toLowerCase())
-        
-        let projectJobs = jobs.filter(j => j.Required == true);
-        projectJobs = projectJobs.concat(wallJobs);
-        projectJobs = projectJobs.concat(foundationJobs);
-        projectJobs = projectJobs.concat(roofingJobs);
-        projectJobs = projectJobs.concat(finishJobs);
-
-        let projectJobsModel = [];
-        projectJobs.forEach(element => {
-            projectJobsModel.push({
-                ...element,
-                Job: element,
-            });
-        });
-
-        project.ProjectJobs = projectJobsModel;
-    }
+    import { config } from '../config';
+    let conf = new config();
 
     async function addProject(event) {
         dataLoaded = false;
         event.preventDefault();
         event.stopPropagation();
 
-        setProjectJobs();
-
         project.ProjectProperties = properties;
         project.Filename = project.Name + '.rvt';
         console.log(typeof project);
         console.log(project);
 
-        await fetch(api + '/create',
+        await fetch(conf.api + '/create',
         {
             method: 'POST',
             body: JSON.stringify(project)
@@ -133,54 +97,34 @@
     }
 
     onMount(function() {
-        let getProperties = fetch(api + '/getProperties')
-        .then((result) => {
-            if (result.ok) {
-                console.log("get props successfully");
-            }
+        if ($propertiesStored.length == 0) {
+            let getProperties = fetch(conf.api + '/getProperties')
+            .then((result) => {
+                if (result.ok) {
+                    console.log("get props successfully");
+                }
 
-            return result.json();
-        })
-        .then((resp) => {
-            resp.data.forEach(element => {
-                element.PropertyValue = null;
-            });
-
-            properties = resp.data;
-        });
-
-        let getJobs = fetch(api + '/getJobs')
-        .then((result) => {
-            if (result.ok) {
-                console.log("get jobs successfully");
-            }
-
-            return result.json();
-        })
-        .then((resp) => {
-            resp.data.forEach(element => {
-                element.PropertyValue = null;
-            });
-
-            jobs = resp.data;
-        });
-
-        Promise.all([getProperties, getJobs])
-            .then(() => {
-                dataLoaded = true;
+                return result.json();
             })
+            .then((resp) => {
+                resp.data.forEach(element => {
+                    element.PropertyValue = null;
+                });
+
+                properties = resp.data;
+            });
+        } else {
+            properties = $propertiesStored;
+            dataLoaded = true;
+        }
     });
 
     async function updateProject(event) {
         dataLoaded = false;
         event.preventDefault();
         event.stopPropagation();
-        setProjectJobs();
-        //setProjectProperties();
 
-        console.log('BEFORE REQUEST', project.ProjectProperties);
-
-        await fetch(api + '/updateProject/'+ project.ProjectId,
+        await fetch(conf.api + '/updateProject/'+ project.ProjectId,
         {
             method: 'PUT',
             body: JSON.stringify(project)
@@ -195,7 +139,6 @@
         })
         .then((data) => {
             let updatedProject = data.data;
-            console.log('AFTER UPDATE', updatedProject.ProjectProperties);
 
             //wait for all data to be loaded
             updatedProject.ProjectJobs = [];

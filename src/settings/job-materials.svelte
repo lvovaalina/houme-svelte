@@ -48,10 +48,8 @@
     $: material.jobNameValue = jobName;
     $: material.stageNameValue = stageName;
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
+    import { config } from '../config';
+    let conf = new config();
     onMount(() => {
         reload();
         get('/getJobs')
@@ -77,7 +75,7 @@
     }
 
     function get(url) {
-        return fetch(api + url)
+        return fetch(conf.api + url)
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");
@@ -125,7 +123,7 @@
         materialToUpdate.materialCost = materialCost;
         materialToUpdate.materialName = materialName;
 
-        fetch(api + '/updateJobNaterial/'+ event.detail.body.ID,
+        fetch(conf.api + '/updateJobNaterial/'+ event.detail.body.ID,
         {
             method: 'PUT',
             body: JSON.stringify(materialToUpdate)
@@ -216,7 +214,7 @@
         console.log(job);
         material.Job = {JobCode: job.JobCode};
 
-        fetch(api + '/createMaterial',
+        fetch(conf.api + '/createMaterial',
         {
             method: 'POST',
             body: JSON.stringify(material)
@@ -234,8 +232,7 @@
     }
 
     function handleDelete(event) {
-        console.log(event);
-        fetch(api + '/deleteJobMaterial/' + event.detail.body.ID, {
+        fetch(conf.api + '/deleteJobMaterial/' + event.detail.body.ID, {
             method: 'DELETE'
         })
         .then((response) => {

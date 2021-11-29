@@ -1,4 +1,7 @@
 <script>
+    import { onMount } from "svelte";
+    import { pageTitle } from '../store';
+
     import JobCosts from "./job-costs.svelte";
     import JobMaterials from "./job-materials.svelte";
     import Projects from "./projects.svelte";
@@ -7,6 +10,12 @@
     function reloadProjectsTable() {
         reload = !reload;
     }
+
+    onMount(() => {
+        pageTitle.set({
+            title: 'Settings'
+        });
+    })
 </script>
 
 <div class="settings-component">

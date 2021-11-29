@@ -5,10 +5,8 @@
     import Dropzone from "svelte-file-dropzone";
     import { Jumper } from 'svelte-loading-spinners'
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
+    import { config } from '../config';
+    let conf = new config();
     let isLoading = false;
 
     const dispatch = createEventDispatcher();
@@ -23,7 +21,7 @@
         let formData = new FormData();
         formData.append("file", file)
 
-        fetch(api + '/upload', {
+        fetch(conf.api  + '/upload', {
             method: 'POST',
             body: formData
         }).then((response) => {
@@ -34,7 +32,7 @@
                 return Promise.reject(response);
             }
         }).then((data) => {
-            return fetch(api + '/translate', {
+            return fetch(conf.api  + '/translate', {
                 method: 'POST',
                 body: JSON.stringify({ fileName : file.name })
             });

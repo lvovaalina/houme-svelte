@@ -14,16 +14,14 @@
 
     let jobProperties = [];
 
-    const api = isProduction
-        ? "https://houme-api.herokuapp.com"
-        : "http://localhost:10000";
-
+    import { config } from '../config';
+    let conf = new config();
     onMount(() => {
         reload();
     })
 
     function get(url) {
-        return fetch(api + url)
+        return fetch(conf.api + url)
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");
@@ -43,6 +41,8 @@
                 element.Currency = "$";
                 element.PropertyName = element.Job.Property.PropertyName;
                 element.PropertyUnit = element.Job.Property.PropertyUnit;
+                element.InParallel = element.Job.InParallel;
+                element.ParallelGroupCode = element.Job.ParallelGroupCode;
             });
             myData = resp.data;
 
@@ -108,7 +108,7 @@
         updatedJobProperty.OptWorkers = optWorkers;
         updatedJobProperty.ConstructionJobPropertyId = constructionJobPropertyId;
 
-        fetch(api + '/updateJobProperty/'+ event.detail.body.ID,
+        fetch(conf.api + '/updateJobProperty/'+ event.detail.body.ID,
         {
             method: 'PUT',
             body: JSON.stringify(updatedJobProperty)
@@ -162,6 +162,8 @@
         {name: 'StageName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'SubStageName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'JobName', show: true, edit: false, width: '150px', tooltip: true},
+        {name: 'InParallel', show: true, edit: false, width: '50px'},
+        {name: 'ParallelGroupCode', show: true, edit: false, width: '110px', tooltip: true},
         {name: 'ConstructionSpeed', show: true, edit: true, width: '50px', description: 'The job'},
         {name: 'ConstructionCost', show: true, edit: true, width: '50px'},
         {name: 'Currency', show: true, edit: false, width: '50px'},

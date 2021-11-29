@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
+    export let forgeViewerClass;
     let resp;
     let forgeViewerElement;
     let viewer;
@@ -69,13 +70,18 @@
     });
 </script>
 
-<div bind:this={forgeViewerElement} class="forge-viewer">
+<div bind:this={forgeViewerElement} class="{!!forgeViewerClass ? forgeViewerClass : "forge-viewer"}">
 </div>
 
 <style>
     .forge-viewer {
         position: relative;
-        /* -header height -tab header height - view project padding */
-        height: calc(100vh - 64px - 56px - 24px);
+        /* -header height -tab header height container bottom padding */
+        height: calc(100vh - 80px - 76px - 20px);
+    }
+
+    .dashboard-height {
+        height: 400px;
+        position: relative;
     }
 </style>

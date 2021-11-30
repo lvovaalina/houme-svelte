@@ -35,11 +35,11 @@ export let stageColorMap = new Map([
     ],
     [
         'Stairs',
-        {color: 'bg-light-green-100' /*'bg-cyan-100'*/, code: 'st'}
+        {color: 'bg-yellow-100' /*'bg-cyan-100'*/, code: 'st'}
     ],
     [
         'Exterior decoration of the house',
-        {color: 'bg-light-green-100' /*'bg-teal-100'*/, code: 'exdec'}
+        {color: 'bg-yellow-100' /*'bg-teal-100'*/, code: 'exdec'}
     ],
     [
         'Floor',

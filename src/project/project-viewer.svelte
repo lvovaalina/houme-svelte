@@ -163,7 +163,6 @@
             }
 
             if (jobs.length == 1) {
-                console.log("HEWSW len 1", stage);
                 let timestamp = timestamps.get(jobs[0].Job.JobCode);
                 stageVM.duration = jobs[0].ConstructionDurationInDays;
                 stageVM.stageCost = jobs[0].ConstructionCost;

@@ -193,7 +193,8 @@
                     let taskChildren = [];
                     let dur = 0, cost = 0, workCount = 0;
 
-                    
+                    let addTask = false;
+
                     subtasks.forEach(st => {
 
                         let timestamp = timestamps.get(st.Job.JobCode);
@@ -222,8 +223,22 @@
                         stageCost += subtask.cost;
                         stageWorkers += subtask.workersCount;
 
-                        if (subStageName === stage || subtasks.length === 1) {
+                        if (subStageName !== st.Job.JobName) {
+                            if (subStageName === stage) {
+                                tasks.push(subtask);
+                            } else {
+                                addTask = true;
+                                dur += subtask.duration;
+                                cost += subtask.cost;
+                                workCount = subtask.workersCount;
+                            }
+                        } else if (subStageName === stage || subtasks.length === 1) {
                             tasks.push(subtask);
+                        } if (subtasks.length === 1 && subStageName !== stage) {
+                            dur += subtask.duration;
+                            cost += subtask.cost;
+                            workCount = subtask.workersCount;
+                            taskChildren.push(subtask);
                         } else {
                             dur += subtask.duration;
                             cost += subtask.cost;
@@ -232,7 +247,7 @@
                         }
                     });
 
-                    if (subStageName !== stage && subtasks.length !== 1) {
+                    if ((subStageName !== stage && subtasks.length !== 1) || addTask) {
                         newTask.duration = dur;
                         newTask.cost = cost;
                         newTask.workersCount = workCount;

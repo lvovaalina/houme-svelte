@@ -174,7 +174,7 @@
                         <Cell numeric>{project.ConstructionCost} $</Cell>
                         <Cell numeric>{project.ConstructionCost} $</Cell>
                         <Cell numeric>50 p.</Cell>
-                        <Cell><Button variant="outlined" on:click={(event) => navigateToProject(event, project.ProjectId)}>
+                        <Cell><Button variant="outlined" style="margin-bottom:0" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                             <ButtonLabel>DETAILS</ButtonLabel>
                         </Button></Cell>
                     </Row>

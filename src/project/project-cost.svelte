@@ -60,7 +60,7 @@
         </Head>
         <Body>
             {#each jobs as stage}
-                <Row on:click={rowClick(stage.code)}>
+                <Row on:click={rowClick(stage.code)} class={stage.tasks && stage.tasks.length !== 0 ? "clickable-row" : ""}>
                     <Cell style="padding:0">
                         <div style="height:51px" class={stage.color}></div>
                     </Cell>
@@ -122,6 +122,10 @@
     :global(.help-icon) {
         font-size: 16px;
         margin-left: 5px;
+    }
+
+    :global(.clickable-row) {
+        cursor: pointer;
     }
 
     .table-caption {

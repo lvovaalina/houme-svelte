@@ -24,11 +24,7 @@
                         <Label><h2>Project Dashboard</h2></Label>
                     </Button>
                     <Icon style="color: rgba(21, 40, 89)" class="material-icons">chevron_right</Icon>
-                    <Button
-                        style="color: rgba(21, 40, 89);margin-bottom: 0;"
-                        on:click={() => navigate('/view/' + $projectStored.projectId + '/model',{replace: true})}>
-                        <Label><h2>{projectName}</h2></Label>
-                    </Button>
+                    <h2 class="project-name">{projectName}</h2>
                     {/if}
                 </Section>
                 <Section>
@@ -42,14 +38,19 @@
 <style>
     :global(.top-app-bar-container .header) {
         background-color: #fff;
-        height: 80px;
+        height: 64px;
         border-bottom: 1px solid #e0e1e2;
+        padding: 0 16px;
     }
 
-    :global(.page-title) {
-        color: rgba(21, 40, 89);
-        text-transform: uppercase; 
-        padding-left: 0;
+    :global(.top-app-bar-container h2) {
+        font-size: 18px !important;
+    }
+
+    h2.project-name {
+        color: #4b636e;
+        text-transform: uppercase;
+        margin-left: 10px;
     }
 
     .header-logo, .header-logo-link {

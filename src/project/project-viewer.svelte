@@ -569,7 +569,7 @@
 
     :global(.project-view-content-details) {
         /* -header height -tab header height container bottom padding */
-        height: calc(100vh - 80px - 76px);
+        height: calc(100vh - 64px - 76px);
         border-right: 1px solid #d3d3d1;
     }
 

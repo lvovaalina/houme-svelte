@@ -9,7 +9,6 @@
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
     import { pageTitle, projectStored, propertiesStored } from '../store';
-    import { Icon } from '@smui/common'
 
     export let projectId;
     export let active = 'Model';
@@ -398,6 +397,19 @@
             console.error(error);
         });
     }
+
+    function getBorderRadius(index, arr) {
+        console.log(index);
+        if (index == 0) {
+            return "br-half-right";
+        }
+
+        if (index == arr.length - 1) {
+            return "br-half-left";
+        }
+
+        return "no-br";
+    }
 </script>
 
 <div class="project-viewer">
@@ -406,13 +418,13 @@
             <Cell span={9} class="project-view-content-details">
                 <div class="project-view-header">
                     <div class="project-view-buttons-container">
-                        {#each tabs as tab}
+                        {#each tabs as tab, index}
                         <Button
-                            style="width: 200px;color: #152859;"
+                            style={"width: 200px;color: #152859;"}
                             variant="outlined"
                             href="javascript:void(0)"
                             on:click={() => setActive(tab)}
-                            class={active === tab.name ? 'activated tab-button' : 'tab-button'}
+                            class={active === tab.name ? getBorderRadius(index, tabs) + ' activated tab-button' : getBorderRadius(index, tabs) + ' tab-button'}
                             >
                             <Label>{tab.name}</Label>
                         </Button>
@@ -491,6 +503,18 @@
 
 <style>
     /* do not hide forge component to allow reload forge model on tab change */
+    :global(.br-half-right, .tab-button.br-half-right .mdc-button__ripple) {
+        border-radius: 4px 0 0 4px;
+    }
+
+    :global(.br-half-left, .tab-button.br-half-left .mdc-button__ripple) {
+        border-radius: 0 4px 4px 0;
+    }
+
+    :global(.no-br, .tab-button.no-br .mdc-button__ripple) {
+        border-radius: 0;
+    }
+
     .hidden-forge {
         position: absolute;
         top: -500px;
@@ -547,16 +571,6 @@
         flex-direction: column;
 
         height: 100%;
-    }
-
-    :global(.tab-button.back-button .mdc-button__ripple) {
-        padding: 0 8px !important;
-        left: -8px !important;
-    }
-
-    :global(.back-button .mdc-button__label) {
-        display: flex;
-        align-items: center;
     }
 
     :global(.tab-button .mdc-button__ripple::before, .tab-button .mdc-button__ripple::after) {

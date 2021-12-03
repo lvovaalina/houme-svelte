@@ -478,7 +478,7 @@
                         </tr>
                         <tr>
                             <td>Margin</td>
-                            <td class="numeric-row">{project.ConstructionCost * 0.15} $</td>
+                            <td class="numeric-row">{parseInt(project.ConstructionCost * 0.15)} $</td>
                         </tr>
                     </table>
                     <div class="divider"/>

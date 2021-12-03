@@ -104,7 +104,7 @@
                 stageDuration += job.ConstructionDurationInDays;
 
                 let projectProperty = propertiesMap.get(job.Job.Property.PropertyCode);
-                if (job.Job.JobName != stage) {
+                if (job.Job.JobName != stage && jobs.length != 1) {
                     let newTask = {
                         name: job.Job.JobName,
                         duration: job.ConstructionDurationInDays,
@@ -131,6 +131,10 @@
                         stageVM.propertyUnit = job.Job.Property.PropertyUnit;
                         stageVM.propertyValue = projectProperty.PropertyValue;
                         isPropertySetForStage = true;
+                    }
+
+                    if (job.Job.JobName != stage) {
+                        stageVM.name = stageVM.name + ' (' + job.Job.JobName + ')';
                     }
                 }
             });

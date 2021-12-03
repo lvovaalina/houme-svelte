@@ -223,8 +223,9 @@
 
     .forge-container {
         width: 40%;
-        padding: 0 30px;
+        padding: 0 0 0 30px;
     }
+
     .solo-container {
         display: flex;
         justify-content: flex-end;

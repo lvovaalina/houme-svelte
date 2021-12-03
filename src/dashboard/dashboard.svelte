@@ -88,9 +88,8 @@
     }
 
     function doSearch() {
-        var re = new RegExp(titleSearch+'.+$', 'i');
-        projectsResult = projects.filter(function(project, i, a){
-            return project.Name.search(re) != -1;
+        projectsResult = projects.filter(function(project){
+            return project.Name.startsWith(titleSearch);
         });
         projectsCount = projectsResult.length;
         dataLoadedForSearch = true;

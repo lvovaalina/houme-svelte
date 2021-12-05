@@ -31,7 +31,6 @@
     project.Name = '';
     project.BucketName = 'houmly';
     project.LivingArea= '';
-    project.RoomsNumber= null;
     project.ConstructonWorkersNumber= '';
     project.WallMaterial= '';
     project.FoundationMaterial= '';
@@ -76,7 +75,6 @@
                     ProjectId: project.ProjectId,
                     Name: project.Name,
                     LivingArea: project.LivingArea,
-                    RoomsNumber: project.RoomsNumber,
                     ConstructionCost: project.ConstructionCost,
                     ConstructionDuration: project.ConstructionDuration
                 }
@@ -192,9 +190,6 @@
                 </Cell>
                 <Cell span={6}>
                     <Textfield required variant="filled" class="text-field" bind:value={project.LivingArea} label="Living area"></Textfield>
-                </Cell>
-                <Cell span={6}>
-                    <Textfield required variant="filled" class="text-field" bind:value={project.RoomsNumber} type="number" label="Rooms number"></Textfield>
                 </Cell>
                 </LayoutGrid>
         </div>

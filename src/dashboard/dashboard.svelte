@@ -33,6 +33,7 @@
         {name: 'Duration', columnId: 'ConstructionDuration'},
         {name: 'Area', columnId: 'LivingArea'},
         {name: 'Margin', style:'text-align: right;'},
+        {name: 'Project Cost', style:'text-align: right;'},
         {name: 'Build cost', style:'text-align: right;'},
         {name: 'Material cost', style:'text-align: right;'},
         {name: 'Workers', style:'text-align: right;'},
@@ -173,7 +174,8 @@
                         <Cell>{project.LivingArea} &#13217;</Cell>
                         <Cell numeric>{currency + parseInt(project.ConstructionCost * 0.15)}</Cell>
                         <Cell numeric>{currency + project.ConstructionCost}</Cell>
-                        <Cell numeric>{currency + project.ConstructionCost}</Cell>
+                        <Cell numeric>{currency + project.ConstructionJobCost}</Cell>
+                        <Cell numeric>{currency + project.ConstructionMaterialCost}</Cell>
                         <Cell numeric>50 p.</Cell>
                         <Cell><Button variant="outlined" style="margin-bottom:0" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                             <ButtonLabel>DETAILS</ButtonLabel>

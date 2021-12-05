@@ -23,6 +23,8 @@
 
     import IconButton from '@smui/icon-button';
 
+    let currency = '$';
+
     let loaded = true;
     let titleSearch;
     let columns = [
@@ -33,7 +35,7 @@
         {name: 'Margin', style:'text-align: right;'},
         {name: 'Build cost', style:'text-align: right;'},
         {name: 'Material cost', style:'text-align: right;'},
-        {name: 'People', style:'text-align: right;'},
+        {name: 'Workers', style:'text-align: right;'},
         {name: ''},
     ];
 
@@ -169,9 +171,9 @@
                         </Cell>
                         <Cell>{project.ConstructionDuration} days</Cell>
                         <Cell>{project.LivingArea} &#13217;</Cell>
-                        <Cell numeric>{parseInt(project.ConstructionCost * 0.15)} $</Cell>
-                        <Cell numeric>{project.ConstructionCost} $</Cell>
-                        <Cell numeric>{project.ConstructionCost} $</Cell>
+                        <Cell numeric>{currency + parseInt(project.ConstructionCost * 0.15)}</Cell>
+                        <Cell numeric>{currency + project.ConstructionCost}</Cell>
+                        <Cell numeric>{currency + project.ConstructionCost}</Cell>
                         <Cell numeric>50 p.</Cell>
                         <Cell><Button variant="outlined" style="margin-bottom:0" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                             <ButtonLabel>DETAILS</ButtonLabel>

@@ -8,12 +8,20 @@
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
+    import ProjectMaterials from '../project/project-materials.svelte';
     import { pageTitle, projectStored, propertiesStored } from '../store';
 
     export let projectId;
     export let active = 'Model';
 
-    let tabs = [{name: 'Model', urlPart: 'model'},{name: 'Timeline', urlPart: 'timeline'}, {name: 'Jobs', urlPart:'jobs'}]
+    let tabs = [
+        {name: 'Model', urlPart: 'model'},
+        {name: 'Timeline', urlPart: 'timeline'},
+        {name: 'Jobs', urlPart: 'jobs'},
+        {name: 'Materials', urlPart: 'materials'},
+    ]
+
+    export let currency = '$';
     
     import { config } from '../config';
     let conf = new config();
@@ -438,9 +446,14 @@
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
                     <ProjectTimeline jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
+
+                <div class="{active == 'Materials' ? '' : 'hidden'}">
+                    <ProjectMaterials jobs={project.projectJobsTimelineVM}></ProjectMaterials>
+                </div>
                 
                 <div class="{active == 'Jobs' ? '' : 'hidden'}">
                 <ProjectCost
+                        currency={currency}
                         jobs={project.projectJobsCostVM}
                         estimation={project.ConstructionDuration}
                         bind:loaded={dataLoaded}>
@@ -462,23 +475,23 @@
                         </tr>
                         <tr>
                             <td>Construction Cost</td>
-                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                            <td class="numeric-row">{currency + project.ConstructionCost}</td>
                         </tr>
                         <tr>
                             <td>Materials Cost</td>
-                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                            <td class="numeric-row">{currency + project.ConstructionCost}</td>
                         </tr>
                         <tr>
                             <td>Project Duration</td>
                             <td class="numeric-row">{project.ConstructionDuration} days</td>
                         </tr>
                         <tr>
-                            <td>People</td>
+                            <td>Workers</td>
                             <td class="numeric-row">50</td>
                         </tr>
                         <tr>
                             <td>Margin</td>
-                            <td class="numeric-row">{parseInt(project.ConstructionCost * 0.15)} $</td>
+                            <td class="numeric-row">{currency + parseInt(project.ConstructionCost * 0.15)}</td>
                         </tr>
                     </table>
                     <div class="divider"/>

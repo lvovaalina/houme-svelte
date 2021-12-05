@@ -8,12 +8,20 @@
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
+    import ProjectMaterials from '../project/project-materials.svelte';
     import { pageTitle, projectStored, propertiesStored } from '../store';
 
     export let projectId;
     export let active = 'Model';
 
-    let tabs = [{name: 'Model', urlPart: 'model'},{name: 'Timeline', urlPart: 'timeline'}, {name: 'Jobs', urlPart:'jobs'}]
+    let tabs = [
+        {name: 'Model', urlPart: 'model'},
+        {name: 'Timeline', urlPart: 'timeline'},
+        {name: 'Jobs', urlPart: 'jobs'},
+        {name: 'Materials', urlPart: 'materials'},
+    ]
+
+    export let currency = '$';
     
     import { config } from '../config';
     let conf = new config();
@@ -24,8 +32,6 @@
     let project = {};
     export let propertiesMap = new Map();
     let properties = [];
-    
-    let open = false;
 
     export let dataLoaded;
 
@@ -271,8 +277,26 @@
             jobsTinelineVM.push(stageVM);
         });
 
+        let materialsVM = []
+        project.ProjectMaterials.forEach(element => {
+            let property = propertiesMap.get(element.ConstructionJobMaterial.Job.PropertyID);
+            let props = stageMap.get(element.ConstructionJobMaterial.Job.StageName);
+
+            materialsVM.push({
+                name: element.ConstructionJobMaterial.MaterialName,
+                cost: element.MaterialCost,
+                nominalCost: element.ConstructionJobMaterial.MaterialCost,
+                volume: property.PropertyValue,
+                propertyUnit: element.ConstructionJobMaterial.Job.Property.PropertyUnit,
+                jobName: element.ConstructionJobMaterial.Job.SubStageName
+                    + ': ' + element.ConstructionJobMaterial.Job.JobName,
+                color: props.color
+            })
+        });
+
         project.projectJobsTimelineVM = jobsTinelineVM;
         project.projectJobsCostVM = jobsVM;
+        project.projectMaterialsVM = materialsVM;
     }
 
     let getProject = function(projectId) {
@@ -303,6 +327,9 @@
                 return result.json();
             })
             .then((resp) => {
+                resp.data.projectMaterialsVM = [];
+                resp.data.projectJobsCostVM = [];
+                resp.data.projectJobsTimelineVM = [];
                 project = resp.data;
 
                 project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
@@ -327,8 +354,8 @@
 
                 dataLoaded = true;
             });
+        }
 
-        } 
         getProperties.then(() => getProject());
     }
 
@@ -341,7 +368,6 @@
         pageTitle.set({
             title: 'Project View ' + active,
         });
-        console.log(projectStored);
         if ($projectStored.ProjectId != projectId) {
             getProject(projectId);
         } else {
@@ -380,6 +406,7 @@
             let projectJobs = updatedProject.ProjectJobs;
             updatedProject.projectJobsTimelineVM = [];
             updatedProject.projectJobsCostVM = [];
+            updatedProject.projectMaterialsVM = [];
             projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
             updatedProject.ProjectJobs = projectJobs;
 
@@ -403,7 +430,6 @@
     }
 
     function getBorderRadius(index, arr) {
-        console.log(index);
         if (index == 0) {
             return "br-half-right";
         }
@@ -438,9 +464,14 @@
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
                     <ProjectTimeline jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
+
+                <div class="{active == 'Materials' ? '' : 'hidden'}">
+                    <ProjectMaterials currency={currency} materials={project.projectMaterialsVM}></ProjectMaterials>
+                </div>
                 
                 <div class="{active == 'Jobs' ? '' : 'hidden'}">
                 <ProjectCost
+                        currency={currency}
                         jobs={project.projectJobsCostVM}
                         estimation={project.ConstructionDuration}
                         bind:loaded={dataLoaded}>
@@ -461,24 +492,28 @@
                             <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
                         </tr>
                         <tr>
+                            <td>Project Cost</td>
+                            <td class="numeric-row">{currency + project.ConstructionCost}</td>
+                        </tr>
+                        <tr>
                             <td>Construction Cost</td>
-                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                            <td class="numeric-row">{currency + project.ConstructionJobCost}</td>
                         </tr>
                         <tr>
                             <td>Materials Cost</td>
-                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                            <td class="numeric-row">{currency + project.ConstructionMaterialCost}</td>
                         </tr>
                         <tr>
                             <td>Project Duration</td>
                             <td class="numeric-row">{project.ConstructionDuration} days</td>
                         </tr>
                         <tr>
-                            <td>People</td>
+                            <td>Workers</td>
                             <td class="numeric-row">50</td>
                         </tr>
                         <tr>
                             <td>Margin</td>
-                            <td class="numeric-row">{parseInt(project.ConstructionCost * 0.15)} $</td>
+                            <td class="numeric-row">{currency + parseInt(project.ConstructionCost * 0.15)}</td>
                         </tr>
                     </table>
                     <div class="divider"/>
@@ -557,7 +592,6 @@
     }
 
     .project-view-buttons-container {
-        width: 50%;
         display: flex;
     }
 

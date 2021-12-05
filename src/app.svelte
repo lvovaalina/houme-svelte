@@ -38,6 +38,9 @@
 		<Route path="view/:projectId/jobs" let:params>
 			<ProjectViewer projectId={params.projectId} active='Jobs'></ProjectViewer>
 		</Route>
+		<Route path="view/:projectId/materials" let:params>
+			<ProjectViewer projectId={params.projectId} active='Materials'></ProjectViewer>
+		</Route>
 	</Router>
 	</Notifications>
 

@@ -7,8 +7,9 @@
     export let jobs = [];
 
     export let loaded = false;
+    export let currency;
 
-    let columns = ['Color', 'Stage', 'Cost',  'Duration', 'Property Name', 'Property Value', 'Property Unit', 'People'];
+    let columns = ['Color', 'Stage', 'Cost',  'Duration', 'Property Name', 'Volume', 'Workers'];
 
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);
@@ -26,7 +27,7 @@
 
     function colStyle(col) {
         let style;
-        if (col == 'Property Value' || col == 'Cost' || col == 'Duration' || col == 'People' ) {
+        if (col == 'Duration' || col == 'Workers' ) {
             style="text-align:right;";
         }
         return style;
@@ -70,15 +71,12 @@
                         {/if}
                         {stage.name}
                     </Cell>
-                    <Cell numeric>{stage.stageCost}</Cell>
-                    <Cell numeric>{stage.duration}</Cell>
+                    <Cell>{currency + stage.stageCost}</Cell>
+                    <Cell numeric>{stage.duration} days</Cell>
                     <Cell>{stage.propertyName}</Cell>
-                    <Cell numeric>{stage.propertyValue}</Cell>
-                    {#if stage.propertyUnit === 'sq.m.'}
-                        <Cell>&#13217;</Cell>
-                    {:else}
-                        <Cell>{stage.propertyUnit}</Cell>
-                    {/if}
+                    <Cell>
+                        {stage.propertyValue + (stage.propertyUnit === 'sq.m.' || stage.propertyUnit === '-' ? '' : stage.propertyUnit)}{#if stage.propertyUnit === 'sq.m.'}&#13217{/if}
+                    </Cell>
                     <Cell numeric>{stage.workersCount}</Cell>
                     
                 </Row>
@@ -89,15 +87,12 @@
                                     <div style="height:51px" class={stage.color}></div>
                                 </Cell>
                                 <Cell style="padding-left:30px;">{task.name}</Cell>
-                                <Cell numeric>{task.cost}</Cell>
-                                <Cell numeric>{task.duration}</Cell>
+                                <Cell>{currency + task.cost}</Cell>
+                                <Cell numeric>{task.duration} days</Cell>
                                 <Cell>{task.propertyName}</Cell>
-                                <Cell numeric>{task.propertyValue}</Cell>
-                                {#if task.propertyUnit === 'sq.m.'}
-                                    <Cell>&#13217;</Cell>
-                                {:else}
-                                    <Cell>{task.propertyUnit}</Cell>
-                                {/if}
+                                <Cell>
+                                    {task.propertyValue + (task.propertyUnit === 'sq.m.' || task.propertyUnit === '-' ? '' : task.propertyUnit)}{#if task.propertyUnit === 'sq.m.'}&#13217{/if}
+                                </Cell>
                                 <Cell numeric>{task.workersCount}</Cell>
                             </Row>
                         {/each}

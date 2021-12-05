@@ -100,8 +100,6 @@
     }
 
     function handleSort(event) {
-        console.log(event);
-        console.log("SORT", sort);
         projectsResult.sort((a, b) => {
             const [aVal, bVal] = [a[sort], b[sort]][
                 sortDirection === 'ascending' ? 'slice' : 'reverse'

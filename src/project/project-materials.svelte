@@ -1,76 +1,40 @@
 <script>
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
-    import Tooltip, { Wrapper } from '@smui/tooltip';
-    import { Icon } from "@smui/common";
 
-    import { onMount } from "svelte";
-
-    export let stages;
-    export let projectProperties;
+    export let materials = [];
+    export let currency;
 
     let columns = ['Material', 'Cost', 'Volume', 'Nominal Cost', 'In Steps'];
-
-    onMount(() => {
-        
-    });
-    
-
-    // function rowClick(className) {
-    //     let rows = document.getElementsByClassName(className);
-    //     rows.forEach(element => {
-    //         element.classList.toggle("hidden-subtasks")
-    //     });
-    // }
 </script>
 
 <div class="project-cost">
-    <!-- <DataTable
-        stickyHeader table$aria-label="Construction Stages"
+    <DataTable
+        stickyHeader table$aria-label="Construction Materials"
         class="project-stages">
         <Head>
             <Row>
-            {#each columns as col}
-                {#if col == 'Color'}
-                    <Cell>
-                        {col}
-                        <Wrapper>
-                            <Icon class="material-icons help-icon">help</Icon>
-                            <Tooltip>Stage color in project timeline</Tooltip>
-                        </Wrapper>
-                    </Cell>
-                {:else}
-                    <Cell>{col}</Cell>
-                {/if}
+            {#each columns as col, index}
+                <Cell style={index == 0 ? 'padding:0' : ''}>{col}</Cell>
             {/each}
             </Row>
         </Head>
         <Body>
-            {#each stages as stage}
-                <Row on:click={rowClick(stage.code)}>
-                    <Cell class={stage.color}></Cell>
-                    <Cell>{stage.name}</Cell>
-                    <Cell numeric>23</Cell>
-                    <Cell numeric>33</Cell>
-                    <Cell>sq.m</Cell>
-                    <Cell numeric>4</Cell>
-                    <Cell numeric>{stage.time}</Cell>
+            {#each materials as material}
+                <Row>
+                    <Cell>{material.name}</Cell>
+                    <Cell>{currency + material.cost}</Cell>
+                    <Cell>{material.volume + (material.propertyUnit === 'sq.m.' || material.propertyUnit === '-' ? '' : material.propertyUnit)}{#if material.propertyUnit === 'sq.m.'}&#13217{/if}</Cell>
+                    <Cell>{currency + material.nominalCost + '/' + (material.propertyUnit === 'sq.m.' || material.propertyUnit === '-' ? '' : material.propertyUnit)}{#if material.propertyUnit === 'sq.m.'}&#13217{/if}</Cell>
+                    <Cell>
+                        <div style="width: fit-content;" class={material.color}>
+                            {material.jobName}
+                        </div>
+                    </Cell>
+                    <Cell></Cell>
                 </Row>
-                {#if stage.tasks && stage.tasks.length !== 0}
-                        {#each stage.tasks as task}
-                            <Row class="hidden-subtasks {stage.code}">
-                                <Cell class={stage.color}></Cell>
-                                <Cell>{task.name}</Cell>
-                                <Cell numeric>22</Cell>
-                                <Cell numeric>33</Cell>
-                                <Cell>sq.m</Cell>
-                                <Cell numeric>4</Cell>
-                                <Cell numeric>12</Cell>
-                            </Row>
-                        {/each}
-                {/if}
             {/each}
         </Body>
-    </DataTable> -->
+    </DataTable>
 </div>
 
 <style>

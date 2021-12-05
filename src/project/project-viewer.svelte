@@ -32,8 +32,6 @@
     let project = {};
     export let propertiesMap = new Map();
     let properties = [];
-    
-    let open = false;
 
     export let dataLoaded;
 
@@ -279,8 +277,26 @@
             jobsTinelineVM.push(stageVM);
         });
 
+        let materialsVM = []
+        project.ProjectMaterials.forEach(element => {
+            let property = propertiesMap.get(element.ConstructionJobMaterial.Job.PropertyID);
+            let props = stageMap.get(element.ConstructionJobMaterial.Job.StageName);
+
+            materialsVM.push({
+                name: element.ConstructionJobMaterial.MaterialName,
+                cost: element.MaterialCost,
+                nominalCost: element.ConstructionJobMaterial.MaterialCost,
+                volume: property.PropertyValue,
+                propertyUnit: element.ConstructionJobMaterial.Job.Property.PropertyUnit,
+                jobName: element.ConstructionJobMaterial.Job.SubStageName
+                    + ': ' + element.ConstructionJobMaterial.Job.JobName,
+                color: props.color
+            })
+        });
+
         project.projectJobsTimelineVM = jobsTinelineVM;
         project.projectJobsCostVM = jobsVM;
+        project.projectMaterialsVM = materialsVM;
     }
 
     let getProject = function(projectId) {
@@ -311,6 +327,9 @@
                 return result.json();
             })
             .then((resp) => {
+                resp.data.projectMaterialsVM = [];
+                resp.data.projectJobsCostVM = [];
+                resp.data.projectJobsTimelineVM = [];
                 project = resp.data;
 
                 project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
@@ -335,8 +354,8 @@
 
                 dataLoaded = true;
             });
+        }
 
-        } 
         getProperties.then(() => getProject());
     }
 
@@ -349,7 +368,6 @@
         pageTitle.set({
             title: 'Project View ' + active,
         });
-        console.log(projectStored);
         if ($projectStored.ProjectId != projectId) {
             getProject(projectId);
         } else {
@@ -388,6 +406,7 @@
             let projectJobs = updatedProject.ProjectJobs;
             updatedProject.projectJobsTimelineVM = [];
             updatedProject.projectJobsCostVM = [];
+            updatedProject.projectMaterialsVM = [];
             projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
             updatedProject.ProjectJobs = projectJobs;
 
@@ -411,7 +430,6 @@
     }
 
     function getBorderRadius(index, arr) {
-        console.log(index);
         if (index == 0) {
             return "br-half-right";
         }
@@ -448,7 +466,7 @@
                 </div>
 
                 <div class="{active == 'Materials' ? '' : 'hidden'}">
-                    <ProjectMaterials jobs={project.projectJobsTimelineVM}></ProjectMaterials>
+                    <ProjectMaterials currency={currency} materials={project.projectMaterialsVM}></ProjectMaterials>
                 </div>
                 
                 <div class="{active == 'Jobs' ? '' : 'hidden'}">
@@ -570,7 +588,6 @@
     }
 
     .project-view-buttons-container {
-        width: 50%;
         display: flex;
     }
 

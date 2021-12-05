@@ -492,12 +492,16 @@
                             <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
                         </tr>
                         <tr>
-                            <td>Construction Cost</td>
+                            <td>Project Cost</td>
                             <td class="numeric-row">{currency + project.ConstructionCost}</td>
                         </tr>
                         <tr>
+                            <td>Construction Cost</td>
+                            <td class="numeric-row">{currency + project.ConstructionJobCost}</td>
+                        </tr>
+                        <tr>
                             <td>Materials Cost</td>
-                            <td class="numeric-row">{currency + project.ConstructionCost}</td>
+                            <td class="numeric-row">{currency + project.ConstructionMaterialCost}</td>
                         </tr>
                         <tr>
                             <td>Project Duration</td>

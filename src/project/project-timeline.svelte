@@ -137,6 +137,7 @@
         tableWidth: 240,
         minWidth: 1000,
         columnUnit: 'day',
+        zoomLevels: [{headers: [{ sticky: true, unit: 'month', format: 'MMMM' }]}],
         ganttTableModules: [SvelteGanttTable],
         ganttBodyModules: [SvelteGanttDependencies],
         taskElementHook: (node, task) => {

@@ -106,48 +106,97 @@ button:focus {
 	background-color: #b2dfdb;
 }
 
+.sg-task.teal:hover {
+	background-color: #a3cfcb;
+}
+
 .sg-task.selected.teal {
 	background-color: #80cbc4;
+}
+
+.sg-task.selected.teal:hover {
+	background-color: #68a7a1;
 }
 
 .sg-task.green, .green {
 	background-color: #c8e6c9;
 }
 
+.sg-task.green:hover {
+	background-color: #b9d1ba;
+}
+
 .sg-task.selected.green {
 	background-color: #a5d6a7;
 }
 
+.sg-task.selected.green:hover {
+	background-color: #90bd92;
+}
+
+
 .sg-task.light-green, .light-green {
 	background-color: #dcedc8;
+}
+
+.sg-task.light-green:hover {
+	background-color: #d2e3be;
 }
 
 .sg-task.selected.light-green {
 	background-color: #c5e1a5;
 }
 
+.sg-task.selected.light-green:hover {
+	background-color: #b5c3a5;
+}
+
 .sg-task.yellow, .yellow {
 	background-color: #fff9c4;
+}
+
+.sg-task.yellow:hover {
+	background-color: #ede7b4;
 }
 
 .sg-task.selected.yellow {
 	background-color: #fff59d;
 }
 
+.sg-task.selected.yellow:hover {
+	background-color: #fff283;
+}
+
 .sg-task.amber, .amber {
 	background-color: #ffecb3;
+}
+
+.sg-task.amber:hover {
+	background-color: #f3e1ab;
 }
 
 .sg-task.selected.amber {
 	background-color: #ffe082;
 }
 
+.sg-task.selected.amber:hover {
+	background-color: #efd278;
+}
+
 .sg-task.light-orange, .light-orange {
 	background-color: #ffe0b2;
 }
 
+.sg-task.light-orange:hover {
+	background-color: #fbdeb2;
+}
+
 .sg-task.selected.light-orange {
 	background-color: #ffcc80;
+}
+
+.sg-task.selected.light-orange:hover {
+	background-color: #ffc267
 }
 
 #example-gantt .sg-cell-inner {

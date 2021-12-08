@@ -98,6 +98,88 @@ button:focus {
     font-size: 10px;
 }
 
+.sg-table-body-cell {
+
+}
+
+.sg-task.teal, .teal {
+	background-color: #b2dfdb;
+}
+
+.sg-task.selected.teal {
+	background-color: #80cbc4;
+}
+
+.sg-task.green, .green {
+	background-color: #c8e6c9;
+}
+
+.sg-task.selected.green {
+	background-color: #a5d6a7;
+}
+
+.sg-task.light-green, .light-green {
+	background-color: #dcedc8;
+}
+
+.sg-task.selected.light-green {
+	background-color: #c5e1a5;
+}
+
+.sg-task.yellow, .yellow {
+	background-color: #fff9c4;
+}
+
+.sg-task.selected.yellow {
+	background-color: #fff59d;
+}
+
+.sg-task.amber, .amber {
+	background-color: #ffecb3;
+}
+
+.sg-task.selected.amber {
+	background-color: #ffe082;
+}
+
+.sg-task.light-orange, .light-orange {
+	background-color: #ffe0b2;
+}
+
+.sg-task.selected.light-orange {
+	background-color: #ffcc80;
+}
+
+/* .sg-cell-inner {
+	padding-left: 25px !important;
+} */
+
+.sg-popup {
+    padding: 0.5rem;
+    background: #fff;
+    border: #ccc 1px solid;
+    z-index: 10;
+    transform: translateX(-50%);
+	width: 300px;
+}
+
+.sg-popup.invisible {
+	position: absolute;
+    top: -500px;
+}
+
+.sg-popup-title {
+    text-align: center;
+}
+
+.sg-popup-item {
+    display: flex;
+}
+
+.sg-popup-item-label {
+    font-weight: 300;
+    flex: 30% 1 1;
+}
 
 .selected {
     font-weight: 700;
@@ -107,7 +189,7 @@ button:focus {
 /* --------------------------- */
 /* ------- Task colors ------- */
 /* --------------------------- */
-.sg-task.blue {
+/* .sg-task.blue {
     background: rgb(116, 191, 255);
 }
 
@@ -119,11 +201,11 @@ button:focus {
     background: rgb(69, 112, 150);
 }
 
-.sg-task.selected:hover {
+.sg-task.blue.selected:hover {
     background: rgb(60, 98, 131);
-}
+} */
 
-.sg-task.green {
+/* .sg-task.green {
     background-color: rgb(188, 235, 194);
 }
 
@@ -153,7 +235,7 @@ button:focus {
 
 .sg-task.orange.selected:hover {
     background-color: rgb(199, 135, 38)
-}
+} */
 
 .context-menu {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -166,11 +248,11 @@ button:focus {
 .sg-table-row.row-group .sg-table-body-cell {
     background-color: #fbfbfb;
 	border-bottom: #efefef 1px solid;
-	font-weight: bold;
 }
 
 .sg-table-row .sg-table-body-cell {
 	border-bottom: #efefef 1px solid;
+	font-weight: 350 !important;
 }
 
 .sg-table-header {
@@ -185,6 +267,10 @@ button:focus {
 .column-header-cell {
 	border-right: #efefef 1px solid;
     border-bottom: #efefef 1px solid;
+}
+
+#example-gantt .sg-task-content {
+	color: #333 !important;
 }
 
 #example-gantt .sg-task:hover::before {
@@ -208,7 +294,7 @@ button:focus {
 }
 
 #example-gantt .sg-task.selected:hover {
-	background-color: #ffebee;
+	/* background-color: #ffebee; */
 }
 
 .sg-external-indicator {

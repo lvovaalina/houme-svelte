@@ -35,10 +35,18 @@
 
     export let dataLoaded;
 
-    function reduceByPropertyValue(array, propName) {
+    function reduceByJobPropertyValue(array, propName) {
         return array.reduce(function (r, a) {
             r[a.Job[propName]] = r[a.Job[propName]] || [];
             r[a.Job[propName]].push(a);
+            return r;
+        }, Object.create(null));
+    }
+
+    function reduceByConstructionMaterialPropertyValue(array, propName) {
+        return array.reduce(function (r, a) {
+            r[a.ConstructionJobMaterial.Job[propName]] = r[a.ConstructionJobMaterial.Job[propName]] || [];
+            r[a.ConstructionJobMaterial.Job[propName]].push(a);
             return r;
         }, Object.create(null));
     }
@@ -84,9 +92,11 @@
     }
 
     function createProjectJobsVM() {
-        let reducedJobsByStageName = reduceByPropertyValue(project.ProjectJobs, "StageName");
+        let reducedJobsByStageName = reduceByJobPropertyValue(project.ProjectJobs, "StageName");
 
-        let reducedJobsBySubStageName = reduceByPropertyValue(project.ProjectJobs, "SubStageName");
+        let reducedJobsBySubStageName = reduceByJobPropertyValue(project.ProjectJobs, "SubStageName");
+
+        let reducedMaterialsByJobName = reduceByConstructionMaterialPropertyValue(project.ProjectMaterials, "JobName");
 
         let jobsVM = [];
         let jobsTinelineVM = [];
@@ -193,7 +203,7 @@
                 let stageDuration = 0, stageCost = 0, stageWorkers = 0;
                 let tasks = [];
 
-                let jobTaskMap = reduceByPropertyValue(jobs, "SubStageName");
+                let jobTaskMap = reduceByJobPropertyValue(jobs, "SubStageName");
 
                 Object.entries(jobTaskMap).forEach(([subStageName, subtasks]) => {
                     let newTask = {
@@ -207,7 +217,19 @@
                     subtasks.forEach(st => {
 
                         let timestamp = timestamps.get(st.Job.JobCode);
-                        
+
+                        let materials = reducedMaterialsByJobName[st.Job.JobName];
+                        let subtaskMaterials = [];
+                        let materialCost = 0;
+                        if (!!materials && materials.length > 0) {
+                            materials.forEach(m => {
+                                materialCost += parseInt(m.MaterialCost);
+                                subtaskMaterials.push({
+                                    name: m.ConstructionJobMaterial.MaterialName,
+                                });
+                            });
+                        }
+
                         let subtask = {
                             name: st.Job.JobName,
                             duration: st.ConstructionDurationInDays,
@@ -215,6 +237,8 @@
                             workersCount: st.ConstructionWorkers,
                             from: timestamp.from,
                             to: timestamp.to,
+                            materials: subtaskMaterials,
+                            materialsCost: materialCost,
                         }
 
                         let projectProperty = propertiesMap.get(st.PropertyCode);
@@ -462,7 +486,7 @@
                     </div>
                 </div>
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
-                    <ProjectTimeline jobs={project.projectJobsTimelineVM}></ProjectTimeline>
+                    <ProjectTimeline currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
 
                 <div class="{active == 'Materials' ? '' : 'hidden'}">

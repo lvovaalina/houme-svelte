@@ -150,6 +150,24 @@ button:focus {
 	background-color: #ffcc80;
 }
 
+#example-gantt .sg-cell-inner {
+	margin-left: 15px;
+}
+
+#example-gantt .sg-tree-expander {
+	width: 100px;
+    justify-content: flex-start;
+	align-items: center;
+    display: flex;
+    position: absolute;
+    z-index: 10;
+    margin-left: -15px;
+}
+
+#example-gantt .sg-tree-expander > i {
+	font-size: 17px;
+}
+
 /* .sg-cell-inner {
 	padding-left: 25px !important;
 } */

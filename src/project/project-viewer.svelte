@@ -486,7 +486,7 @@
                     </div>
                 </div>
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
-                    <ProjectTimeline currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
+                    <ProjectTimeline projectDuration={project.ConstructionDuration} currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
 
                 <div class="{active == 'Materials' ? '' : 'hidden'}">

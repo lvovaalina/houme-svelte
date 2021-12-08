@@ -5,6 +5,7 @@
     import moment from 'moment';
 
     export let currency;
+    export let projectDuration;
 
     let gantt;
     let currentStart = time('01-01');
@@ -13,8 +14,6 @@
     export let jobs = [];
     let rows = [];
     let tasks = [];
-
-    let selectedTask = {};
 
     let taskColors = ['orange', 'green', 'blue'];
 
@@ -119,7 +118,10 @@
             let to = tasks[tasks.length - 1].to;
             data = {rows: rows, tasks: tasks, to: to};
 
-            console.log()
+            console.log(projectDuration);
+            if (projectDuration > 365) {
+                data.minWidth = 2000;
+            }
 
             gantt.$set({...data});
         }

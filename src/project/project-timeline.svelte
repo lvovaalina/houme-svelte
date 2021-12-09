@@ -124,6 +124,13 @@
             }
 
             gantt.$set({...data});
+
+            let headerCells = document.getElementsByClassName('column-header-cell');
+            console.log(headerCells);
+            headerCells.forEach(el => {
+                let elClone = el.cloneNode(true);
+                el.parentNode.replaceChild(elClone, el);
+            });
         }
     }
 
@@ -267,6 +274,10 @@
         flex-grow: 1;
         overflow: auto;
 	    border: #efefef 1px solid;
+    }
+
+    :global(#example-gantt .column-header-cell) {
+        cursor: auto;
     }
     
     :global(.sg-task-reflected .sg-task-content) {

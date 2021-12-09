@@ -623,7 +623,7 @@
         display: flex;
         flex-grow: 1;
         flex-direction: column;
-        padding: 0 25px 20px;
+        padding: 0 25px;
     }
 
     .project-card {
@@ -645,7 +645,7 @@
 
     :global(.project-view-content-details) {
         /* -header height -tab header height container bottom padding */
-        height: calc(100vh - 64px - 76px);
+        height: calc(100vh - 64px);
         border-right: 1px solid #d3d3d1;
     }
 

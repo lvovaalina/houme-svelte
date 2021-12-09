@@ -41,6 +41,8 @@
     project.ProjectProperties= [];
     project.ProjectJobs= [];
     project.ConstructionCompanyName= 'Construction';
+    project.Margin = '';
+    project.Workers = '';
 
     import { config } from '../config';
     let conf = new config();
@@ -190,6 +192,12 @@
                 </Cell>
                 <Cell span={6}>
                     <Textfield required variant="filled" class="text-field" bind:value={project.LivingArea} label="Living area"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.Margin} label="Margin"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.Workers} label="Workers"></Textfield>
                 </Cell>
                 </LayoutGrid>
         </div>

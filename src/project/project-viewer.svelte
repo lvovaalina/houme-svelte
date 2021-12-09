@@ -533,11 +533,11 @@
                         </tr>
                         <tr>
                             <td>Workers</td>
-                            <td class="numeric-row">50</td>
+                            <td class="numeric-row">{project.Workers}</td>
                         </tr>
                         <tr>
                             <td>Margin</td>
-                            <td class="numeric-row">{currency + parseInt(project.ConstructionCost * 0.15)}</td>
+                            <td class="numeric-row">{currency + project.Margin}</td>
                         </tr>
                     </table>
                     <div class="divider"/>

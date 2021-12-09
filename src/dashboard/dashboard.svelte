@@ -221,7 +221,7 @@
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;
-        height: calc(100vh - 64px - 76px - 20px);
+        height: calc(100vh - 64px - 76px);
     }
 
     .forge-container {

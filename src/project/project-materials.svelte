@@ -48,10 +48,6 @@
         justify-content: space-between;
     }
 
-    .table-caption p {
-        display: flex;
-    }
-
     :global(.project-stages, .project-materials) {
         width: 100%;
     }

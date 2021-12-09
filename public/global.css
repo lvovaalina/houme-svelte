@@ -204,13 +204,13 @@ button:focus {
 }
 
 #example-gantt .sg-tree-expander {
-	width: 100px;
     justify-content: flex-start;
 	align-items: center;
     display: flex;
     position: absolute;
     z-index: 10;
     margin-left: -15px;
+	width: 240px;
 }
 
 #example-gantt .sg-tree-expander > i {

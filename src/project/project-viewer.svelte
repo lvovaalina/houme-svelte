@@ -503,7 +503,7 @@
                 </div>
 
                 <div class="{active == 'Model' ? '' : 'hidden-forge'}">
-                    <ForgeViewer></ForgeViewer>
+                    <ForgeViewer urn={project.Filename}></ForgeViewer>
                 </div>
             </Cell>
             <Cell span={3}>

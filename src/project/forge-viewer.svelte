@@ -51,7 +51,7 @@
         onSuccess(resp["access_token"], resp["expires_in"])
     }
 
-    onMount(async () => {
+    function loadViewable() {
         Autodesk.Viewing.Initializer({
             env: 'AutodeskProduction',
             api: 'derivativeV2',
@@ -67,6 +67,16 @@
                 onDocumentLoadSuccess.bind(this),
                 onDocumentLoadFailure.bind(this));
         });
+    }
+
+    function urnChanged() {
+        loadViewable();
+    }
+
+    $: urnChanged(urn)
+
+    onMount(async () => {
+        loadViewable();
     });
 </script>
 
@@ -77,7 +87,7 @@
     .forge-viewer {
         position: relative;
         /* -header height -tab header height container bottom padding */
-        height: calc(100vh - 64px - 20px);
+        height: calc(100vh - 64px - 76px - 20px);
     }
 
     .dashboard-height {

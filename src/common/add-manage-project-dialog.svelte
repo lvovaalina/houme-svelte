@@ -30,6 +30,7 @@
     let files = [];
     project.ProjectId = 0;
     project.Name = '';
+    project.Filename = '';
     project.BucketName = 'houmly';
     project.LivingArea= '';
     project.ConstructonWorkersNumber= '';
@@ -68,7 +69,6 @@
         event.stopPropagation();
 
         project.ProjectProperties = properties;
-        project.Filename = project.Name + '.rvt';
 
         await fetch(conf.api + '/create',
         {
@@ -215,6 +215,9 @@
                 </Cell>
                 <Cell span={6}>
                     <Textfield required variant="filled" class="text-field" bind:value={project.Workers} label="Workers"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.Filename} label="Urn"></Textfield>
                 </Cell>
                 <Cell span={6}>
                     <Textfield bind:files={files} accept=".png" label="File" type="file" />

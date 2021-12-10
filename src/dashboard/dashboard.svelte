@@ -168,7 +168,7 @@
                 {#each projectsResult as project}
                     <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
                         <Cell style="padding-left:0;">
-                            <div style="width:100px">
+                            <div class="project-cover-container" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                                 <img
                                     class="project-image"
                                     src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
@@ -223,6 +223,10 @@
 </div>
 
 <style>
+    .project-cover-container {
+        width: 100px;
+    }
+
     .dasboard-content-container {
         display: flex;
     }

@@ -22,10 +22,10 @@
     import { Icon } from '@smui/common';
 
     import IconButton from '@smui/icon-button';
+    let urn;
 
     let currency = '$';
 
-    let loaded = true;
     let titleSearch;
     let columns = [
         {name: 'Image', style: 'padding-left: 0'},
@@ -114,6 +114,12 @@
         projectsResult = projectsResult;
     }
 
+    function showProjectModel(id) {
+        selectedProjectId = id;
+        urn = projects.find(x => x.ProjectId == selectedProjectId).Filename;
+        console.log(urn);
+    }
+
 </script>
 
 <div class="dashboard">
@@ -160,7 +166,7 @@
             <Body>
                 {#if projectsResult.length !== 0} 
                 {#each projectsResult as project}
-                    <Row style="cursor: pointer" on:click={() => selectedProjectId = project.ProjectId}>
+                    <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
                         <Cell style="padding-left:0;">
                             <div style="width:100px">
                                 <img
@@ -202,7 +208,7 @@
         {#if !!selectedProjectId && selectedProjectId > 0}
             <p style="margin-bottom: -20px;">PROJECT</p>
             <h2>{projects.find(x => x.ProjectId == selectedProjectId).Name}</h2>
-            <ForgeViewer forgeViewerClass="dashboard-height"></ForgeViewer>
+            <ForgeViewer urn={urn} forgeViewerClass="dashboard-height"></ForgeViewer>
         {:else}
         <p style="text-align: center;">Select a project for a quick view</p>
         {/if}

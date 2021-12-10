@@ -114,6 +114,8 @@
             .then((resp) => {
                 let proj = resp.data;
 
+                proj.ProjectCoverBase64 = 'data:image/png;base64,' + proj.ProjectCoverBase64;
+
                 proj.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
 
                 properties.forEach((prop) => {

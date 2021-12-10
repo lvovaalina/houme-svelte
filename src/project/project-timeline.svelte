@@ -118,18 +118,19 @@
             let to = tasks[tasks.length - 1].to;
             data = {rows: rows, tasks: tasks, to: to};
 
-            console.log(projectDuration);
             if (projectDuration > 365) {
                 data.minWidth = 2000;
             }
 
             gantt.$set({...data});
 
-            let headerCells = document.getElementsByClassName('column-header-cell');
-            console.log(headerCells);
-            headerCells.forEach(el => {
-                let elClone = el.cloneNode(true);
-                el.parentNode.replaceChild(elClone, el);
+            // wait for gantt element to render before removing clickable headers
+            setTimeout(() => {
+                let headerCells = document.getElementsByClassName('column-header-cell');
+                headerCells.forEach(el => {
+                    let elClone = el.cloneNode(true);
+                    el.parentNode.replaceChild(elClone, el);
+                });
             });
         }
     }
@@ -156,7 +157,6 @@
             }
 
             function onLeave() {
-                console.log("romove");
                 if (popup) {
                     popup.remove();
                 }
@@ -234,11 +234,7 @@
         div.style.top = `${rect.bottom}px`;
         div.style.position = 'absolute';
         div.classList = 'sg-popup invisible';
-        console.log("add")
         document.body.appendChild(div);
-
-        console.log("DIV HEIGHT", div.offsetHeight);
-
         if (rect.bottom + div.offsetHeight > height) {
             // 40 - task height
             let top = rect.bottom - div.offsetHeight - 40;
@@ -274,6 +270,7 @@
         flex-grow: 1;
         overflow: auto;
 	    border: #efefef 1px solid;
+        height: calc(100vh - 64px - 76px - 20px);
     }
 
     :global(#example-gantt .column-header-cell) {

@@ -65,11 +65,8 @@
             return result.json();
         })
         .then((resp) => {
-            resp.data.forEach(element => {
-                element.PropertyValue = null;
-            });
-
-            projects = resp.data;
+             projects = resp.data;
+            
             projectsResult = projects;
             projectsCount = projects.length;
             dataLoaded = true;
@@ -165,7 +162,12 @@
                 {#each projectsResult as project}
                     <Row style="cursor: pointer" on:click={() => selectedProjectId = project.ProjectId}>
                         <Cell style="padding-left:0;">
-                            <img class="project-image" src="/project.png" alt="Project mini version"/>
+                            <div style="width:100px">
+                                <img
+                                    class="project-image"
+                                    src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
+                                    alt="Project {project.Name} cover"/>
+                            </div>
                         </Cell>
                         <Cell>
                             {project.Name}
@@ -271,6 +273,7 @@
         border: none;
         width: 50%;
     }
+
     .project-image {
         height: 50px;
         width: 100px;

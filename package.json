@@ -5,7 +5,6 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "qa": "rollup -c -w",
     "start": "node server.js"
   },
   "devDependencies": {
@@ -19,7 +18,6 @@
     "@smui/data-table": "^5.0.0-beta.7",
     "@smui/dialog": "^5.0.0-beta.7",
     "@smui/drawer": "^5.0.0-beta.7",
-    "@smui/icon-button": "^6.0.0-beta.3",
     "@smui/layout-grid": "^4.2.0",
     "@smui/linear-progress": "^5.0.0-beta.8",
     "@smui/list": "^5.0.0-beta.7",
@@ -36,13 +34,14 @@
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "svelte": "^3.0.0",
-    "svelte-gantt": "^3.0.4-beta",
+    "svelte-gantt": "^4.0.3-beta",
     "svelte-generic-crud-table": "^1.5.92",
     "svelte-loading-spinners": "^0.1.7",
     "svelte-preprocess": "^4.9.8"
   },
   "dependencies": {
     "@smui/common": "^4.2.0",
+    "@smui/icon-button": "^4.2.0",
     "express": "^4.17.1",
     "moment": "^2.29.1",
     "sirv-cli": "^1.0.0",

@@ -22,8 +22,10 @@
     import { Icon } from '@smui/common';
 
     import IconButton from '@smui/icon-button';
+    let urn;
 
-    let loaded = true;
+    let currency = '$';
+
     let titleSearch;
     let columns = [
         {name: 'Image', style: 'padding-left: 0'},
@@ -31,9 +33,10 @@
         {name: 'Duration', columnId: 'ConstructionDuration'},
         {name: 'Area', columnId: 'LivingArea'},
         {name: 'Margin', style:'text-align: right;'},
+        {name: 'Project Cost', style:'text-align: right;'},
         {name: 'Build cost', style:'text-align: right;'},
         {name: 'Material cost', style:'text-align: right;'},
-        {name: 'People', style:'text-align: right;'},
+        {name: 'Workers', style:'text-align: right;'},
         {name: ''},
     ];
 
@@ -62,11 +65,8 @@
             return result.json();
         })
         .then((resp) => {
-            resp.data.forEach(element => {
-                element.PropertyValue = null;
-            });
-
-            projects = resp.data;
+             projects = resp.data;
+            
             projectsResult = projects;
             projectsCount = projects.length;
             dataLoaded = true;
@@ -110,6 +110,12 @@
             return Number(aVal) - Number(bVal);
         });
         projectsResult = projectsResult;
+    }
+
+    function showProjectModel(id) {
+        selectedProjectId = id;
+        urn = projects.find(x => x.ProjectId == selectedProjectId).Filename;
+        console.log(urn);
     }
 
 </script>
@@ -158,19 +164,25 @@
             <Body>
                 {#if projectsResult.length !== 0} 
                 {#each projectsResult as project}
-                    <Row style="cursor: pointer" on:click={() => selectedProjectId = project.ProjectId}>
+                    <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
                         <Cell style="padding-left:0;">
-                            <img class="project-image" src="/project.png" alt="Project mini version"/>
+                            <div class="project-cover-container" on:click={(event) => navigateToProject(event, project.ProjectId)}>
+                                <img
+                                    class="project-image"
+                                    src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
+                                    alt="Project {project.Name} cover"/>
+                            </div>
                         </Cell>
                         <Cell>
                             {project.Name}
                         </Cell>
                         <Cell>{project.ConstructionDuration} days</Cell>
                         <Cell>{project.LivingArea} &#13217;</Cell>
-                        <Cell numeric>{parseInt(project.ConstructionCost * 0.15)} $</Cell>
-                        <Cell numeric>{project.ConstructionCost} $</Cell>
-                        <Cell numeric>{project.ConstructionCost} $</Cell>
-                        <Cell numeric>50 p.</Cell>
+                        <Cell numeric>{currency + project.Margin}</Cell>
+                        <Cell numeric>{currency + project.ConstructionCost}</Cell>
+                        <Cell numeric>{currency + project.ConstructionJobCost}</Cell>
+                        <Cell numeric>{currency + project.ConstructionMaterialCost}</Cell>
+                        <Cell numeric>{project.Workers}</Cell>
                         <Cell><Button variant="outlined" style="margin-bottom:0" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                             <ButtonLabel>DETAILS</ButtonLabel>
                         </Button></Cell>
@@ -194,7 +206,7 @@
         {#if !!selectedProjectId && selectedProjectId > 0}
             <p style="margin-bottom: -20px;">PROJECT</p>
             <h2>{projects.find(x => x.ProjectId == selectedProjectId).Name}</h2>
-            <ForgeViewer forgeViewerClass="dashboard-height"></ForgeViewer>
+            <ForgeViewer urn={urn} forgeViewerClass="dashboard-height"></ForgeViewer>
         {:else}
         <p style="text-align: center;">Select a project for a quick view</p>
         {/if}
@@ -209,13 +221,17 @@
 </div>
 
 <style>
+    .project-cover-container {
+        width: 100px;
+    }
+
     .dasboard-content-container {
         display: flex;
     }
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;
-        height: calc(100vh - 64px - 76px - 20px);
+        height: calc(100vh - 64px - 76px);
     }
 
     .forge-container {
@@ -265,6 +281,7 @@
         border: none;
         width: 50%;
     }
+
     .project-image {
         height: 50px;
         width: 100px;

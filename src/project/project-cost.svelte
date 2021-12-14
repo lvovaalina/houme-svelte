@@ -1,14 +1,13 @@
 <script>
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
-    import Tooltip, { Wrapper } from '@smui/tooltip';
-    import { Icon } from "@smui/common";
     import LinearProgress from '@smui/linear-progress';
 
     export let jobs = [];
 
     export let loaded = false;
+    export let currency;
 
-    let columns = ['Color', 'Stage', 'Cost',  'Duration', 'Property Name', 'Property Value', 'Property Unit', 'People'];
+    let columns = ['Stage', 'Cost',  'Duration', 'Property Name', 'Volume', 'Workers'];
 
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);
@@ -26,8 +25,12 @@
 
     function colStyle(col) {
         let style;
-        if (col == 'Property Value' || col == 'Cost' || col == 'Duration' || col == 'People' ) {
-            style="text-align:right;";
+        if (col == 'Duration' || col == 'Workers' ) {
+            style = 'text-align:right;';
+        }
+
+        if (col == 'Stage') {
+            style = 'padding-left: 0';
         }
         return style;
     }
@@ -40,64 +43,45 @@
         <Head>
             <Row>
             {#each columns as col}
-                {#if col == 'Color'}
-                    <Cell style="padding:0;">
-                        <div style="display:flex;align-items: center;">
-                        <div>
-                            {col}
-                        </div>
-                        <Wrapper>
-                            <Icon style="z-index:7" class="material-icons help-icon">help</Icon>
-                            <Tooltip>Stage color in project timeline</Tooltip>
-                        </Wrapper>
-                        </div>
-                    </Cell>
-                {:else}
-                    <Cell style={colStyle(col)}>{col}</Cell>
-                {/if}
+                <Cell style={colStyle(col)}>{col}</Cell>
             {/each}
             </Row>
         </Head>
         <Body>
             {#each jobs as stage}
                 <Row on:click={rowClick(stage.code)} class={stage.tasks && stage.tasks.length !== 0 ? "clickable-row" : ""}>
-                    <Cell style="padding:0">
-                        <div style="height:51px" class={stage.color}></div>
+                    <Cell style="padding: 0; display: flex; align-items: center;">
+                        <div style="width:12px;height:51px" class={stage.color}></div>
+                        
+                        <div style="padding-left: 8px">
+                            {#if stage.tasks && stage.tasks.length !== 0}
+                                <i class={'fas fa-angle-right' + ' ' + stage.code + '-icon'} aria-hidden="true"></i>
+                            {/if}
+                            {stage.name}
+                        </div>
                     </Cell>
-                    <Cell>
-                        {#if stage.tasks && stage.tasks.length !== 0}
-                        <i class={'fas fa-angle-right' + ' ' + stage.code + '-icon'} aria-hidden="true"></i>
-                        {/if}
-                        {stage.name}
-                    </Cell>
-                    <Cell numeric>{stage.stageCost}</Cell>
-                    <Cell numeric>{stage.duration}</Cell>
+                    <Cell>{currency + stage.stageCost}</Cell>
+                    <Cell numeric>{stage.duration} days</Cell>
                     <Cell>{stage.propertyName}</Cell>
-                    <Cell numeric>{stage.propertyValue}</Cell>
-                    {#if stage.propertyUnit === 'sq.m.'}
-                        <Cell>&#13217;</Cell>
-                    {:else}
-                        <Cell>{stage.propertyUnit}</Cell>
-                    {/if}
+                    <Cell>
+                        {stage.propertyValue + (stage.propertyUnit === 'sq.m.' || stage.propertyUnit === '-' ? '' : stage.propertyUnit)}{#if stage.propertyUnit === 'sq.m.'}&#13217{/if}
+                    </Cell>
                     <Cell numeric>{stage.workersCount}</Cell>
                     
                 </Row>
                 {#if stage.tasks && stage.tasks.length !== 0}
                         {#each stage.tasks as task}
                             <Row class="hidden-subtasks {stage.code}">
-                                <Cell style="padding:0">
-                                    <div style="height:51px" class={stage.color}></div>
+                                <Cell style="padding: 0; display: flex; align-items: center;">
+                                    <div style="width:12px; height:51px" class={stage.color}></div>
+                                    <div style="padding-left: 30px;">{task.name}</div>
                                 </Cell>
-                                <Cell style="padding-left:30px;">{task.name}</Cell>
-                                <Cell numeric>{task.cost}</Cell>
-                                <Cell numeric>{task.duration}</Cell>
+                                <Cell>{currency + task.cost}</Cell>
+                                <Cell numeric>{task.duration} days</Cell>
                                 <Cell>{task.propertyName}</Cell>
-                                <Cell numeric>{task.propertyValue}</Cell>
-                                {#if task.propertyUnit === 'sq.m.'}
-                                    <Cell>&#13217;</Cell>
-                                {:else}
-                                    <Cell>{task.propertyUnit}</Cell>
-                                {/if}
+                                <Cell>
+                                    {task.propertyValue + (task.propertyUnit === 'sq.m.' || task.propertyUnit === '-' ? '' : task.propertyUnit)}{#if task.propertyUnit === 'sq.m.'}&#13217{/if}
+                                </Cell>
                                 <Cell numeric>{task.workersCount}</Cell>
                             </Row>
                         {/each}

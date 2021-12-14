@@ -7,101 +7,101 @@ export function time(input) {
 export let stageColorMap = new Map([
     [
         'Excavation',
-        {color: 'bg-teal-100'/*'bg-red-100'*/, code: 'exv'}
+        {color: 'teal'/*'red'*/, code: 'exv'}
     ],
     [
         'Foundation',
-        {color: 'bg-green-100'/*'bg-pink-100'*/, code: 'fnd'}
+        {color: 'green'/*'pink'*/, code: 'fnd'}
     ],
     [
         'Walls',
-        {color: 'bg-light-green-100'/*'bg-purple-100'*/, code: 'wll'}
+        {color: 'light-green'/*'purple'*/, code: 'wll'}
     ],
     [
         'Roof',
-        {color: 'bg-light-green-100'/*'bg-deep-purple-100'*/, code: 'rff'}
+        {color: 'light-green'/*'deep-purple'*/, code: 'rff'}
     ],
     [
         'Windows and windowsills',
-        {color: 'bg-light-green-100'/*'bg-indigo-100'*/, code: 'wnw'}
+        {color: 'light-green'/*'indigo'*/, code: 'wnw'}
     ],
     [
         'Warming',
-        {color: 'bg-light-green-100' /*'bg-blue-100'*/, code: 'hi'}
+        {color: 'light-green' /*'blue'*/, code: 'hi'}
     ],
     [
         'Subfloor/Floor System',
-        {color: 'bg-light-green-100' /*'bg-light-blue-100'*/, code: 'fs'}
+        {color: 'light-green' /*'light-blue'*/, code: 'fs'}
     ],
     [
         'Stairs',
-        {color: 'bg-yellow-100' /*'bg-cyan-100'*/, code: 'st'}
+        {color: 'yellow' /*'cyan'*/, code: 'st'}
     ],
     [
         'Exterior decoration of the house',
-        {color: 'bg-yellow-100' /*'bg-teal-100'*/, code: 'exdec'}
+        {color: 'yellow' /*'teal'*/, code: 'exdec'}
     ],
     [
         'Floor',
-        {color:  'bg-yellow-100' /*'bg-green-100'*/, code: 'flr'}
+        {color:  'yellow' /*'green'*/, code: 'flr'}
     ],
     [
         'Electrical wiring',
-        {color:  'bg-yellow-100' /*'bg-light-green-100'*/, code: 'ewr'}
+        {color:  'yellow' /*'light-green'*/, code: 'ewr'}
     ],
     [
         'Plumbing',
-        {color: 'bg-yellow-100' /*'bg-brown-100'*/, code: 'pm'}
+        {color: 'yellow' /*'brown'*/, code: 'pm'}
     ],
     [
         'Interior decoration of the house',
-        {color:  'bg-yellow-100' /*'bg-lime-100'*/, code: 'intdec'}
+        {color:  'yellow' /*'lime'*/, code: 'intdec'}
     ],
     [
         'Doors',
-        {color:  'bg-yellow-100' /*'bg-yellow-100'*/, code: 'drs'}
+        {color:  'yellow' /*'yellow'*/, code: 'drs'}
     ],
     [
         'Kitchen assembly, equipment installation',
-        {color: 'bg-amber-100' /*'bg-amber-100'*/, code: 'ka'}
+        {color: 'amber' /*'amber'*/, code: 'ka'}
     ],
     [
         'Lighting, switches',
-        {color: 'bg-amber-100' /*'bg-orange-100'*/, code: 'ls'}
+        {color: 'amber' /*'orange'*/, code: 'ls'}
     ],
     [
         'Furnishing',
-        {color: 'bg-amber-100' /*'bg-deep-orange-100'*/, code: 'fr'}
+        {color: 'amber' /*'deep-orange'*/, code: 'fr'}
     ],
     [
         'Commissioning works',
-        {color: 'bg-orange-100'/*'bg-brown-100'*/, code: 'cwr'}
+        {color: 'light-orange'/*'brown'*/, code: 'cwr'}
     ],
 ]);
 
 export let stageMap = new Map([
     [
         'Excavation',
-        {color: 'bg-teal-100', code: 'exv'}
+        {color: 'teal', code: 'exv'}
     ],
     [
         'Foundation',
-        {color: 'bg-green-100', code: 'fnd'}
+        {color: 'green', code: 'fnd'}
     ],
     [
         'Box',
-        {color: 'bg-light-green-100', code: 'box'}
+        {color: 'light-green', code: 'box'}
     ],
     [
         'Interior',
-        {color: 'bg-yellow-100', code: 'int'}
+        {color: 'yellow', code: 'int'}
     ],
     [
         'Furnishing',
-        {color: 'bg-amber-100', code: 'frn'}
+        {color: 'amber', code: 'frn'}
     ],
     [
         'Commissioning works',
-        {color: 'bg-orange-100', code: 'cw'}
+        {color: 'light-orange', code: 'cw'}
     ],
 ]);

@@ -88,9 +88,8 @@
     }
 
     function doSearch() {
-        var re = new RegExp(titleSearch+'.+$', 'i');
-        projectsResult = projects.filter(function(project, i, a){
-            return project.Name.search(re) != -1;
+        projectsResult = projects.filter(function(project){
+            return project.Name.toLowerCase().startsWith(titleSearch.toLowerCase());
         });
         projectsCount = projectsResult.length;
         dataLoadedForSearch = true;
@@ -101,8 +100,6 @@
     }
 
     function handleSort(event) {
-        console.log(event);
-        console.log("SORT", sort);
         projectsResult.sort((a, b) => {
             const [aVal, bVal] = [a[sort], b[sort]][
                 sortDirection === 'ascending' ? 'slice' : 'reverse'
@@ -174,7 +171,7 @@
                         <Cell numeric>{project.ConstructionCost} $</Cell>
                         <Cell numeric>{project.ConstructionCost} $</Cell>
                         <Cell numeric>50 p.</Cell>
-                        <Cell><Button variant="outlined" on:click={(event) => navigateToProject(event, project.ProjectId)}>
+                        <Cell><Button variant="outlined" style="margin-bottom:0" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                             <ButtonLabel>DETAILS</ButtonLabel>
                         </Button></Cell>
                     </Row>
@@ -218,13 +215,14 @@
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;
-        height: calc(100vh - 80px - 76px - 20px);
+        height: calc(100vh - 64px - 76px - 20px);
     }
 
     .forge-container {
         width: 40%;
-        padding: 0 30px;
+        padding: 0 0 0 30px;
     }
+
     .solo-container {
         display: flex;
         justify-content: flex-end;

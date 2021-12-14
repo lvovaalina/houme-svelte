@@ -60,7 +60,7 @@
         </Head>
         <Body>
             {#each jobs as stage}
-                <Row on:click={rowClick(stage.code)}>
+                <Row on:click={rowClick(stage.code)} class={stage.tasks && stage.tasks.length !== 0 ? "clickable-row" : ""}>
                     <Cell style="padding:0">
                         <div style="height:51px" class={stage.color}></div>
                     </Cell>
@@ -124,6 +124,10 @@
         margin-left: 5px;
     }
 
+    :global(.clickable-row) {
+        cursor: pointer;
+    }
+
     .table-caption {
         display: flex;
         align-items: center;
@@ -133,7 +137,7 @@
     :global(.project-stages, .project-materials) {
         width: 100%;
         /* -header height -tab header height container bottom padding */
-        height: calc(100vh - 80px - 76px - 20px);
+        height: calc(100vh - 64px - 76px - 20px);
         border: none;
     }
 

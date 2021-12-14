@@ -72,10 +72,14 @@
 
     :global(.project-settings .material-select) {
         width: 60%;
-        margin: 10px 0;
+        margin: 5px 0;
+    }
+
+    :global(.project-settings .material-select .mdc-notched-outline__leading, .project-settings .material-select .mdc-notched-outline__trailing) {
+        border-color: #D6D6D6;
     }
 
     :global(.project-settings .mdc-select__anchor) {
-        height: 40px;
+        height: 34px;
     }
 </style>

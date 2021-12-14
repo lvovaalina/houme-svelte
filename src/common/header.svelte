@@ -20,15 +20,11 @@
                         <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
                     </a>
                     {#if !!projectName}
-                    <Button style="color: rgba(21, 40, 89);margin-bottom: 0;margin-left: 20px;" on:click={() => navigate('/',{replace: true})}>
+                    <Button class="project-dashboard-link" style="color: rgba(21, 40, 89, .7);margin-bottom: 0;margin-left: 20px;" on:click={() => navigate('/',{replace: true})}>
                         <Label><h2>Project Dashboard</h2></Label>
                     </Button>
-                    <Icon style="color: rgba(21, 40, 89)" class="material-icons">chevron_right</Icon>
-                    <Button
-                        style="color: rgba(21, 40, 89);margin-bottom: 0;"
-                        on:click={() => navigate('/view/' + $projectStored.projectId + '/model',{replace: true})}>
-                        <Label><h2>{projectName}</h2></Label>
-                    </Button>
+                    <Icon style="color: rgba(21, 40, 89); font-size: 20px;" class="material-icons">chevron_right</Icon>
+                    <h2 class="project-name">{projectName}</h2>
                     {/if}
                 </Section>
                 <Section>
@@ -42,19 +38,28 @@
 <style>
     :global(.top-app-bar-container .header) {
         background-color: #fff;
-        height: 80px;
+        height: 64px;
         border-bottom: 1px solid #e0e1e2;
+        padding: 0 16px;
     }
 
-    :global(.page-title) {
+    :global(.top-app-bar-container h2) {
+        font-size: 16px !important;
+    }
+
+    :global(.project-dashboard-link:hover) {
+        color: rgba(21, 40, 89) !important;
+    }
+
+    h2.project-name {
         color: rgba(21, 40, 89);
-        text-transform: uppercase; 
-        padding-left: 0;
+        text-transform: uppercase;
+        margin-left: 10px;
     }
 
     .header-logo, .header-logo-link {
-        width: 200px;
-        height: 40px;
+        width: 165px;
+        height: 33px;
     }
 
     .header-logo-link {

@@ -123,8 +123,6 @@
         .then(data => {
             if (data.success) {
                 reload();
-
-                dispatch("reloadProjects");
             }
         })
     }

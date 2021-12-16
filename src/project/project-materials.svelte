@@ -4,7 +4,7 @@
     export let materials = [];
     export let currency;
 
-    let columns = ['Material', 'Cost', 'Volume', 'Nominal Cost', 'In Steps'];
+    let columns = ['Material', 'Cost', 'Volume', 'Nominal Cost', 'In stock by Date', 'In Steps'];
 </script>
 
 <div class="project-cost">
@@ -25,12 +25,12 @@
                     <Cell>{currency + material.cost}</Cell>
                     <Cell>{material.volume + (material.propertyUnit === 'sq.m.' || material.propertyUnit === '-' ? '' : material.propertyUnit)}{#if material.propertyUnit === 'sq.m.'}&#13217{/if}</Cell>
                     <Cell>{currency + material.nominalCost + '/' + (material.propertyUnit === 'sq.m.' || material.propertyUnit === '-' ? '' : material.propertyUnit)}{#if material.propertyUnit === 'sq.m.'}&#13217{/if}</Cell>
+                    <Cell>{material.date.format('D MMM YYYY')}</Cell>
                     <Cell>
                         <div style="width: fit-content;" class={material.color}>
                             {material.jobName}
                         </div>
                     </Cell>
-                    <Cell></Cell>
                 </Row>
             {/each}
         </Body>

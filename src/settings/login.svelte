@@ -70,7 +70,7 @@
     }
 
     async function isLoggedInFetch() {
-        await fetch(conf.api + '/isLoggedIn')
+        await fetch(conf.api + '/isLoggedIn', {credentials: 'include'})
         .then((result) => {
 
             return result.json();

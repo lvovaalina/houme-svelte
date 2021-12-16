@@ -5,6 +5,7 @@
     import JobCosts from "./job-costs.svelte";
     import JobMaterials from "./job-materials.svelte";
     import Projects from "./projects.svelte";
+    import Login from './login.svelte';
 
     import { getNotificationsContext } from 'svelte-notifications';
     const { addNotification } = getNotificationsContext();
@@ -15,6 +16,8 @@
     function reloadProjectsTable() {
         reload = !reload;
     }
+
+    let isLoggedIn = false;
 
     function updateProjects() {
         fetch(conf.api + '/updateProjects',
@@ -53,6 +56,8 @@
 <div class="settings-component">
     <h1>Settings</h1>
 
+    {#if isLoggedIn}
+
     <Projects bind:reloadProj={reload}/>
 
     <button on:click={updateProjects}>UPDATE PROJECTS</button>
@@ -60,6 +65,9 @@
     <JobCosts on:reloadProjects={reloadProjectsTable} />
 
     <JobMaterials />
+    {:else}
+        <Login bind:isLoggedIn={isLoggedIn}></Login>
+    {/if}
 
 </div>
 

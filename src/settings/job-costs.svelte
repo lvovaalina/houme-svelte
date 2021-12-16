@@ -21,7 +21,7 @@
     })
 
     function get(url) {
-        return fetch(conf.api + url)
+        return fetch(conf.api + url, {credentials: 'include','Content-Type':  'application/json',})
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");

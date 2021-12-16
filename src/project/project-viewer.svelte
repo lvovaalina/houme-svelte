@@ -11,6 +11,9 @@
     import ProjectMaterials from '../project/project-materials.svelte';
     import { pageTitle, projectStored, propertiesStored } from '../store';
 
+    import { getNotificationsContext } from 'svelte-notifications';
+    const { addNotification } = getNotificationsContext();
+
     export let projectId;
     export let active = 'Model';
 
@@ -306,6 +309,8 @@
             let property = propertiesMap.get(element.ConstructionJobMaterial.Job.PropertyID);
             let props = stageMap.get(element.ConstructionJobMaterial.Job.StageName);
 
+            let timestamp = timestamps.get(element.ConstructionJobMaterial.Job.JobCode);
+
             materialsVM.push({
                 name: element.ConstructionJobMaterial.MaterialName,
                 cost: element.MaterialCost,
@@ -314,7 +319,8 @@
                 propertyUnit: element.ConstructionJobMaterial.Job.Property.PropertyUnit,
                 jobName: element.ConstructionJobMaterial.Job.SubStageName
                     + ': ' + element.ConstructionJobMaterial.Job.JobName,
-                color: props.color
+                color: props.color,
+                date: timestamp.from,
             })
         });
 

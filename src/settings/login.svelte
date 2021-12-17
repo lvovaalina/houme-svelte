@@ -27,6 +27,7 @@
         {
             method: 'POST',
             body: JSON.stringify({
+                mode: 'cors',
                 email: 'admin',
                 passwordString: 'admin',
                 credentials: 'include',

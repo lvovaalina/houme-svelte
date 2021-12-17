@@ -29,6 +29,7 @@
             body: JSON.stringify({
                 email: 'admin',
                 passwordString: 'admin',
+                credentials: 'include',
             })
         })
         .then((result) => {

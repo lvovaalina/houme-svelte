@@ -19,6 +19,46 @@
         email: '',
         passwordString: '',
     }
+    
+    async function loginJWT() {
+        dataLoaded = false;
+
+        await fetch(conf.api + '/login',
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                email: 'admin',
+                passwordString: 'admin',
+            })
+        })
+        .then((result) => {
+            if (result.ok) {
+                console.log("Add successfully");
+            }
+
+            return result.json();
+        })
+        .then(data => {
+            if (data.success) {
+                //isLoggedIn = true;
+                dataLoaded = true;
+            } else {
+                responseMessage = data.message;
+            }
+        })
+    }
+
+    async function helloJWT() {
+        await fetch(conf.api + '/auth/hello', {credentials: 'include'})
+        .then((result) => {
+
+            return result.json();
+        })
+        .then(data => {
+            console.log(data);
+        })
+    }
+
 
     async function login() {
         dataLoaded = false;
@@ -108,6 +148,14 @@
 
     <Button on:click={isLoggedInFetch}>
         <Label>isLoggedIn</Label>
+    </Button>
+
+    <Button on:click={loginJWT}>
+        <Label>loginJWT</Label>
+    </Button>
+
+    <Button on:click={helloJWT}>
+        <Label>Hellp</Label>
     </Button>
 </div>
 

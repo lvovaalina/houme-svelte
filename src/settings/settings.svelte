@@ -56,7 +56,7 @@
 <div class="settings-component">
     <h1>Settings</h1>
 
-    {#if isLoggedIn}
+    <!-- {#if isLoggedIn} -->
 
     <Projects bind:reloadProj={reload}/>
 
@@ -65,9 +65,9 @@
     <JobCosts on:reloadProjects={reloadProjectsTable} />
 
     <JobMaterials />
-    {:else}
+    <!-- {:else}
         <Login bind:isLoggedIn={isLoggedIn}></Login>
-    {/if}
+    {/if} -->
 
 </div>
 

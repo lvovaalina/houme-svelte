@@ -88,8 +88,9 @@
     }
 
     function doSearch() {
+        let searchTerm = titleSearch.toLowerCase().trim();
         projectsResult = projects.filter(function(project){
-            return project.Name.toLowerCase().startsWith(titleSearch.toLowerCase());
+            return project.Name.toLowerCase().startsWith(searchTerm);
         });
         projectsCount = projectsResult.length;
         dataLoadedForSearch = true;

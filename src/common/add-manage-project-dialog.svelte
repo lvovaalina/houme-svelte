@@ -139,10 +139,11 @@
 
         project.ProjectCoverBase64 = project.ProjectCoverBase64.replace('data:image/png;base64,', '');
 
-        await fetch(conf.api + '/updateProject/'+ project.ProjectId,
+        await fetch(conf.api + '/auth/updateProject/'+ project.ProjectId,
         {
             method: 'PUT',
-            body: JSON.stringify(project)
+            body: JSON.stringify(project),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {

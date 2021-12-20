@@ -2,6 +2,8 @@
     import Button, { Label } from '@smui/button';
     import Textfield from '@smui/textfield';
 
+    import { adminAuthentificated } from '../store';
+
     import { config } from '../config';
     let conf = new config();
     let dataLoaded = true;
@@ -13,24 +15,18 @@
     }
     $: emptyMassage(admin)
 
-    export let isLoggedIn = false;
-
     let admin = {
         email: '',
         passwordString: '',
     }
     
-    async function loginJWT() {
+    async function login() {
         dataLoaded = false;
 
         await fetch(conf.api + '/login',
         {
             method: 'POST',
-            body: JSON.stringify({
-                email: 'admin',
-                passwordString: 'admin',
-                
-            }),
+            body: JSON.stringify(admin),
             credentials: 'include',
             mode: 'cors'
         })
@@ -42,87 +38,9 @@
             return result.json();
         })
         .then(data => {
-            if (data.success) {
-                //isLoggedIn = true;
+            if (data.code == 200) {
                 dataLoaded = true;
-            } else {
-                responseMessage = data.message;
-            }
-        })
-    }
-
-    async function helloJWT() {
-        await fetch(conf.api + '/auth/hello', {credentials: 'include'})
-        .then((result) => {
-
-            return result.json();
-        })
-        .then(data => {
-            console.log(data);
-        })
-    }
-
-
-    async function login() {
-        dataLoaded = false;
-
-        await fetch(conf.api + '/loginAdmin',
-        {
-            method: 'PUT',
-            body: JSON.stringify(admin)
-        })
-        .then((result) => {
-            if (result.ok) {
-                console.log("Add successfully");
-            }
-
-            return result.json();
-        })
-        .then(data => {
-            if (data.success) {
-                //isLoggedIn = true;
-                dataLoaded = true;
-            } else {
-                responseMessage = data.message;
-            }
-        })
-    }
-
-    async function register() {
-        dataLoaded = false;
-
-        await fetch(conf.api + '/registerAdmin',
-        {
-            method: 'POST',
-            body: JSON.stringify(admin)
-        })
-        .then((result) => {
-            if (result.ok) {
-                console.log("Add successfully");
-            }
-
-            return result.json();
-        })
-        .then(data => {
-            if (data.success) {
-                dataLoaded = true;
-            } else {
-                responseMessage = data.message;
-            }
-        })
-    }
-
-    async function isLoggedInFetch() {
-        await fetch(conf.api + '/isLoggedIn', {credentials: 'include'})
-        .then((result) => {
-
-            return result.json();
-        })
-        .then(data => {
-            if (data.success) {
-                dataLoaded = true;
-            } else {
-                responseMessage = data.message;
+                adminAuthentificated.set(true);
             }
         })
     }
@@ -147,19 +65,6 @@
             <Label>Login</Label>
         </Button>
     </form>
-
-
-    <Button on:click={isLoggedInFetch}>
-        <Label>isLoggedIn</Label>
-    </Button>
-
-    <Button on:click={loginJWT}>
-        <Label>loginJWT</Label>
-    </Button>
-
-    <Button on:click={helloJWT}>
-        <Label>Hellp</Label>
-    </Button>
 </div>
 
 <style>

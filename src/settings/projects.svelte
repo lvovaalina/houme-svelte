@@ -148,7 +148,7 @@
 
         selectedProjectId = event.detail.body.ProjectId;
 
-        fetch(conf.api + '/getProjectJobs/'+ selectedProjectId)
+        fetch(conf.api + '/auth/getProjectJobs/'+ selectedProjectId, {credentials: 'include',})
         .then((result) => {
             if (result.ok) {
                 console.log("get projects successfully");

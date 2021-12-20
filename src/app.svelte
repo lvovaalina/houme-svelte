@@ -44,7 +44,7 @@
 	</Notifications>
 
 	{#if (envmt != "production") } 
-	<div class="version-container">version: 0.3.01</div>
+	<div class="version-container">version: 0.3.02</div>
 	{/if}
 </main>
 

@@ -11,8 +11,9 @@
     import { config } from '../config';
     let conf = new config();
     function deleteProject() {
-        fetch(conf.api + '/deleteProject/' + projectId, {
-            method: 'DELETE'
+        fetch(conf.api + '/auth/deleteProject/' + projectId, {
+            method: 'DELETE',
+            credentials: 'include',
         })
         .then((response) => {
             if (response.ok) {

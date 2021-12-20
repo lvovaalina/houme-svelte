@@ -75,7 +75,7 @@
     }
 
     function get(url) {
-        return fetch(conf.api + url)
+        return fetch(conf.api + url, { credentials: 'include',})
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");
@@ -86,7 +86,7 @@
     }
 
     function reload() {
-        get('/getJobMaterials').then((resp) => {
+        get('/auth/getJobMaterials').then((resp) => {
             jobMaterials = resp.data;
             resp.data.forEach(element => {
                 element.StageName = element.Job.StageName;
@@ -123,10 +123,11 @@
         materialToUpdate.materialCost = materialCost;
         materialToUpdate.materialName = materialName;
 
-        fetch(conf.api + '/updateJobNaterial/'+ event.detail.body.ID,
+        fetch(conf.api + '/auth/updateJobNaterial/'+ event.detail.body.ID,
         {
             method: 'PUT',
-            body: JSON.stringify(materialToUpdate)
+            body: JSON.stringify(materialToUpdate),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {
@@ -214,10 +215,11 @@
         console.log(job);
         material.Job = {JobCode: job.JobCode};
 
-        fetch(conf.api + '/createMaterial',
+        fetch(conf.api + '/auth/createMaterial',
         {
             method: 'POST',
-            body: JSON.stringify(material)
+            body: JSON.stringify(material),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {
@@ -232,8 +234,9 @@
     }
 
     function handleDelete(event) {
-        fetch(conf.api + '/deleteJobMaterial/' + event.detail.body.ID, {
-            method: 'DELETE'
+        fetch(conf.api + '/auth/deleteJobMaterial/' + event.detail.body.ID, {
+            method: 'DELETE',
+            credentials: 'include',
         })
         .then((response) => {
             if (response.ok) {

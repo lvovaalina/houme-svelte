@@ -21,7 +21,7 @@
     })
 
     function get(url) {
-        return fetch(conf.api + url, {credentials: 'include','Content-Type':  'application/json',})
+        return fetch(conf.api + url, { credentials: 'include','Content-Type':  'application/json',})
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");
@@ -32,7 +32,7 @@
     }
 
     function reload() {
-        get('/getJobProperties').then((resp) => {
+        get('/auth/getJobProperties').then((resp) => {
             jobProperties = resp.data;
             resp.data.forEach(element => {
                 element.StageName = element.Job.StageName;
@@ -108,10 +108,11 @@
         updatedJobProperty.OptWorkers = optWorkers;
         updatedJobProperty.ConstructionJobPropertyId = constructionJobPropertyId;
 
-        fetch(conf.api + '/updateJobProperty/'+ event.detail.body.ID,
+        fetch(conf.api + '/auth/updateJobProperty/'+ event.detail.body.ID,
         {
             method: 'PUT',
-            body: JSON.stringify(updatedJobProperty)
+            body: JSON.stringify(updatedJobProperty),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {

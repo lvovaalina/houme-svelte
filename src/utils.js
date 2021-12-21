@@ -26,7 +26,7 @@ export let stageColorMap = new Map([
         {color: 'light-green'/*'indigo'*/, code: 'wnw'}
     ],
     [
-        'Warming',
+        'Insulation',
         {color: 'light-green' /*'blue'*/, code: 'hi'}
     ],
     [

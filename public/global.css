@@ -98,8 +98,8 @@ button:focus {
     font-size: 10px;
 }
 
-.sg-table-body-cell {
-
+.sg-task.position-hack .sg-task-content {
+	right: 10px;
 }
 
 .sg-task.teal, .teal {

@@ -3,7 +3,8 @@
     import ForgeViewer from './forge-viewer.svelte';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
-    import { navigate } from "svelte-navigator";
+    import Ripple from '@smui/ripple';
+    import { navigate, Link } from "svelte-navigator";
     import Button, {Label} from '@smui/button';
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
@@ -479,15 +480,12 @@
                 <div class="project-view-header">
                     <div class="project-view-buttons-container">
                         {#each tabs as tab, index}
-                        <Button
-                            style={"width: 200px;color: #152859;"}
-                            variant="outlined"
-                            href="javascript:void(0)"
-                            on:click={() => setActive(tab)}
-                            class={active === tab.name ? getBorderRadius(index, tabs) + ' activated tab-button' : getBorderRadius(index, tabs) + ' tab-button'}
-                            >
-                            <Label>{tab.name}</Label>
-                        </Button>
+                        <div use:Ripple={{ surface: true }}
+                        class={
+                            active === tab.name ? getBorderRadius(index, tabs) + " tab-link-container active"
+                                : getBorderRadius(index, tabs) + " tab-link-container"}>
+                            <Link class="tab-link" style="color: rgb(21, 40, 89);" to="/view/{project.ProjectId}/{tab.urlPart}">{tab.name}</Link>
+                        </div>
                         {/each}
                     </div>
                 </div>
@@ -571,16 +569,37 @@
 </div>
 
 <style>
+    :global(.tab-link) {
+        font-weight: 500;
+        font-size: 14px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        height:100%;
+        width:100%;
+    }
+    .tab-link-container {
+        color: rgb(21, 40, 89);
+        height: 36px;
+        display: flex;
+        align-items: center;
+        border: 1px solid #e0e1e2;
+        border-radius: 4px;
+        width: 25%;
+        justify-content: center;
+        text-transform: uppercase;
+    }
+
     /* do not hide forge component to allow reload forge model on tab change */
-    :global(.br-half-right, .tab-button.br-half-right .mdc-button__ripple) {
+    .br-half-right {
         border-radius: 4px 0 0 4px;
     }
 
-    :global(.br-half-left, .tab-button.br-half-left .mdc-button__ripple) {
+    .br-half-left {
         border-radius: 0 4px 4px 0;
     }
 
-    :global(.no-br, .tab-button.no-br .mdc-button__ripple) {
+    .no-br {
         border-radius: 0;
     }
 
@@ -623,6 +642,7 @@
 
     .project-view-buttons-container {
         display: flex;
+        width: 80%;
     }
 
     .project-viewer {
@@ -645,7 +665,7 @@
         background-color: rgba(21, 40, 89);
     }
 
-    :global(.tab-button.activated) {
+    .tab-link-container.active {
         border-color: rgba(21, 40, 89);
     }
 

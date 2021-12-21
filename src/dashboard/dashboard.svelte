@@ -29,6 +29,7 @@
 
     let titleSearch;
     let columns = [
+        {name: ''},
         {name: 'Image', style: 'padding-left: 0'},
         {name: 'Title', columnId: 'Name'},
         {name: 'Duration', columnId: 'ConstructionDuration'},
@@ -172,8 +173,9 @@
             </Head>
             <Body>
                 {#if projectsResult.length !== 0} 
-                {#each projectsResult as project}
+                {#each projectsResult as project, index}
                     <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
+                        <Cell>{index + 1}</Cell>
                         <Cell style="padding-left:0;">
                             <div class="project-cover-container" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                                 <img

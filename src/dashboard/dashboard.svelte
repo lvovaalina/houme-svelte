@@ -161,13 +161,17 @@
             class="projects-table">
             <Head>
                 <Row>
-                {#each columns as col}
+                {#each columns as col, index}
+                    {#if index == 0}
+                        <Cell style="padding-left: 5px;padding-right: 0;"></Cell>
+                    {:else}
                     <Cell sortable={!!col.columnId ? 'true' : 'false'} style={col.style} columnId={col.columnId}>
                         <Label>{col.name}</Label>
                         {#if !!col.columnId}
                             <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
                         {/if}
                     </Cell>
+                    {/if}
                 {/each}
                 </Row>
             </Head>
@@ -175,7 +179,7 @@
                 {#if projectsResult.length !== 0} 
                 {#each projectsResult as project, index}
                     <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
-                        <Cell>{index + 1}</Cell>
+                        <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
                         <Cell style="padding-left:0;">
                             <div class="project-cover-container" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                                 <img

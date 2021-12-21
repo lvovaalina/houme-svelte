@@ -36,6 +36,13 @@
                 materialsCost: task.materialsCost,
             }
 
+            console.log(task);
+            // to do: figure out how to recalculate position based on timeline width
+            if (task.name == 'Kitchen assembly, equipment installation'
+                || task.name == 'Commissioning works') {
+                    newTask.classes += ' position-hack';
+                }
+
             tasks.push(newTask);
             return newTask;
         }

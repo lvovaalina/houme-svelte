@@ -7,6 +7,7 @@
         Cell,
         Label,
     } from '@smui/data-table';
+    import Ripple from '@smui/ripple';
     import LinearProgress from '@smui/linear-progress';
     import Tooltip, { Wrapper } from '@smui/tooltip';
     import Button, { Label as ButtonLabel } from '@smui/button';
@@ -14,7 +15,7 @@
     import ForgeViewer from '../project/forge-viewer.svelte';
 
     import { onMount } from 'svelte';
-    import { navigate } from 'svelte-navigator';
+    import { navigate, Link} from 'svelte-navigator';
     import { pageTitle } from '../store';
 
     import { Input } from '@smui/textfield';
@@ -192,9 +193,10 @@
                         <Cell numeric>{currency + project.ConstructionMaterialCost}</Cell>
                         <Cell numeric>{project.Workers}</Cell>
                         <Cell>
-                            <Button variant="outlined" style="margin-bottom:0" href="http://localhost:5001/view/{project.ProjectId}/model" on:click={(event) => navigateToProject(event, project.ProjectId)}>
-                            <ButtonLabel>DETAILS</ButtonLabel>
-                        </Button></Cell>
+                            <div use:Ripple={{ surface: true }} class="project-link-container">
+                                <Link style="color: rgb(21, 40, 89)" to="/view/{project.ProjectId}/model">DETAILS</Link>
+                            </div>
+                        </Cell>
                     </Row>
             {/each}
             {/if}
@@ -230,6 +232,20 @@
 </div>
 
 <style>
+    .project-link-container {
+        color: rgb(21, 40, 89);
+        height: 36px;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        border: 1px solid #e0e1e2;
+        border-radius: 4px;
+    }
+
+    :global(.project-link-container a) {
+        font-weight: 500;
+    }
+
     .project-cover-container {
         width: 100px;
     }

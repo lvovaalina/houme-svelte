@@ -97,7 +97,14 @@
     }
 
     function navigateToProject(event, projectId) {
-        navigate('/view/' + projectId + '/model', {replace: true});
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (event.metaKey || event.ctrlKey) {
+            window.open(window.location.origin + '/view/' + projectId + '/model', '_blank');
+        } else {
+            navigate('/view/' + projectId + '/model', {replace: true});
+        }
     }
 
     function handleSort(event) {
@@ -184,7 +191,8 @@
                         <Cell numeric>{currency + project.ConstructionJobCost}</Cell>
                         <Cell numeric>{currency + project.ConstructionMaterialCost}</Cell>
                         <Cell numeric>{project.Workers}</Cell>
-                        <Cell><Button variant="outlined" style="margin-bottom:0" on:click={(event) => navigateToProject(event, project.ProjectId)}>
+                        <Cell>
+                            <Button variant="outlined" style="margin-bottom:0" href="http://localhost:5001/view/{project.ProjectId}/model" on:click={(event) => navigateToProject(event, project.ProjectId)}>
                             <ButtonLabel>DETAILS</ButtonLabel>
                         </Button></Cell>
                     </Row>

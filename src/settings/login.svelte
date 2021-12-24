@@ -22,6 +22,7 @@
     
     async function login() {
         dataLoaded = false;
+        admin.email = admin.email.trim();
 
         await fetch(conf.api + '/login',
         {

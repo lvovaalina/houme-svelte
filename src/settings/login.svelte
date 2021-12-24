@@ -42,6 +42,8 @@
             if (data.code == 200) {
                 dataLoaded = true;
                 adminAuthentificated.set(true);
+            } else {
+                responseMessage = data.message.charAt(0).toUpperCase() + data.message.slice(1);
             }
         })
     }
@@ -50,7 +52,7 @@
 <div class="login-form-container">
     <form id="login-form" on:submit|preventDefault="{login}">
         {#if !!responseMessage}
-            <div>{responseMessage}</div>
+            <div class="response-message">{responseMessage}</div>
         {/if}
         <Textfield 
             required variant="filled"
@@ -69,6 +71,10 @@
 </div>
 
 <style>
+    .response-message {
+        color: red;
+    }
+
     .login-form-container {
         display: flex;
         align-items: center;

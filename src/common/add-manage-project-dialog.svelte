@@ -70,10 +70,11 @@
 
         project.ProjectProperties = properties;
 
-        await fetch(conf.api + '/create',
+        await fetch(conf.api + '/auth/create',
         {
             method: 'POST',
-            body: JSON.stringify(project)
+            body: JSON.stringify(project),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {

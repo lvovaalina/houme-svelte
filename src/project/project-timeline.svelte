@@ -16,6 +16,11 @@
     let tasks = [];
 
     let taskColors = ['orange', 'green', 'blue'];
+    let monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"];
 
     function translateStagesToTasks() {
         function addTask(task, resourceId, color) {
@@ -36,7 +41,6 @@
                 materialsCost: task.materialsCost,
             }
 
-            console.log(task);
             // to do: figure out how to recalculate position based on timeline width
             if (task.name == 'Kitchen assembly, equipment installation'
                 || task.name == 'Commissioning works') {
@@ -134,8 +138,19 @@
             // wait for gantt element to render before removing clickable headers
             setTimeout(() => {
                 let headerCells = document.getElementsByClassName('column-header-cell');
-                headerCells.forEach(el => {
+
+                let startIndex = 0;
+                headerCells.forEach((el, index) => {
                     let elClone = el.cloneNode(true);
+                    
+                    // hack to fix HM-238 without forking repository
+                    let headerText = elClone.children[0].innerHTML;
+                    if (monthNames.findIndex(x => x == headerText) >= 0) {
+                        startIndex = startIndex == 0 ? index : startIndex;
+                        let monthNumber = (index - startIndex)%12;
+                        elClone.children[0].innerHTML = monthNames[monthNumber];
+                    }
+
                     el.parentNode.replaceChild(elClone, el);
                 });
             });

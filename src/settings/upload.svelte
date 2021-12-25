@@ -75,8 +75,6 @@
         files.accepted = [...files.accepted, ...acceptedFiles];
         files.rejected = [...files.rejected, ...fileRejections];
     }
-
-    export let bucketName;
 </script>
 
 <div class="card-container">

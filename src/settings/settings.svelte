@@ -7,6 +7,7 @@
     import Projects from "./projects.svelte";
     import Login from './login.svelte';
     import Upload from './upload.svelte';
+    import ForgeFiles from './forge-files.svelte';
 
     import { getNotificationsContext } from 'svelte-notifications';
     const { addNotification } = getNotificationsContext();
@@ -90,7 +91,6 @@
                 })
                 .then(data => {
                     if (data.success) {
-                        console.log(data);
                         adminStored.set({
                             email: data.data.Email
                         });
@@ -108,6 +108,7 @@
 
     {#if isLoggedIn}
         <Upload></Upload>
+        <ForgeFiles />
         <Projects bind:reloadProj={reload}/>
 
         <button on:click={updateProjects}>UPDATE PROJECTS</button>
@@ -116,7 +117,7 @@
 
         <JobMaterials />
     {:else}
-        <Login bind:isLoggedIn={isLoggedIn}></Login>
+        <Login></Login>
     {/if}
 
 </div>

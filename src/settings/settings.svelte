@@ -6,6 +6,7 @@
     import JobMaterials from "./job-materials.svelte";
     import Projects from "./projects.svelte";
     import Login from './login.svelte';
+    import Upload from './upload.svelte';
 
     import { getNotificationsContext } from 'svelte-notifications';
     const { addNotification } = getNotificationsContext();
@@ -106,6 +107,7 @@
     <h1>Settings</h1>
 
     {#if isLoggedIn}
+        <Upload></Upload>
         <Projects bind:reloadProj={reload}/>
 
         <button on:click={updateProjects}>UPDATE PROJECTS</button>

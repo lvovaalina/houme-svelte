@@ -26,8 +26,8 @@
     
     async function getForgeToken(onSuccess) {
         let details = {
-                    "client_id": "HjKvq1UCmrAOpHBp97m0lfgYEGEB7E2V",
-                    "client_secret": "1wuJ3vwrxbqnuxjP",
+                    "client_id": "iTsiwR4RGLuOJdyXz49v3szapWzzxGs3",
+                    "client_secret": "xI2RjkCJiIbLEMPF",
                     "grant_type": "client_credentials",
                     "scope":"viewables:read",
                 }

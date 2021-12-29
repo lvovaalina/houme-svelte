@@ -181,11 +181,13 @@
                     <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
                         <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
                         <Cell style="padding-left:0;">
-                            <div class="project-cover-container" on:click={(event) => navigateToProject(event, project.ProjectId)}>
+                            <div class="project-cover-container">
+                            <Link to="/view/{project.ProjectId}/model">
                                 <img
                                     class="project-image"
                                     src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
                                     alt="Project {project.Name} cover"/>
+                            </Link>
                             </div>
                         </Cell>
                         <Cell>
@@ -252,8 +254,9 @@
         font-weight: 500;
     }
 
-    .project-cover-container {
+    :global(.project-cover-container) {
         width: 100px;
+        height: 55px;
     }
 
     .dasboard-content-container {

@@ -5,6 +5,9 @@
     import Dropzone from "svelte-file-dropzone";
     import { Jumper } from 'svelte-loading-spinners'
 
+    import { getNotificationsContext } from 'svelte-notifications';
+    const { addNotification } = getNotificationsContext();
+
     import { config } from '../config';
     let conf = new config();
     let isLoading = false;
@@ -21,9 +24,10 @@
         let formData = new FormData();
         formData.append("file", file)
 
-        fetch(conf.api  + '/upload', {
+        fetch(conf.api  + '/auth/upload', {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include',
         }).then((response) => {
             isLoading = false;
             if (response.ok) {
@@ -32,9 +36,15 @@
                 return Promise.reject(response);
             }
         }).then((data) => {
-            return fetch(conf.api  + '/translate', {
+            addNotification({
+                id: Date.now(),
+                text: data.message + '. Sending translation request. Filename: ' + file.name + '.',
+                position: 'top-center',
+            });
+            return fetch(conf.api  + '/auth/translate', {
                 method: 'POST',
-                body: JSON.stringify({ fileName : file.name })
+                body: JSON.stringify({ fileName : file.name }),
+                credentials: 'include',
             });
         }).then((response) => {
             if (response.ok) {
@@ -44,6 +54,11 @@
             }
         }).then((data) => {
             files.accepted = [];
+            addNotification({
+                id: Date.now(),
+                text: 'Translate request has been successfully send. Filename: ' + file.name + '.',
+                position: 'top-center',
+            });
             dispatch("add", { fileName: file.name });
         })
         .catch((error) => {
@@ -60,8 +75,6 @@
         files.accepted = [...files.accepted, ...acceptedFiles];
         files.rejected = [...files.rejected, ...fileRejections];
     }
-
-    export let bucketName;
 </script>
 
 <div class="card-container">

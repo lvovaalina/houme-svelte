@@ -27,11 +27,12 @@
     export let open;
     export let newProject;
     export let project = {};
-
+    let files = [];
+    project.ProjectId = 0;
     project.Name = '';
+    project.Filename = '';
     project.BucketName = 'houmly';
     project.LivingArea= '';
-    project.RoomsNumber= null;
     project.ConstructonWorkersNumber= '';
     project.WallMaterial= '';
     project.FoundationMaterial= '';
@@ -42,9 +43,25 @@
     project.ProjectProperties= [];
     project.ProjectJobs= [];
     project.ConstructionCompanyName= 'Construction';
+    project.Margin = '';
+    project.Workers = '';
+    project.ProjectCover = null;
 
     import { config } from '../config';
     let conf = new config();
+
+    function setCover(files) {
+        if (!!files && files.length > 0) {
+            let image = files[0];
+            let reader = new FileReader();
+            reader.readAsDataURL(image);
+            reader.onload = e => {
+                project.ProjectCoverBase64 = e.target.result;
+            };
+        }
+    }
+
+    $:setCover(files);
 
     async function addProject(event) {
         dataLoaded = false;
@@ -52,19 +69,16 @@
         event.stopPropagation();
 
         project.ProjectProperties = properties;
-        project.Filename = project.Name + '.rvt';
-        console.log(typeof project);
-        console.log(project);
 
-        await fetch(conf.api + '/create',
+        await fetch(conf.api + '/auth/create',
         {
             method: 'POST',
-            body: JSON.stringify(project)
+            body: JSON.stringify(project),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {
                 console.log("Add successfully");
-               
             }
 
             return result.json();
@@ -76,7 +90,6 @@
                     ProjectId: project.ProjectId,
                     Name: project.Name,
                     LivingArea: project.LivingArea,
-                    RoomsNumber: project.RoomsNumber,
                     ConstructionCost: project.ConstructionCost,
                     ConstructionDuration: project.ConstructionDuration
                 }
@@ -97,6 +110,7 @@
     }
 
     onMount(function() {
+        files = [];
         if ($propertiesStored.length == 0) {
             let getProperties = fetch(conf.api + '/getProperties')
             .then((result) => {
@@ -124,10 +138,13 @@
         event.preventDefault();
         event.stopPropagation();
 
-        await fetch(conf.api + '/updateProject/'+ project.ProjectId,
+        project.ProjectCoverBase64 = project.ProjectCoverBase64.replace('data:image/png;base64,', '');
+
+        await fetch(conf.api + '/auth/updateProject/'+ project.ProjectId,
         {
             method: 'PUT',
-            body: JSON.stringify(project)
+            body: JSON.stringify(project),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {
@@ -145,6 +162,8 @@
 
             project = updatedProject;
             open = false;
+            project = {};
+            files = [];
             dataLoaded = true;
         })
         .catch(error => {
@@ -194,9 +213,23 @@
                     <Textfield required variant="filled" class="text-field" bind:value={project.LivingArea} label="Living area"></Textfield>
                 </Cell>
                 <Cell span={6}>
-                    <Textfield required variant="filled" class="text-field" bind:value={project.RoomsNumber} type="number" label="Rooms number"></Textfield>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.Margin} label="Margin"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.Workers} label="Workers"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield required variant="filled" class="text-field" bind:value={project.Filename} label="Urn"></Textfield>
+                </Cell>
+                <Cell span={6}>
+                    <Textfield bind:files={files} accept=".png" label="File" type="file" />
                 </Cell>
                 </LayoutGrid>
+            {#if !!project.ProjectCoverBase64}
+                <div>
+                    <img class="project-image" src="{project.ProjectCoverBase64}" alt="Project cover"/>
+                </div>
+            {/if}
         </div>
         {/if}
         
@@ -276,6 +309,12 @@
 </Dialog>
 
 <style>
+    .project-image {
+        height: 50px;
+        width: 100px;
+        margin-top: 5px;
+    }
+
     :global(.material-select) {
         margin: 10px 0 10px 0;
     }

@@ -2,7 +2,6 @@
 	import Dashboard from "./dashboard/dashboard.svelte";
 	import Settings from "./settings/settings.svelte";
 	import { Router, Route } from "svelte-navigator";
-	import "../node_modules/svelte-gantt/css/svelteGantt.css";
 	import "../public/material-colors.min.css";
 	import { pageTitle } from './store';
 	import Analytics from './common/analytics.svelte';
@@ -38,11 +37,14 @@
 		<Route path="view/:projectId/jobs" let:params>
 			<ProjectViewer projectId={params.projectId} active='Jobs'></ProjectViewer>
 		</Route>
+		<Route path="view/:projectId/materials" let:params>
+			<ProjectViewer projectId={params.projectId} active='Materials'></ProjectViewer>
+		</Route>
 	</Router>
 	</Notifications>
 
 	{#if (envmt != "production") } 
-	<div class="version-container">version: 0.2.26</div>
+	<div class="version-container">version: 0.3.06</div>
 	{/if}
 </main>
 

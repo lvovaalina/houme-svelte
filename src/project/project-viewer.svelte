@@ -3,17 +3,29 @@
     import ForgeViewer from './forge-viewer.svelte';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
-    import { navigate } from "svelte-navigator";
+    import Ripple from '@smui/ripple';
+    import { navigate, Link } from "svelte-navigator";
     import Button, {Label} from '@smui/button';
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectSettings from '../project/project-settings.svelte';
+    import ProjectMaterials from '../project/project-materials.svelte';
     import { pageTitle, projectStored, propertiesStored } from '../store';
+
+    import { getNotificationsContext } from 'svelte-notifications';
+    const { addNotification } = getNotificationsContext();
 
     export let projectId;
     export let active = 'Model';
 
-    let tabs = [{name: 'Model', urlPart: 'model'},{name: 'Timeline', urlPart: 'timeline'}, {name: 'Jobs', urlPart:'jobs'}]
+    let tabs = [
+        {name: 'Model', urlPart: 'model'},
+        {name: 'Timeline', urlPart: 'timeline'},
+        {name: 'Jobs', urlPart: 'jobs'},
+        {name: 'Materials', urlPart: 'materials'},
+    ]
+
+    export let currency = '$';
     
     import { config } from '../config';
     let conf = new config();
@@ -24,15 +36,21 @@
     let project = {};
     export let propertiesMap = new Map();
     let properties = [];
-    
-    let open = false;
 
     export let dataLoaded;
 
-    function reduceByPropertyValue(array, propName) {
+    function reduceByJobPropertyValue(array, propName) {
         return array.reduce(function (r, a) {
             r[a.Job[propName]] = r[a.Job[propName]] || [];
             r[a.Job[propName]].push(a);
+            return r;
+        }, Object.create(null));
+    }
+
+    function reduceByConstructionMaterialPropertyValue(array, propName) {
+        return array.reduce(function (r, a) {
+            r[a.ConstructionJobMaterial.Job[propName]] = r[a.ConstructionJobMaterial.Job[propName]] || [];
+            r[a.ConstructionJobMaterial.Job[propName]].push(a);
             return r;
         }, Object.create(null));
     }
@@ -78,9 +96,11 @@
     }
 
     function createProjectJobsVM() {
-        let reducedJobsByStageName = reduceByPropertyValue(project.ProjectJobs, "StageName");
+        let reducedJobsByStageName = reduceByJobPropertyValue(project.ProjectJobs, "StageName");
 
-        let reducedJobsBySubStageName = reduceByPropertyValue(project.ProjectJobs, "SubStageName");
+        let reducedJobsBySubStageName = reduceByJobPropertyValue(project.ProjectJobs, "SubStageName");
+
+        let reducedMaterialsByJobName = reduceByConstructionMaterialPropertyValue(project.ProjectMaterials, "JobName");
 
         let jobsVM = [];
         let jobsTinelineVM = [];
@@ -187,7 +207,7 @@
                 let stageDuration = 0, stageCost = 0, stageWorkers = 0;
                 let tasks = [];
 
-                let jobTaskMap = reduceByPropertyValue(jobs, "SubStageName");
+                let jobTaskMap = reduceByJobPropertyValue(jobs, "SubStageName");
 
                 Object.entries(jobTaskMap).forEach(([subStageName, subtasks]) => {
                     let newTask = {
@@ -201,7 +221,19 @@
                     subtasks.forEach(st => {
 
                         let timestamp = timestamps.get(st.Job.JobCode);
-                        
+
+                        let materials = reducedMaterialsByJobName[st.Job.JobName];
+                        let subtaskMaterials = [];
+                        let materialCost = 0;
+                        if (!!materials && materials.length > 0) {
+                            materials.forEach(m => {
+                                materialCost += parseInt(m.MaterialCost);
+                                subtaskMaterials.push({
+                                    name: m.ConstructionJobMaterial.MaterialName,
+                                });
+                            });
+                        }
+
                         let subtask = {
                             name: st.Job.JobName,
                             duration: st.ConstructionDurationInDays,
@@ -209,6 +241,8 @@
                             workersCount: st.ConstructionWorkers,
                             from: timestamp.from,
                             to: timestamp.to,
+                            materials: subtaskMaterials,
+                            materialsCost: materialCost,
                         }
 
                         let projectProperty = propertiesMap.get(st.PropertyCode);
@@ -271,8 +305,29 @@
             jobsTinelineVM.push(stageVM);
         });
 
+        let materialsVM = []
+        project.ProjectMaterials.forEach(element => {
+            let property = propertiesMap.get(element.ConstructionJobMaterial.Job.PropertyID);
+            let props = stageMap.get(element.ConstructionJobMaterial.Job.StageName);
+
+            let timestamp = timestamps.get(element.ConstructionJobMaterial.Job.JobCode);
+
+            materialsVM.push({
+                name: element.ConstructionJobMaterial.MaterialName,
+                cost: element.MaterialCost,
+                nominalCost: element.ConstructionJobMaterial.MaterialCost,
+                volume: property.PropertyValue,
+                propertyUnit: element.ConstructionJobMaterial.Job.Property.PropertyUnit,
+                jobName: element.ConstructionJobMaterial.Job.SubStageName
+                    + ': ' + element.ConstructionJobMaterial.Job.JobName,
+                color: props.color,
+                date: timestamp.from,
+            })
+        });
+
         project.projectJobsTimelineVM = jobsTinelineVM;
         project.projectJobsCostVM = jobsVM;
+        project.projectMaterialsVM = materialsVM;
     }
 
     let getProject = function(projectId) {
@@ -303,6 +358,9 @@
                 return result.json();
             })
             .then((resp) => {
+                resp.data.projectMaterialsVM = [];
+                resp.data.projectJobsCostVM = [];
+                resp.data.projectJobsTimelineVM = [];
                 project = resp.data;
 
                 project.ProjectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
@@ -327,8 +385,8 @@
 
                 dataLoaded = true;
             });
+        }
 
-        } 
         getProperties.then(() => getProject());
     }
 
@@ -341,7 +399,6 @@
         pageTitle.set({
             title: 'Project View ' + active,
         });
-        console.log(projectStored);
         if ($projectStored.ProjectId != projectId) {
             getProject(projectId);
         } else {
@@ -380,6 +437,7 @@
             let projectJobs = updatedProject.ProjectJobs;
             updatedProject.projectJobsTimelineVM = [];
             updatedProject.projectJobsCostVM = [];
+            updatedProject.projectMaterialsVM = [];
             projectJobs.sort((el1, el2) => el1.Job.JobId - el2.Job.JobId);
             updatedProject.ProjectJobs = projectJobs;
 
@@ -403,7 +461,6 @@
     }
 
     function getBorderRadius(index, arr) {
-        console.log(index);
         if (index == 0) {
             return "br-half-right";
         }
@@ -423,24 +480,26 @@
                 <div class="project-view-header">
                     <div class="project-view-buttons-container">
                         {#each tabs as tab, index}
-                        <Button
-                            style={"width: 200px;color: #152859;"}
-                            variant="outlined"
-                            href="javascript:void(0)"
-                            on:click={() => setActive(tab)}
-                            class={active === tab.name ? getBorderRadius(index, tabs) + ' activated tab-button' : getBorderRadius(index, tabs) + ' tab-button'}
-                            >
-                            <Label>{tab.name}</Label>
-                        </Button>
+                        <div use:Ripple={{ surface: true }}
+                        class={
+                            active === tab.name ? getBorderRadius(index, tabs) + " tab-link-container active"
+                                : getBorderRadius(index, tabs) + " tab-link-container"}>
+                            <Link class="tab-link" style="color: rgb(21, 40, 89);" to="/view/{project.ProjectId}/{tab.urlPart}">{tab.name}</Link>
+                        </div>
                         {/each}
                     </div>
                 </div>
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
-                    <ProjectTimeline jobs={project.projectJobsTimelineVM}></ProjectTimeline>
+                    <ProjectTimeline projectDuration={project.ConstructionDuration} currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
+                </div>
+
+                <div class="{active == 'Materials' ? '' : 'hidden'}">
+                    <ProjectMaterials currency={currency} materials={project.projectMaterialsVM}></ProjectMaterials>
                 </div>
                 
                 <div class="{active == 'Jobs' ? '' : 'hidden'}">
                 <ProjectCost
+                        currency={currency}
                         jobs={project.projectJobsCostVM}
                         estimation={project.ConstructionDuration}
                         bind:loaded={dataLoaded}>
@@ -448,7 +507,7 @@
                 </div>
 
                 <div class="{active == 'Model' ? '' : 'hidden-forge'}">
-                    <ForgeViewer></ForgeViewer>
+                    <ForgeViewer urn={project.Filename}></ForgeViewer>
                 </div>
             </Cell>
             <Cell span={3}>
@@ -461,24 +520,28 @@
                             <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
                         </tr>
                         <tr>
+                            <td>Project Cost</td>
+                            <td class="numeric-row">{currency + project.ConstructionCost}</td>
+                        </tr>
+                        <tr>
                             <td>Construction Cost</td>
-                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                            <td class="numeric-row">{currency + project.ConstructionJobCost}</td>
                         </tr>
                         <tr>
                             <td>Materials Cost</td>
-                            <td class="numeric-row">{project.ConstructionCost} &dollar;</td>
+                            <td class="numeric-row">{currency + project.ConstructionMaterialCost}</td>
                         </tr>
                         <tr>
                             <td>Project Duration</td>
                             <td class="numeric-row">{project.ConstructionDuration} days</td>
                         </tr>
                         <tr>
-                            <td>People</td>
-                            <td class="numeric-row">50</td>
+                            <td>Workers</td>
+                            <td class="numeric-row">{project.Workers}</td>
                         </tr>
                         <tr>
                             <td>Margin</td>
-                            <td class="numeric-row">{parseInt(project.ConstructionCost * 0.15)} $</td>
+                            <td class="numeric-row">{currency + project.Margin}</td>
                         </tr>
                     </table>
                     <div class="divider"/>
@@ -506,16 +569,37 @@
 </div>
 
 <style>
+    :global(.tab-link) {
+        font-weight: 500;
+        font-size: 14px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        height:100%;
+        width:100%;
+    }
+    .tab-link-container {
+        color: rgb(21, 40, 89);
+        height: 36px;
+        display: flex;
+        align-items: center;
+        border: 1px solid #e0e1e2;
+        border-radius: 4px;
+        width: 25%;
+        justify-content: center;
+        text-transform: uppercase;
+    }
+
     /* do not hide forge component to allow reload forge model on tab change */
-    :global(.br-half-right, .tab-button.br-half-right .mdc-button__ripple) {
+    .br-half-right {
         border-radius: 4px 0 0 4px;
     }
 
-    :global(.br-half-left, .tab-button.br-half-left .mdc-button__ripple) {
+    .br-half-left {
         border-radius: 0 4px 4px 0;
     }
 
-    :global(.no-br, .tab-button.no-br .mdc-button__ripple) {
+    .no-br {
         border-radius: 0;
     }
 
@@ -557,15 +641,15 @@
     }
 
     .project-view-buttons-container {
-        width: 50%;
         display: flex;
+        width: 80%;
     }
 
     .project-viewer {
         display: flex;
         flex-grow: 1;
         flex-direction: column;
-        padding: 0 25px 20px;
+        padding: 0 25px;
     }
 
     .project-card {
@@ -581,13 +665,13 @@
         background-color: rgba(21, 40, 89);
     }
 
-    :global(.tab-button.activated) {
+    .tab-link-container.active {
         border-color: rgba(21, 40, 89);
     }
 
     :global(.project-view-content-details) {
         /* -header height -tab header height container bottom padding */
-        height: calc(100vh - 64px - 76px);
+        height: calc(100vh - 64px);
         border-right: 1px solid #d3d3d1;
     }
 

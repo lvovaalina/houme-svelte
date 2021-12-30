@@ -21,7 +21,7 @@
     })
 
     function get(url) {
-        return fetch(conf.api + url)
+        return fetch(conf.api + url, { credentials: 'include','Content-Type':  'application/json',})
         .then((result) => {
             if (result.ok) {
                 console.log("get job properties success");
@@ -32,7 +32,7 @@
     }
 
     function reload() {
-        get('/getJobProperties').then((resp) => {
+        get('/auth/getJobProperties').then((resp) => {
             jobProperties = resp.data;
             resp.data.forEach(element => {
                 element.StageName = element.Job.StageName;
@@ -108,10 +108,11 @@
         updatedJobProperty.OptWorkers = optWorkers;
         updatedJobProperty.ConstructionJobPropertyId = constructionJobPropertyId;
 
-        fetch(conf.api + '/updateJobProperty/'+ event.detail.body.ID,
+        fetch(conf.api + '/auth/updateJobProperty/'+ event.detail.body.ID,
         {
             method: 'PUT',
-            body: JSON.stringify(updatedJobProperty)
+            body: JSON.stringify(updatedJobProperty),
+            credentials: 'include',
         })
         .then((result) => {
             if (result.ok) {
@@ -123,8 +124,6 @@
         .then(data => {
             if (data.success) {
                 reload();
-
-                dispatch("reloadProjects");
             }
         })
     }
@@ -164,8 +163,8 @@
         {name: 'JobName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'InParallel', show: true, edit: false, width: '50px'},
         {name: 'ParallelGroupCode', show: true, edit: false, width: '110px', tooltip: true},
-        {name: 'ConstructionSpeed', show: true, edit: true, width: '50px', description: 'The job'},
-        {name: 'ConstructionCost', show: true, edit: true, width: '50px'},
+        {name: 'ConstructionSpeed', show: true, edit: true, width: '50px', description: 'Construction Speed in unit per hour'},
+        {name: 'ConstructionCost', show: true, edit: true, width: '50px', description: 'Construction Speed in dollar per hour'},
         {name: 'Currency', show: true, edit: false, width: '50px'},
         {name: 'PropertyUnit', show: true, edit: false, width: '50px'},
         {name: 'PropertyName', show: true, edit: false, with: '50px'},

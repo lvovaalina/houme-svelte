@@ -7,6 +7,7 @@
         Cell,
         Label,
     } from '@smui/data-table';
+    import Ripple from '@smui/ripple';
     import LinearProgress from '@smui/linear-progress';
     import Tooltip, { Wrapper } from '@smui/tooltip';
     import Button, { Label as ButtonLabel } from '@smui/button';
@@ -14,7 +15,7 @@
     import ForgeViewer from '../project/forge-viewer.svelte';
 
     import { onMount } from 'svelte';
-    import { navigate } from 'svelte-navigator';
+    import { navigate, Link} from 'svelte-navigator';
     import { pageTitle } from '../store';
 
     import { Input } from '@smui/textfield';
@@ -22,18 +23,22 @@
     import { Icon } from '@smui/common';
 
     import IconButton from '@smui/icon-button';
+    let urn;
 
-    let loaded = true;
+    let currency = '$';
+
     let titleSearch;
     let columns = [
+        {name: ''},
         {name: 'Image', style: 'padding-left: 0'},
         {name: 'Title', columnId: 'Name'},
         {name: 'Duration', columnId: 'ConstructionDuration'},
         {name: 'Area', columnId: 'LivingArea'},
         {name: 'Margin', style:'text-align: right;'},
+        {name: 'Project Cost', style:'text-align: right;'},
         {name: 'Build cost', style:'text-align: right;'},
         {name: 'Material cost', style:'text-align: right;'},
-        {name: 'People', style:'text-align: right;'},
+        {name: 'Workers', style:'text-align: right;'},
         {name: ''},
     ];
 
@@ -62,11 +67,8 @@
             return result.json();
         })
         .then((resp) => {
-            resp.data.forEach(element => {
-                element.PropertyValue = null;
-            });
-
-            projects = resp.data;
+             projects = resp.data;
+            
             projectsResult = projects;
             projectsCount = projects.length;
             dataLoaded = true;
@@ -88,15 +90,23 @@
     }
 
     function doSearch() {
+        let searchTerm = titleSearch.toLowerCase().trim();
         projectsResult = projects.filter(function(project){
-            return project.Name.toLowerCase().startsWith(titleSearch.toLowerCase());
+            return project.Name.toLowerCase().startsWith(searchTerm);
         });
         projectsCount = projectsResult.length;
         dataLoadedForSearch = true;
     }
 
     function navigateToProject(event, projectId) {
-        navigate('/view/' + projectId + '/model', {replace: true});
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (event.metaKey || event.ctrlKey) {
+            window.open(window.location.origin + '/view/' + projectId + '/model', '_blank');
+        } else {
+            navigate('/view/' + projectId + '/model', {replace: true});
+        }
     }
 
     function handleSort(event) {
@@ -110,6 +120,12 @@
             return Number(aVal) - Number(bVal);
         });
         projectsResult = projectsResult;
+    }
+
+    function showProjectModel(id) {
+        selectedProjectId = id;
+        urn = projects.find(x => x.ProjectId == selectedProjectId).Filename;
+        console.log(urn);
     }
 
 </script>
@@ -145,35 +161,50 @@
             class="projects-table">
             <Head>
                 <Row>
-                {#each columns as col}
+                {#each columns as col, index}
+                    {#if index == 0}
+                        <Cell style="padding-left: 5px;padding-right: 0;"></Cell>
+                    {:else}
                     <Cell sortable={!!col.columnId ? 'true' : 'false'} style={col.style} columnId={col.columnId}>
                         <Label>{col.name}</Label>
                         {#if !!col.columnId}
                             <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
                         {/if}
                     </Cell>
+                    {/if}
                 {/each}
                 </Row>
             </Head>
             <Body>
                 {#if projectsResult.length !== 0} 
-                {#each projectsResult as project}
-                    <Row style="cursor: pointer" on:click={() => selectedProjectId = project.ProjectId}>
+                {#each projectsResult as project, index}
+                    <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
+                        <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
                         <Cell style="padding-left:0;">
-                            <img class="project-image" src="/project.png" alt="Project mini version"/>
+                            <div class="project-cover-container">
+                            <Link to="/view/{project.ProjectId}/model">
+                                <img
+                                    class="project-image"
+                                    src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
+                                    alt="Project {project.Name} cover"/>
+                            </Link>
+                            </div>
                         </Cell>
                         <Cell>
                             {project.Name}
                         </Cell>
                         <Cell>{project.ConstructionDuration} days</Cell>
                         <Cell>{project.LivingArea} &#13217;</Cell>
-                        <Cell numeric>{parseInt(project.ConstructionCost * 0.15)} $</Cell>
-                        <Cell numeric>{project.ConstructionCost} $</Cell>
-                        <Cell numeric>{project.ConstructionCost} $</Cell>
-                        <Cell numeric>50 p.</Cell>
-                        <Cell><Button variant="outlined" style="margin-bottom:0" on:click={(event) => navigateToProject(event, project.ProjectId)}>
-                            <ButtonLabel>DETAILS</ButtonLabel>
-                        </Button></Cell>
+                        <Cell numeric>{currency + project.Margin}</Cell>
+                        <Cell numeric>{currency + project.ConstructionCost}</Cell>
+                        <Cell numeric>{currency + project.ConstructionJobCost}</Cell>
+                        <Cell numeric>{currency + project.ConstructionMaterialCost}</Cell>
+                        <Cell numeric>{project.Workers}</Cell>
+                        <Cell>
+                            <div use:Ripple={{ surface: true }} class="project-link-container">
+                                <Link style="color: rgb(21, 40, 89)" to="/view/{project.ProjectId}/model">DETAILS</Link>
+                            </div>
+                        </Cell>
                     </Row>
             {/each}
             {/if}
@@ -194,7 +225,7 @@
         {#if !!selectedProjectId && selectedProjectId > 0}
             <p style="margin-bottom: -20px;">PROJECT</p>
             <h2>{projects.find(x => x.ProjectId == selectedProjectId).Name}</h2>
-            <ForgeViewer forgeViewerClass="dashboard-height"></ForgeViewer>
+            <ForgeViewer urn={urn} forgeViewerClass="dashboard-height"></ForgeViewer>
         {:else}
         <p style="text-align: center;">Select a project for a quick view</p>
         {/if}
@@ -209,13 +240,32 @@
 </div>
 
 <style>
+    .project-link-container {
+        color: rgb(21, 40, 89);
+        height: 36px;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        border: 1px solid #e0e1e2;
+        border-radius: 4px;
+    }
+
+    :global(.project-link-container a) {
+        font-weight: 500;
+    }
+
+    :global(.project-cover-container) {
+        width: 100px;
+        height: 55px;
+    }
+
     .dasboard-content-container {
         display: flex;
     }
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;
-        height: calc(100vh - 64px - 76px - 20px);
+        height: calc(100vh - 64px - 76px);
     }
 
     .forge-container {
@@ -265,6 +315,7 @@
         border: none;
         width: 50%;
     }
+
     .project-image {
         height: 50px;
         width: 100px;

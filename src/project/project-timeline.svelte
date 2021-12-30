@@ -1,7 +1,11 @@
 <script>
-    import { SvelteGantt, SvelteGanttDependencies,  SvelteGanttTable } from 'svelte-gantt';
+    import { SvelteGantt, SvelteGanttDependencies,  SvelteGanttTable, MomentSvelteGanttDateAdapter } from 'svelte-gantt';
     import { onMount } from 'svelte';
     import { time } from '../utils';
+    import moment from 'moment';
+
+    export let currency;
+    export let projectDuration;
 
     let gantt;
     let currentStart = time('01-01');
@@ -11,9 +15,12 @@
     let rows = [];
     let tasks = [];
 
-    //let selectedTask = {};
-
     let taskColors = ['orange', 'green', 'blue'];
+    let monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"];
 
     function translateStagesToTasks() {
         function addTask(task, resourceId, color) {
@@ -27,8 +34,18 @@
                 classes: colorClass,
                 from: task.from,
                 to: task.to,
-                resourceId: resourceId
+                resourceId: resourceId,
+                workers: task.workersCount,
+                cost: task.cost,
+                materials: task.materials,
+                materialsCost: task.materialsCost,
             }
+
+            // to do: figure out how to recalculate position based on timeline width
+            if (task.name == 'Kitchen assembly, equipment installation'
+                || task.name == 'Commissioning works') {
+                    newTask.classes += ' position-hack';
+                }
 
             tasks.push(newTask);
             return newTask;
@@ -112,28 +129,143 @@
             let to = tasks[tasks.length - 1].to;
             data = {rows: rows, tasks: tasks, to: to};
 
+            if (projectDuration > 365) {
+                data.minWidth = 2000;
+            }
+
             gantt.$set({...data});
+
+            // wait for gantt element to render before removing clickable headers
+            setTimeout(() => {
+                let headerCells = document.getElementsByClassName('column-header-cell');
+
+                let startIndex = 0;
+                headerCells.forEach((el, index) => {
+                    let elClone = el.cloneNode(true);
+                    
+                    // hack to fix HM-238 without forking repository
+                    let headerText = elClone.children[0].innerHTML;
+                    if (monthNames.findIndex(x => x == headerText) >= 0) {
+                        startIndex = startIndex == 0 ? index : startIndex;
+                        let monthNumber = (index - startIndex)%12;
+                        elClone.children[0].innerHTML = monthNames[monthNumber];
+                    }
+
+                    el.parentNode.replaceChild(elClone, el);
+                });
+            });
         }
     }
 
-    function onTaskClick(task) {
-        console.log(task);
-    }
-
     const options = {
+        dateAdapter: new MomentSvelteGanttDateAdapter(moment),
         rows: [],
         tasks: [],
         headers: [{ sticky: true, unit: 'year', format: 'YYYY' }, { sticky: true, unit: 'month', format: 'MMMM' }],
-        fitWidth: false,
+        fitWidth: true,
         from: currentStart.clone().startOf('year'),
         to: currentEnd,
         tableHeaders: [{ title: 'Stages', property: 'label', width: 140, type: 'tree' }],
         tableWidth: 240,
         minWidth: 1000,
         columnUnit: 'day',
+        zoomLevels: [{headers: [{ sticky: true, unit: 'month', format: 'MMMM' }]}],
         ganttTableModules: [SvelteGanttTable],
         ganttBodyModules: [SvelteGanttDependencies],
-        zoomLevel: [],
+        taskElementHook: (node, task) => {
+            let popup;
+            function onHover() {
+                popup = createPopup(task, node);
+            }
+
+            function onLeave() {
+                if (popup) {
+                    popup.remove();
+                }
+            }
+
+            node.addEventListener('mouseenter', onHover);
+            node.addEventListener('mouseleave', onLeave);
+
+            return {
+                destroy() {
+                    node.removeEventListener('mouseenter', onHover);
+                    node.removeEventListener('mouseleave', onLeave);
+                }
+            }
+        },
+    }
+
+    function createPopup(task, node) {
+        if (!!task.materials && task.materials.length > 0) {
+            let materialsList = '';
+            task.materials.forEach((x, index) => {
+                if (index == task.materials.length - 1) {
+                    materialsList += x.name;
+                } else {
+                    materialsList += x.name + ', ';
+                }
+            });
+
+            task.materialsList = materialsList;
+        }
+
+        const rect = node.getBoundingClientRect();
+        const div = document.createElement('div');
+
+        div.innerHTML = `
+            <div class="sg-popup-title">${task.label}</div>
+            <div class="sg-popup-item">
+                <div class="sg-popup-item-label">Start Date:</div>
+                <div class="sg-popup-item-value">${task.from.format('D MMM YYYY')}</div>
+            </div>
+            <div class="sg-popup-item">
+                <div class="sg-popup-item-label">End Date:</div>
+                <div class="sg-popup-item-value">${task.to.format('D MMM YYYY')}</div>
+            </div>
+            <div class="sg-popup-item">
+                <div class="sg-popup-item-label">Workers:</div>
+                <div class="sg-popup-item-value">${task.workers}</div>
+            </div>
+            <div class="sg-popup-item">
+                <div class="sg-popup-item-label">Job Cost:</div>
+                <div class="sg-popup-item-value">${currency + task.cost}</div>
+            </div>
+        `
+
+        if (!!task.materialsList) {
+            div.innerHTML += `
+            <div class="sg-popup-item">
+                    <div class="sg-popup-item-label">Material Cost:</div>
+                    <div class="sg-popup-item-value">${currency + task.materialsCost}</div>
+                </div>
+                <div class="sg-popup-item">
+                    <div class="sg-popup-item-label">Materials:</div>
+                    <div class="sg-popup-item-value" style="text-align: right;">${task.materialsList}</div>
+                </div>
+            `
+        }
+
+        var body = document.body,
+            html = document.documentElement;
+
+        var height = Math.max( body.scrollHeight, body.offsetHeight, 
+            html.clientHeight, html.scrollHeight, html.offsetHeight);
+        
+        div.style.left = `${rect.left + rect.width / 2}px`;
+        div.style.top = `${rect.bottom}px`;
+        div.style.position = 'absolute';
+        div.classList = 'sg-popup invisible';
+        document.body.appendChild(div);
+        if (rect.bottom + div.offsetHeight > height) {
+            // 40 - task height
+            let top = rect.bottom - div.offsetHeight - 40;
+            div.style.top = `${top}px`
+        }
+
+        div.classList = 'sg-popup';
+
+        return div;
     }
 
     onMount(() => {
@@ -143,29 +275,10 @@
             // svelte-gantt options
             props: options
         });
-        //gantt.api.tasks.on.select(onTaskSelect);
     });
-
-    //let container;
-
-    // function onTaskSelect(task) {
-    //     selectedTask = task[0];
-    //     console.log(selectedTask.label);
-    //     container.style.top = selectedTask.top + 'px';
-    //     container.style.letf = selectedTask.left + 'px';
-    // }
-
 </script>
 
 <div class="container">
-    <!-- {#if !!selectedTask && !!selectedTask.model}
-    <div bind:this={container} class="task-prop" style="position:absolute;top:{selectedTask.model.top};left:{selectedTask.model.left};">
-        {selectedTask.top}
-        {selectedTask.left}
-        {selectedTask.model.label}
-    </div>
-    {/if} -->
-   
     <div id="example-gantt"></div>
 </div>
 
@@ -179,6 +292,11 @@
         flex-grow: 1;
         overflow: auto;
 	    border: #efefef 1px solid;
+        height: calc(100vh - 64px - 76px - 20px);
+    }
+
+    :global(#example-gantt .column-header-cell) {
+        cursor: auto;
     }
     
     :global(.sg-task-reflected .sg-task-content) {

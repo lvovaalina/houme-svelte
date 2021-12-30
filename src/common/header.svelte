@@ -3,12 +3,43 @@
     import { navigate } from "svelte-navigator";
     import { Icon } from '@smui/common';
     import Button, { Label } from "@smui/button";
-    import { pageTitle, projectStored } from '../store';
+    import { pageTitle, adminStored, adminAuthentificated } from '../store';
 
     export let projectName = '';
     pageTitle.subscribe(value => {
         projectName = value.projectName;
 	});
+
+    import { config } from '../config';
+    let conf = new config();
+
+    let admin = {};
+    adminStored.subscribe(value => {
+        admin = value;
+    });
+
+    async function logout() {
+        fetch(conf.api + '/auth/logout',
+        {
+            method: 'POST',
+            credentials: 'include',
+        })
+        .then((result) => {
+            if (result.ok) {
+                console.log("Successfully refreshed token");
+            }
+
+            return result.json();
+        })
+        .then(data => {
+            if (data.code == 200) {
+                adminStored.set({});
+                adminAuthentificated.set(false);
+            } else {
+                isLoggedIn = false;
+            }
+        })
+    }
 </script>
 
 <div class="flexy">
@@ -27,8 +58,15 @@
                     <h2 class="project-name">{projectName}</h2>
                     {/if}
                 </Section>
-                <Section>
-                    
+                <Section style="justify-content:flex-end">
+                    {#if !!admin && !!admin.email}
+                    <div class="user-info">
+                        <div>{admin.email}</div>
+                        <Button variant="outlined" style="margin-bottom:0; margin-left:20px;" on:click={logout}>
+                            <Label>Logout</Label>
+                        </Button>
+                    </div>
+                    {/if}
                 </Section>
             </Row>
         </TopAppBar>
@@ -36,6 +74,16 @@
 </div>
 
 <style>
+    .user-info {
+        color: rgba(21, 40, 89, .7);
+        display: flex;
+        align-items: center;
+    }
+
+    :global(.user-info .mdc-button__label) {
+        color: rgba(21, 40, 89, .7);
+    }
+
     :global(.top-app-bar-container .header) {
         background-color: #fff;
         height: 64px;

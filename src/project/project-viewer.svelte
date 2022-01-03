@@ -544,14 +544,17 @@
                 </div>
 
                 <div class="{active == 'Timeline' ? '' : 'hidden'}">
+                    <div class="details-padding"></div>
                     <ProjectTimeline projectDuration={project.ConstructionDuration} currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
 
                 <div class="{active == 'Materials' ? '' : 'hidden'}">
+                    <div class="details-padding"></div>
                     <ProjectMaterials currency={currency} materials={project.projectMaterialsVM}></ProjectMaterials>
                 </div>
                 
                 <div class="{active == 'Jobs' ? '' : 'hidden'}">
+                    <div class="details-padding"></div>
                     <ProjectCost
                             currency={currency}
                             jobs={project.projectJobsCostVM}
@@ -561,6 +564,7 @@
                 </div>
 
                 <div class="{active == 'Model' ? '' : 'hidden-forge'}">
+                    <div class="details-padding"></div>
                     <ForgeViewer urn={project.Filename}></ForgeViewer>
                 </div>
 
@@ -630,6 +634,7 @@
     .hidden-forge {
         position: absolute;
         top: -500px;
+        left: -500px;
     }
 
     .divider {
@@ -701,6 +706,13 @@
 
     @media only screen and (max-width:839px)
     {
+        .details-padding {
+            background-color: #F5F7FA;
+            margin: 0 -14px;
+            opacity: 70%;
+            height: 12px;
+        }
+
         .tab-link:first-of-type {
             justify-content: start;
         }

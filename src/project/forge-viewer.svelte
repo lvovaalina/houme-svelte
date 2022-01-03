@@ -94,4 +94,12 @@
         height: 400px;
         position: relative;
     }
+
+    @media only screen and (max-width:839px)
+    {    
+        .forge-viewer {
+            height: calc(100vh - 38px - 43px - 12px - 36px);
+            margin: 0 -14px;
+        }
+    }
 </style>

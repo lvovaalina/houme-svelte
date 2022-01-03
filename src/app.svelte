@@ -40,6 +40,9 @@
 		<Route path="view/:projectId/materials" let:params>
 			<ProjectViewer projectId={params.projectId} active='Materials'></ProjectViewer>
 		</Route>
+		<Route path="view/:projectId/details" let:params>
+			<ProjectViewer projectId={params.projectId} active='Details'></ProjectViewer>
+		</Route>
 	</Router>
 	</Notifications>
 
@@ -65,5 +68,12 @@
 		bottom: 0;
 		height: 30px;
 		width: 100vw;
+	}
+
+	@media only screen and (max-width:839px)
+    {
+		.version-container {
+			display: none
+		}
 	}
 </style>

@@ -568,10 +568,6 @@
                     <ForgeViewer urn={project.Filename}></ForgeViewer>
                 </div>
 
-                <div class="{active == 'Timeline' ? '' : 'hidden'}">
-                    <ProjectTimeline projectDuration={project.ConstructionDuration} currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
-                </div>
-
                 <div class="{active == 'Details' ? 'project-card-tab-responsive' : 'hidden'}">
                     {#if dataLoaded}
                     <ProjectCard bind:project={project} currency={currency} on:apply={updateProject}></ProjectCard>

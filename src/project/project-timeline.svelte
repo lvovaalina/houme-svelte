@@ -17,10 +17,10 @@
 
     let taskColors = ['orange', 'green', 'blue'];
     let monthNames = [
-        "January", "February", "March",
-        "April", "May", "June", "July",
-        "August", "September", "October",
-        "November", "December"];
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Oct",
+        "Nov", "Dec"];
 
     function translateStagesToTasks() {
         function addTask(task, resourceId, color) {
@@ -145,10 +145,9 @@
                     
                     // hack to fix HM-238 without forking repository
                     let headerText = elClone.children[0].innerHTML;
-                    if (monthNames.findIndex(x => x == headerText) >= 0) {
-                        startIndex = startIndex == 0 ? index : startIndex;
-                        let monthNumber = (index - startIndex)%12;
-                        elClone.children[0].innerHTML = monthNames[monthNumber];
+                    if (monthNames.findIndex(x => headerText.startsWith(x)) >= 0) {
+                        let monthNumber = (index)%12;
+                        elClone.children[0].innerHTML = monthNames[monthNumber] + headerText.substring(3);
                     }
 
                     el.parentNode.replaceChild(elClone, el);
@@ -161,7 +160,7 @@
         dateAdapter: new MomentSvelteGanttDateAdapter(moment),
         rows: [],
         tasks: [],
-        headers: [{ sticky: true, unit: 'year', format: 'YYYY' }, { sticky: true, unit: 'month', format: 'MMMM' }],
+        headers: [{ sticky: true, unit: 'month', format: 'MMM YYYY' }],
         fitWidth: true,
         from: currentStart.clone().startOf('year'),
         to: currentEnd,
@@ -301,5 +300,25 @@
     
     :global(.sg-task-reflected .sg-task-content) {
         visibility: hidden;
+    }
+
+    :global(.column-header-cell:hover) {
+        background: none !important;
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        #example-gantt, .container {
+            height: calc(100vh - 38px - 43px - 12px - 36px);
+            margin: 0 -14px;
+        }
+
+        :global(.sg-table, .sg-resize) {
+            display: none !important;
+        }
+
+        :global(.sg-task-content) {
+            font-size: 13px !important;
+        }
     }
 </style>

@@ -284,8 +284,8 @@
     });
 </script>
 
-<div class="gantt-container" style={!!responsiveHeight ? responsiveHeight + "px" : ""}>
-    <div id="example-gantt" style={!!responsiveHeight ? responsiveHeight + "px" : ""}></div>
+<div class="gantt-container" style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}>
+    <div id="example-gantt" style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}></div>
 </div>
 
 <style>

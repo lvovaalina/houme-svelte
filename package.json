@@ -37,7 +37,8 @@
     "svelte-gantt": "^4.0.3-beta",
     "svelte-generic-crud-table": "^1.5.92",
     "svelte-loading-spinners": "^0.1.7",
-    "svelte-preprocess": "^4.9.8"
+    "svelte-preprocess": "^4.9.8",
+    "svelte-watch-resize": "^1.0.3"
   },
   "dependencies": {
     "@smui/common": "^4.2.0",

@@ -10,7 +10,7 @@
     import Ripple from '@smui/ripple';
     import LinearProgress from '@smui/linear-progress';
     import Tooltip, { Wrapper } from '@smui/tooltip';
-    import Button, { Label as ButtonLabel } from '@smui/button';
+    import { watchResize } from "svelte-watch-resize";
 
     import ForgeViewer from '../project/forge-viewer.svelte';
 
@@ -26,6 +26,7 @@
     let urn;
 
     let currency = '$';
+    let detailsUrl = '';
 
     let titleSearch;
     let columns = [
@@ -58,6 +59,8 @@
     let selectedProjectId = 0;
 
     onMount(function() {
+        setDetailsUrlPart();
+
         fetch(conf.api + '/getProjects')
         .then((result) => {
             if (result.ok) {
@@ -122,15 +125,37 @@
         projectsResult = projectsResult;
     }
 
+    function getWidth() {
+        return Math.max(
+            document.body.scrollWidth,
+            document.documentElement.scrollWidth,
+            document.body.offsetWidth,
+            document.documentElement.offsetWidth,
+            document.documentElement.clientWidth
+        );
+    }
+
     function showProjectModel(id) {
         selectedProjectId = id;
         urn = projects.find(x => x.ProjectId == selectedProjectId).Filename;
         console.log(urn);
     }
 
+    function setDetailsUrlPart(){
+        console.log(getWidth());
+        if (getWidth() > 839) {
+            detailsUrl = '/model';
+        } else {
+            detailsUrl = '/details';
+        }
+    }
+
+    function handleResize() {
+        setDetailsUrlPart();
+    }
 </script>
 
-<div class="dashboard">
+<div class="dashboard" use:watchResize={handleResize}>
     {#if dataLoaded}
     <div class="project-table-header">
         <h1>Projects({projectsCount})</h1>
@@ -182,7 +207,7 @@
                         <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
                         <Cell style="padding-left:0;">
                             <div class="project-cover-container">
-                            <Link to="/view/{project.ProjectId}/model">
+                            <Link to="/view/{project.ProjectId}/{detailsUrl}">
                                 <img
                                     class="project-image"
                                     src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
@@ -202,7 +227,7 @@
                         <Cell numeric>{project.Workers}</Cell>
                         <Cell>
                             <div use:Ripple={{ surface: true }} class="project-link-container">
-                                <Link style="color: rgb(21, 40, 89)" to="/view/{project.ProjectId}/model">DETAILS</Link>
+                                <Link style="color: rgb(21, 40, 89)" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
                             </div>
                         </Cell>
                     </Row>

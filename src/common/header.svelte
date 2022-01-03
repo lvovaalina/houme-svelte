@@ -54,7 +54,7 @@
                     <Button class="project-dashboard-link" style="color: rgba(21, 40, 89, .7);margin-bottom: 0;margin-left: 20px;" on:click={() => navigate('/',{replace: true})}>
                         <Label><h2>Project Dashboard</h2></Label>
                     </Button>
-                    <Icon style="color: rgba(21, 40, 89); font-size: 20px;" class="material-icons">chevron_right</Icon>
+                    <Icon style="color: rgba(21, 40, 89); font-size: 20px;" class="right-icon material-icons">chevron_right</Icon>
                     <h2 class="project-name">{projectName}</h2>
                     {/if}
                 </Section>
@@ -112,5 +112,22 @@
 
     .header-logo-link {
         display: block;
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        :global(.top-app-bar-container .header) {
+            height: 38px;
+            padding: 0 12px;
+        }
+
+        :global(.project-dashboard-link, .right-icon, .project-name) {
+            display: none;
+        }
+
+        .header-logo, .header-logo-link {
+            width: 120px;
+            height: 24px;
+        }
     }
 </style>

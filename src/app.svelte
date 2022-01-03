@@ -3,7 +3,7 @@
 	import Settings from "./settings/settings.svelte";
 	import { Router, Route } from "svelte-navigator";
 	import "../public/material-colors.min.css";
-	import { pageTitle } from './store';
+	import { pageTitle, responsive } from './store';
 	import Analytics from './common/analytics.svelte';
 
 	import Header from "./common/header.svelte";
@@ -11,11 +11,18 @@
 	export let url = "";
 	import Notifications from 'svelte-notifications';
 	import ProjectViewer from "./project/project-viewer.svelte";
+	import { onMount } from "svelte";
 
 	let envmt = env;
 	pageTitle.subscribe(value => {
 		document.title = value.title + ' | Houmly';
 	});
+
+	onMount(() => {
+		if (window.screen.width < 839) {
+			responsive.set(true);
+		}
+	})
 </script>
 
 <main>

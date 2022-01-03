@@ -9,3 +9,5 @@ export const propertiesStored = writable([]);
 export const adminAuthentificated = writable(false);
 
 export const adminStored = writable({})
+
+export const responsive = writable(false);

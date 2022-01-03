@@ -4,12 +4,15 @@
     import { time } from '../utils';
     import moment from 'moment';
 
+    import { responsive } from '../store';
+
     export let currency;
     export let projectDuration;
 
     let gantt;
     let currentStart = time('01-01');
     let currentEnd = time('12-31');
+    let responsiveHeight = '';
 
     export let jobs = [];
     let rows = [];
@@ -268,6 +271,10 @@
     }
 
     onMount(() => {
+        if ($responsive) {
+            responsiveHeight = document.documentElement.clientHeight - 38 - 39 - 12 - 46;
+        }
+
         gantt = new SvelteGantt({ 
             // target a DOM element
             target: document.getElementById('example-gantt'), 
@@ -277,8 +284,8 @@
     });
 </script>
 
-<div class="gantt-container">
-    <div id="example-gantt"></div>
+<div class="gantt-container" style={!!responsiveHeight ? responsiveHeight + "px" : ""}>
+    <div id="example-gantt" style={!!responsiveHeight ? responsiveHeight + "px" : ""}></div>
 </div>
 
 <style>
@@ -309,7 +316,7 @@
     @media only screen and (max-width:839px)
     {
         #example-gantt, .gantt-container {
-            height:  calc(100vh - 38px - 39px - 12px - 46px);
+            height: calc(100vh - 38px - 39px - 12px - 46px);
         }
 
         :global(.sg-table, .sg-resize) {

@@ -1,16 +1,27 @@
 <script>
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
+    import { onMount } from "svelte";
+    import { responsive } from '../store';
 
     export let materials = [];
     export let currency;
 
+    let responsiveHeight = 0;
+
     let columns = ['Material', 'Cost', 'Volume', 'Nominal Cost', 'In stock by Date', 'In Steps'];
+
+    onMount(() => {
+        if ($responsive) {
+            responsiveHeight = document.documentElement.clientHeight - - 38 - 39 - 12 - 46;
+        }
+    })
 </script>
 
 <div class="project-cost">
     <DataTable
         stickyHeader table$aria-label="Construction Materials"
-        class="project-stages">
+        class="project-stages"
+        style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}>
         <Head>
             <Row>
             {#each columns as col, index}

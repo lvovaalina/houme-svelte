@@ -1,11 +1,14 @@
 <script>
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
     import LinearProgress from '@smui/linear-progress';
+    import { onMount } from "svelte";
+    import { responsive } from '../store';
 
     export let jobs = [];
 
     export let loaded = false;
     export let currency;
+    let responsiveHeight = 0;
 
     let columns = ['Stage', 'Cost',  'Duration', 'Property Name', 'Volume', 'Workers'];
 
@@ -34,12 +37,19 @@
         }
         return style;
     }
+
+    onMount(() => {
+        if ($responsive) {
+            responsiveHeight = document.documentElement.clientHeight - - 38 - 39 - 12 - 46;
+        }
+    })
 </script>
 
 <div class="project-cost">
     <DataTable
         stickyHeader table$aria-label="Construction Stages"
-        class="project-stages">
+        class="project-stages"
+        style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}>
         <Head>
             <Row>
             {#each columns as col}
@@ -69,23 +79,23 @@
                     <Cell numeric>{stage.workersCount}</Cell>
                     
                 </Row>
-                <!-- {#if stage.tasks && stage.tasks.length !== 0}
-                        {#each stage.tasks as task}
-                            <Row class="hidden-subtasks {stage.code}">
-                                <Cell style="padding: 0; display: flex; align-items: center;">
-                                    <div style="width:12px; height:51px" class={stage.color}></div>
-                                    <div style="padding-left: 30px;">{task.name}</div>
-                                </Cell>
-                                <Cell>{currency + task.cost}</Cell>
-                                <Cell numeric>{task.duration} days</Cell>
-                                <Cell>{task.propertyName}</Cell>
-                                <Cell>
-                                    {task.propertyValue + (task.propertyUnit === 'sq.m.' || task.propertyUnit === '-' ? '' : task.propertyUnit)}{#if task.propertyUnit === 'sq.m.'}&#13217{/if}
-                                </Cell>
-                                <Cell numeric>{task.workersCount}</Cell>
-                            </Row>
-                        {/each}
-                {/if} -->
+                {#if stage.tasks && stage.tasks.length !== 0}
+                    {#each stage.tasks as task}
+                        <Row class="hidden-subtasks {stage.code}">
+                            <Cell style="padding: 0; display: flex; align-items: center;">
+                                <div style="width:12px; height:51px" class={stage.color}></div>
+                                <div style="padding-left: 30px;">{task.name}</div>
+                            </Cell>
+                            <Cell>{currency + task.cost}</Cell>
+                            <Cell numeric>{task.duration} days</Cell>
+                            <Cell>{task.propertyName}</Cell>
+                            <Cell>
+                                {task.propertyValue + (task.propertyUnit === 'sq.m.' || task.propertyUnit === '-' ? '' : task.propertyUnit)}{#if task.propertyUnit === 'sq.m.'}&#13217{/if}
+                            </Cell>
+                            <Cell numeric>{task.workersCount}</Cell>
+                        </Row>
+                    {/each}
+                {/if}
             {/each}
         </Body>
         <LinearProgress

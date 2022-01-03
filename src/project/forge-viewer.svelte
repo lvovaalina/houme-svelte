@@ -1,10 +1,12 @@
 <script>
     import { onMount } from 'svelte';
+    import { responsive } from '../store';
 
     export let forgeViewerClass;
     let resp;
     let forgeViewerElement;
     let viewer;
+    let responsiveHeight = 0;
 
     export let urn = "dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6aG91bWUvTHVrYS5ydnQ=";
 
@@ -76,11 +78,17 @@
     $: urnChanged(urn)
 
     onMount(async () => {
+        if ($responsive) {
+            responsiveHeight = document.documentElement.clientHeight - 38 - 43 - 12 - 36;
+        }
+
         loadViewable();
     });
 </script>
 
-<div bind:this={forgeViewerElement} class="{!!forgeViewerClass ? forgeViewerClass : "forge-viewer"}">
+<div
+    bind:this={forgeViewerElement} class="{!!forgeViewerClass ? forgeViewerClass : "forge-viewer"}"
+    style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}>
 </div>
 
 <style>

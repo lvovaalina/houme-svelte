@@ -246,6 +246,59 @@
         <p style="text-align:center">No projects to view</p>
         {/if}
     </div>
+    <div class="projects-grid-responsive">
+        {#each projects as project}
+        <div class="details-padding"></div>
+        <div class="project-drid-responsive">
+            <div class="project-grid-header">
+                <div class="project-cover-container">
+                    <Link to="/view/{project.ProjectId}/{detailsUrl}">
+                        <img
+                            class="project-image"
+                            src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
+                            alt="Project {project.Name} cover"/>
+                    </Link>
+                </div>
+                <div class="project-grid-header-name">{project.Name}</div>
+            </div>
+            <div class="property-grid-responsive">
+                <div class="property-details-grid-cell">
+                    <div class="property-name">Duration</div>
+                    <div class="property-value">{project.ConstructionDuration} days</div>
+                </div>
+                <div class="property-details-grid-cell">
+                    <div class="property-name">Area</div>
+                    <div class="property-value">{project.LivingArea.replace(" sq.m.", "")}&#13217;</div>
+                </div>
+                <div class="property-details-grid-cell">
+                    <div class="property-name">Margin</div>
+                    <div class="property-value">{currency + project.Margin}</div>
+                </div>
+                <div class="property-details-grid-cell">
+                    <div class="property-name">Workers</div>
+                    <div class="property-value">{project.Workers}</div>
+                </div>
+                <div class="property-details-grid-cell">
+                    <div class="property-name">Project Cost</div>
+                    <div class="property-value">{currency + project.ConstructionCost}</div>
+                </div>
+                <div class="property-details-grid-cell">
+                    <div class="property-name">Build Cost</div>
+                    <div class="property-value">{currency + project.ConstructionJobCost}</div>
+                </div>
+                <div class="property-details-grid-cell">
+                    <div class="property-name">Material Cost</div>
+                    <div class="property-value">{currency + project.ConstructionMaterialCost}</div>
+                </div>
+                <div class="property-details-grid-cell">
+                    <div use:Ripple={{ surface: true }} class="project-link-container">
+                        <Link style="color:white" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/each}
+    </div>
     <div class="forge-container">
         {#if !!selectedProjectId && selectedProjectId > 0}
             <p style="margin-bottom: -20px;">PROJECT</p>
@@ -317,6 +370,7 @@
         box-shadow: none;
         border: 1px solid #e0e1e2;
     }
+
     * :global(.solo-paper > *) {
         display: inline-block;
     }
@@ -349,5 +403,92 @@
 
     .dashboard {
         padding: 0 25px;
+    }
+
+    .projects-grid-responsive {
+        display: none;
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        .project-drid-responsive {
+            padding: 0 12px;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.06), 0px 1px 1px rgba(0, 0, 0, 0.06);
+        }
+        .project-cover-container {
+            width: 25%;
+        }
+
+        .project-grid-header-name {
+            font-size: 18px;
+        }
+
+        .project-grid-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .project-link-container {
+            background-color: rgb(21, 40, 89);
+            justify-content: center;
+        }
+
+        .details-padding {
+            background-color: #F5F7FA;
+            opacity: 70%;
+            height: 12px;
+            width: 100vw;
+        }
+
+        .projects-grid-responsive {
+            display: block;
+        }
+
+        .property-details-grid-cell {
+            width: 25%;
+            margin: 8px 0;
+        }
+
+        .property-grid-responsive {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .dashboard {
+            padding: 0;
+        }
+
+        .project-table-header {
+            width: 100%;
+            justify-content: space-between;
+            padding: 0 12px;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.06), 0px 1px 1px rgba(0, 0, 0, 0.06);
+        }
+
+        .project-table-header h1 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .project-table-header .solo-container {
+            width: auto;
+        }
+
+        .forge-container {
+            display: none;
+        }
+
+        .projects-table-container {
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width:459px)
+    {
+        .property-details-grid-cell, .project-cover-container {
+            width: 33%;
+        }
     }
 </style>

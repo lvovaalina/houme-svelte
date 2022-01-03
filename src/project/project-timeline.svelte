@@ -277,12 +277,12 @@
     });
 </script>
 
-<div class="container">
+<div class="gantt-container">
     <div id="example-gantt"></div>
 </div>
 
 <style>
-    .container {
+    .gantt-container {
         /* -header height -tab header height container bottom padding */
         height: calc(100vh - 64px - 76px - 20px);
     }
@@ -308,9 +308,8 @@
 
     @media only screen and (max-width:839px)
     {
-        #example-gantt, .container {
-            height: calc(100vh - 38px - 43px - 12px - 36px);
-            margin: 0 -14px;
+        #example-gantt, .gantt-container {
+            height:  calc(100vh - 38px - 39px - 12px - 46px);
         }
 
         :global(.sg-table, .sg-resize) {

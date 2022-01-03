@@ -14,7 +14,7 @@
         <Head>
             <Row>
             {#each columns as col, index}
-                <Cell style={index == 0 ? 'padding:0' : ''}>{col}</Cell>
+                <Cell style={index == 0 ? 'padding:0;' : ''}>{col}</Cell>
             {/each}
             </Row>
         </Head>
@@ -36,29 +36,3 @@
         </Body>
     </DataTable>
 </div>
-
-<style>
-    :global(.costs-grid) {
-        padding-top: 0;
-    }
-
-    .table-caption {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    :global(.project-stages, .project-materials) {
-        width: 100%;
-    }
-
-    @media (max-width: 839px) {
-        :global(.project-stages, .project-materials) {
-            overflow: scroll;
-        }
-    }
-    
-    :global(.hidden-subtasks) {
-        display: none;
-    }
-</style>

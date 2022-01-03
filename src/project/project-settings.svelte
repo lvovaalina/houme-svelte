@@ -92,12 +92,6 @@
 
     @media only screen and (max-width:839px)
     {
-        .setting-container label {
-            text-transform: uppercase;
-            font-size: 14px;
-            opacity: 70%;
-        }
-
         .project-settings {
             padding: 8px 0;
         }

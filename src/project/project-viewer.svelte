@@ -508,7 +508,8 @@
     }
 </script>
 
-<div class="project-viewer" use:watchResize={handleResize}>
+<div use:watchResize={handleResize}></div>
+<div class="project-viewer">
     <div class="project-view-content">
 
         <LayoutGrid class="project-content-grid">
@@ -543,17 +544,17 @@
                     </div>
                 </div>
 
-                <div class="{active == 'Timeline' ? '' : 'hidden'}">
+                <div class="{active == 'Timeline' ? 'details-tab' : 'hidden'}">
                     <div class="details-padding"></div>
                     <ProjectTimeline projectDuration={project.ConstructionDuration} currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
 
-                <div class="{active == 'Materials' ? '' : 'hidden'}">
+                <div class="{active == 'Materials' ? 'details-tab' : 'hidden'}">
                     <div class="details-padding"></div>
                     <ProjectMaterials currency={currency} materials={project.projectMaterialsVM}></ProjectMaterials>
                 </div>
                 
-                <div class="{active == 'Jobs' ? '' : 'hidden'}">
+                <div class="{active == 'Jobs' ? 'details-tab' : 'hidden'}">
                     <div class="details-padding"></div>
                     <ProjectCost
                             currency={currency}
@@ -563,7 +564,7 @@
                     </ProjectCost>
                 </div>
 
-                <div class="{active == 'Model' ? '' : 'hidden-forge'}">
+                <div class="{active == 'Model' ? 'details-tab' : 'hidden-forge'}">
                     <div class="details-padding"></div>
                     <ForgeViewer urn={project.Filename}></ForgeViewer>
                 </div>
@@ -702,11 +703,15 @@
 
     @media only screen and (max-width:839px)
     {
+        .details-tab {
+            margin: 0 -12px;
+        }
+
         .details-padding {
             background-color: #F5F7FA;
-            margin: 0 -14px;
             opacity: 70%;
             height: 12px;
+            width: 100vw;
         }
 
         .tab-link:first-of-type {

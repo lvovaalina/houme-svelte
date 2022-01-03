@@ -43,7 +43,7 @@
         <Head>
             <Row>
             {#each columns as col}
-                <Cell style={colStyle(col)}>{col}</Cell>
+                <Cell style={colStyle(col)}><div class='column-header'>{col}</div></Cell>
             {/each}
             </Row>
         </Head>
@@ -69,7 +69,7 @@
                     <Cell numeric>{stage.workersCount}</Cell>
                     
                 </Row>
-                {#if stage.tasks && stage.tasks.length !== 0}
+                <!-- {#if stage.tasks && stage.tasks.length !== 0}
                         {#each stage.tasks as task}
                             <Row class="hidden-subtasks {stage.code}">
                                 <Cell style="padding: 0; display: flex; align-items: center;">
@@ -85,7 +85,7 @@
                                 <Cell numeric>{task.workersCount}</Cell>
                             </Row>
                         {/each}
-                {/if}
+                {/if} -->
             {/each}
         </Body>
         <LinearProgress
@@ -130,6 +130,42 @@
             overflow: scroll;
         }
     /*}*/
+
+    @media (max-width: 839px) {
+        :global(.project-stages, .project-materials)
+        {
+            height: calc(100vh - 38px - 39px - 12px - 46px);
+        }
+
+        :global(
+            .project-stages th:first-of-type, .project-materials th:first-of-type,
+            .project-stages td:first-of-type, .project-materials td:first-of-type)
+        {
+            position: sticky;
+            position: -webkit-sticky;
+            left: 0;
+            z-index: 1102;
+            background-color:white;
+            box-shadow: 3px 1px 3px rgba(0, 0, 0, 0.06), 2px 1px 2px rgba(0, 0, 0, 0.06), 1px 0px 1px rgba(0, 0, 0, 0.06);
+        }
+
+        :global(.project-stages th:first-of-type, .project-materials th:first-of-type) {
+            padding-left: 16px !important;
+        }
+
+        :global(.project-stages td:first-of-type, .project-materials td:first-of-type)
+        {
+            z-index: 1101;
+        }
+
+        :global(.project-stages .column-header, .project-materials .column-header) {
+            line-height: 36px;
+        }
+
+        :global(.mdc-data-table__header-row) {
+            height: 36px;
+        }
+    }
     
     :global(.hidden-subtasks) {
         display: none;

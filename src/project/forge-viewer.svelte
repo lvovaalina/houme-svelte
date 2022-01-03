@@ -99,7 +99,6 @@
     {    
         .forge-viewer {
             height: calc(100vh - 38px - 43px - 12px - 36px);
-            margin: 0 -14px;
         }
     }
 </style>

@@ -12,7 +12,7 @@
 
     onMount(() => {
         if ($responsive) {
-            responsiveHeight = document.documentElement.clientHeight - - 38 - 39 - 12 - 46;
+            responsiveHeight = document.documentElement.clientHeight - 38 - 39 - 12 - 46;
         }
     })
 </script>

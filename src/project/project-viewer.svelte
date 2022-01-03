@@ -10,7 +10,7 @@
     import { stageColorMap, stageMap, time } from '../utils';
     import ProjectCard from '../project/project-card.svelte';
     import ProjectMaterials from '../project/project-materials.svelte';
-    import { pageTitle, projectStored, propertiesStored } from '../store';
+    import { pageTitle, projectStored, propertiesStored, responsive } from '../store';
     import { watchResize } from "svelte-watch-resize";
 
     import { getNotificationsContext } from 'svelte-notifications';
@@ -35,6 +35,7 @@
     ];
 
     let headerTabs = [];
+    let responsiveHeight = 0;
 
     function getWidth() {
         return Math.max(
@@ -413,6 +414,10 @@
         });
 
     onMount(() => {
+        if ($responsive) {
+            responsiveHeight = document.documentElement.clientHeight - 38 - 39 - 12 - 46;
+        }
+
         pageTitle.set({
             title: 'Project View ' + active,
         });
@@ -513,7 +518,7 @@
     <div class="project-view-content">
 
         <LayoutGrid class="project-content-grid">
-            <Cell span={9} class="project-view-content-details">
+            <Cell span={9} class="project-view-content-details" style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}>
 
                 {#if dataLoaded}
                 <div class="project-name-container-responsive">

@@ -60,15 +60,18 @@
         <Body>
             {#each jobs as stage}
                 <Row on:click={rowClick(stage.code)} class={stage.tasks && stage.tasks.length !== 0 ? "clickable-row" : ""}>
-                    <Cell style="padding: 0; display: flex; align-items: center;">
-                        <div style="width:12px;height:51px" class={stage.color}></div>
+                    <Cell style="padding: 0;">
+                        <div style="overflow-wrap: break-word; width: 132px; height:80px; display: flex; align-items: center;">
+                            <div style="width:15px;height:80px" class={stage.color}></div>
                         
-                        <div style="padding-left: 8px">
-                            {#if stage.tasks && stage.tasks.length !== 0}
-                                <i class={'fas fa-angle-right' + ' ' + stage.code + '-icon'} aria-hidden="true"></i>
-                            {/if}
-                            {stage.name}
+                            <div style="padding-left: 4px;inline-size: 110px;overflow-wrap: break-word;word-break: break-word;height:auto;white-space: pre-line;hyphens: auto;">
+                                {#if stage.tasks && stage.tasks.length !== 0}
+                                    <i class={'fas fa-angle-right' + ' ' + stage.code + '-icon'} aria-hidden="true"></i>
+                                {/if}
+                                {stage.name}
+                            </div>
                         </div>
+                        
                     </Cell>
                     <Cell>{currency + stage.stageCost}</Cell>
                     <Cell numeric>{stage.duration} days</Cell>
@@ -83,8 +86,10 @@
                     {#each stage.tasks as task}
                         <Row class="hidden-subtasks {stage.code}">
                             <Cell style="padding: 0; display: flex; align-items: center;">
-                                <div style="width:12px; height:51px" class={stage.color}></div>
-                                <div style="padding-left: 30px;">{task.name}</div>
+                                <div style="overflow-wrap: break-word; width: 132px; height:80px; display: flex; align-items: center;">
+                                    <div style="width:15px; height:80px" class={stage.color}></div>
+                                    <div style="padding-left: 30px;inline-size: 110px;overflow-wrap: break-word;word-break: break-word;height:auto;white-space: pre-line;hyphens: auto;">{task.name}</div>
+                                </div>
                             </Cell>
                             <Cell>{currency + task.cost}</Cell>
                             <Cell numeric>{task.duration} days</Cell>

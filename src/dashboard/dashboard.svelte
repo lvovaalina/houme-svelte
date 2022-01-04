@@ -71,7 +71,7 @@
             return result.json();
         })
         .then((resp) => {
-             projects = resp.data;
+            projects = resp.data;
             
             projectsResult = projects;
             projectsCount = projects.length;
@@ -248,7 +248,7 @@
         {/if}
     </div>
     <div class="projects-grid-responsive">
-        {#each projects as project}
+        {#each projectsResult as project}
         <div class="details-padding"></div>
         <div class="project-drid-responsive">
             <div class="project-grid-header">

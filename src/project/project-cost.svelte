@@ -3,6 +3,7 @@
     import LinearProgress from '@smui/linear-progress';
     import { onMount } from "svelte";
     import { responsive } from '../store';
+    import { numberWithCommas } from '../utils';
 
     export let jobs = [];
 
@@ -73,7 +74,7 @@
                         </div>
                         
                     </Cell>
-                    <Cell>{currency + stage.stageCost}</Cell>
+                    <Cell>{currency + numberWithCommas(stage.stageCost)}</Cell>
                     <Cell numeric>{stage.duration} days</Cell>
                     <Cell>{stage.propertyName}</Cell>
                     <Cell>
@@ -91,7 +92,7 @@
                                     <div style="padding-left: 30px;inline-size: 110px;overflow-wrap: break-word;word-break: break-word;height:auto;white-space: pre-line;hyphens: auto;">{task.name}</div>
                                 </div>
                             </Cell>
-                            <Cell>{currency + task.cost}</Cell>
+                            <Cell>{currency + numberWithCommas(task.cost)}</Cell>
                             <Cell numeric>{task.duration} days</Cell>
                             <Cell>{task.propertyName}</Cell>
                             <Cell>

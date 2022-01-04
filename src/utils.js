@@ -105,3 +105,7 @@ export let stageMap = new Map([
         {color: 'light-orange', code: 'cw'}
     ],
 ]);
+
+export function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

@@ -3,6 +3,8 @@
     import ProjectSettings from './project-settings.svelte';
 
     import { createEventDispatcher } from "svelte";
+    import { numberWithCommas } from '../utils';
+
     const dispatch = createEventDispatcher();
 
     export let project = {};
@@ -25,15 +27,15 @@
         </tr>
         <tr>
             <td>Project Cost</td>
-            <td class="numeric-row">{currency + project.ConstructionCost}</td>
+            <td class="numeric-row">{currency + numberWithCommas(project.ConstructionCost)}</td>
         </tr>
         <tr>
             <td>Construction Cost</td>
-            <td class="numeric-row">{currency + project.ConstructionJobCost}</td>
+            <td class="numeric-row">{currency + numberWithCommas(project.ConstructionJobCost)}</td>
         </tr>
         <tr>
             <td>Materials Cost</td>
-            <td class="numeric-row">{currency + project.ConstructionMaterialCost}</td>
+            <td class="numeric-row">{currency + numberWithCommas(project.ConstructionMaterialCost)}</td>
         </tr>
         <tr>
             <td>Project Duration</td>

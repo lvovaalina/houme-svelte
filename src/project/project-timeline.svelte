@@ -5,6 +5,7 @@
     import moment from 'moment';
 
     import { responsive } from '../store';
+    import { numberWithCommas } from '../utils';
 
     export let currency;
     export let projectDuration;
@@ -231,7 +232,7 @@
             </div>
             <div class="sg-popup-item">
                 <div class="sg-popup-item-label">Job Cost:</div>
-                <div class="sg-popup-item-value">${currency + task.cost}</div>
+                <div class="sg-popup-item-value">${currency + numberWithCommas(task.cost)}</div>
             </div>
         `
 
@@ -239,7 +240,7 @@
             div.innerHTML += `
             <div class="sg-popup-item">
                     <div class="sg-popup-item-label">Material Cost:</div>
-                    <div class="sg-popup-item-value">${currency + task.materialsCost}</div>
+                    <div class="sg-popup-item-value">${currency + numberWithCommas(task.materialsCost)}</div>
                 </div>
                 <div class="sg-popup-item">
                     <div class="sg-popup-item-label">Materials:</div>

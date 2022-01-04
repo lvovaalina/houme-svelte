@@ -17,6 +17,7 @@
     import { onMount } from 'svelte';
     import { navigate, Link} from 'svelte-navigator';
     import { pageTitle } from '../store';
+    import { numberWithCommas } from '../utils';
 
     import { Input } from '@smui/textfield';
     import Paper from '@smui/paper';
@@ -220,10 +221,10 @@
                         </Cell>
                         <Cell>{project.ConstructionDuration} days</Cell>
                         <Cell>{project.LivingArea} &#13217;</Cell>
-                        <Cell numeric>{currency + project.Margin}</Cell>
-                        <Cell numeric>{currency + project.ConstructionCost}</Cell>
-                        <Cell numeric>{currency + project.ConstructionJobCost}</Cell>
-                        <Cell numeric>{currency + project.ConstructionMaterialCost}</Cell>
+                        <Cell numeric>{currency + numberWithCommas(project.Margin)}</Cell>
+                        <Cell numeric>{currency + numberWithCommas(project.ConstructionCost)}</Cell>
+                        <Cell numeric>{currency + numberWithCommas(project.ConstructionJobCost)}</Cell>
+                        <Cell numeric>{currency + numberWithCommas(project.ConstructionMaterialCost)}</Cell>
                         <Cell numeric>{project.Workers}</Cell>
                         <Cell>
                             <div use:Ripple={{ surface: true }} class="project-link-container">
@@ -272,7 +273,7 @@
                 </div>
                 <div class="property-details-grid-cell">
                     <div class="property-name">Margin</div>
-                    <div class="property-value">{currency + project.Margin}</div>
+                    <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
                 </div>
                 <div class="property-details-grid-cell">
                     <div class="property-name">Workers</div>
@@ -280,15 +281,15 @@
                 </div>
                 <div class="property-details-grid-cell">
                     <div class="property-name">Project Cost</div>
-                    <div class="property-value">{currency + project.ConstructionCost}</div>
+                    <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
                 </div>
                 <div class="property-details-grid-cell">
                     <div class="property-name">Build Cost</div>
-                    <div class="property-value">{currency + project.ConstructionJobCost}</div>
+                    <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
                 </div>
                 <div class="property-details-grid-cell">
                     <div class="property-name">Material Cost</div>
-                    <div class="property-value">{currency + project.ConstructionMaterialCost}</div>
+                    <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
                 </div>
                 <div class="property-details-grid-cell">
                     <div use:Ripple={{ surface: true }} class="project-link-container">

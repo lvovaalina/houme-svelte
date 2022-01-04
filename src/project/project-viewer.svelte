@@ -585,7 +585,7 @@
                     {#if dataLoaded}
                         <ProjectCard bind:project={project} currency={currency} on:apply={updateProject}></ProjectCard>
                     {:else}
-                        <CircularProgress style="height: 90vh; width: 120px;" indeterminate />
+                        <CircularProgress style="height: 90vh; width: 100px; margin: 0 auto;" indeterminate />
                     {/if}
                 </div>
             </Cell>

@@ -694,6 +694,7 @@
 
     .tab-link-container.active {
         border-color: rgba(21, 40, 89);
+        z-index: 1;
     }
 
     :global(.project-view-content-details) {

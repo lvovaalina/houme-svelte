@@ -1,7 +1,6 @@
 <script>
     import TopAppBar, { Row, Section } from "@smui/top-app-bar";
-    import { navigate } from "svelte-navigator";
-    import { Icon } from '@smui/common';
+    import { navigate, Link } from "svelte-navigator";
     import Button, { Label } from "@smui/button";
     import { pageTitle, adminStored, adminAuthentificated } from '../store';
 
@@ -51,11 +50,16 @@
                         <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
                     </a>
                     {#if !!projectName}
-                    <Button class="project-dashboard-link" style="color: rgba(21, 40, 89, .7);margin-bottom: 0;margin-left: 20px;" on:click={() => navigate('/',{replace: true})}>
-                        <Label><h2>Project Dashboard</h2></Label>
-                    </Button>
-                    <Icon style="color: rgba(21, 40, 89); font-size: 20px;" class="right-icon material-icons">chevron_right</Icon>
-                    <h2 class="project-name">{projectName}</h2>
+                        <Link class="project-dashboard-link" 
+                            style="color: rgba(21, 40, 89, .7);margin-bottom: 0;margin-left: 20px;"
+                            to="/">
+                            <h2>Project Dashboard</h2>
+                        </Link>
+                        <div
+                            class="dashboard-link">
+                            <i style="border-color: rgba(21, 40, 89, .7);padding: 3px;" class="arrow right"></i>
+                        </div>
+                        <h2 class="project-name">{projectName}</h2>
                     {/if}
                 </Section>
                 <Section style="justify-content:flex-end">
@@ -80,6 +84,12 @@
         align-items: center;
     }
 
+    :global(.dashboard-link) {
+        border-color: rgba(21, 40, 89, 0.7);
+        padding: 3px;
+        margin-bottom: 2px;
+    }
+
     :global(.user-info .mdc-button__label) {
         color: rgba(21, 40, 89, .7);
     }
@@ -97,6 +107,11 @@
 
     :global(.project-dashboard-link:hover) {
         color: rgba(21, 40, 89) !important;
+    }
+
+    :global(.project-dashboard-link h2) {
+        text-transform: uppercase;
+        margin-right: 8px;
     }
 
     h2.project-name {
@@ -121,7 +136,7 @@
             padding: 0 12px;
         }
 
-        :global(.project-dashboard-link, .right-icon, .project-name) {
+        :global(.project-dashboard-link, .dashboard-icon, .project-name) {
             display: none;
         }
 

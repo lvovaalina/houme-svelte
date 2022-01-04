@@ -2,6 +2,7 @@
     import DataTable, { Body, Head, Row, Cell} from "@smui/data-table";
     import { onMount } from "svelte";
     import { responsive } from '../store';
+    import { numberWithCommas } from '../utils';
 
     export let materials = [];
     export let currency;
@@ -33,9 +34,9 @@
             {#each materials as material}
                 <Row>
                     <Cell>{material.name}</Cell>
-                    <Cell>{currency + material.cost}</Cell>
+                    <Cell>{currency + numberWithCommas(material.cost)}</Cell>
                     <Cell>{material.volume + (material.propertyUnit === 'sq.m.' || material.propertyUnit === '-' ? '' : material.propertyUnit)}{#if material.propertyUnit === 'sq.m.'}&#13217{/if}</Cell>
-                    <Cell>{currency + material.nominalCost + '/' + (material.propertyUnit === 'sq.m.' || material.propertyUnit === '-' ? '' : material.propertyUnit)}{#if material.propertyUnit === 'sq.m.'}&#13217{/if}</Cell>
+                    <Cell>{currency + numberWithCommas(material.nominalCost) + '/' + (material.propertyUnit === 'sq.m.' || material.propertyUnit === '-' ? '' : material.propertyUnit)}{#if material.propertyUnit === 'sq.m.'}&#13217{/if}</Cell>
                     <Cell>{material.date.format('D MMM YYYY')}</Cell>
                     <Cell>
                         <div style="width: fit-content;" class={material.color}>

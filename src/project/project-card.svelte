@@ -129,7 +129,8 @@
     @media only screen and (max-width:839px)
     {
         .helper-text {
-            margin: 10px 0;
+            margin: 0;
+            color: rgba(0, 0, 0);
         }
 
         .divider {

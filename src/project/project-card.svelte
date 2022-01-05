@@ -61,7 +61,7 @@
             <div class="property-value">{project.LivingArea.replace(" sq.m.", "")}&#13217;</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Margin</div>(
+            <div class="property-name">Margin</div>
             <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
         </div>
         <div class="property-details-grid-cell">
@@ -89,7 +89,7 @@
 </div>
 
 <div class="materials-block responsive-box-shadow">
-    <p style="margin:0 0 10px 0">Change materials and/or number of workers to recalculate project's duration and cost:</p>
+    <p class="helper-text">Change materials and/or number of workers to recalculate project's duration and cost:</p>
     <ProjectSettings
         bind:foundationMaterialValue={project.FoundationMaterial}
         bind:wallMaterialValue={project.WallMaterial}
@@ -111,6 +111,10 @@
 </div>
 
 <style>
+    .helper-text {
+        margin: 0 0 10px 0;
+    }
+
     .property-table tr {
         height: 30px;
     }
@@ -121,6 +125,10 @@
 
     @media only screen and (max-width:839px)
     {
+        .helper-text {
+            margin: 10px 0;
+        }
+
         .divider {
             display: none;
         }
@@ -174,7 +182,7 @@
 
         .materials-block, .property-table-container {
             margin: 0 -14px;
-            padding: 0 14px;
+            padding: 14px;
         }
     }
 </style>

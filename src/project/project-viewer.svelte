@@ -684,7 +684,7 @@
     }
 
     .project-card {
-        padding: 20px 0 0 24px;
+        padding: 20px 0 0 0;
 
         display: flex;
         flex-direction: column;

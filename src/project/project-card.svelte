@@ -89,7 +89,7 @@
 </div>
 
 <div class="materials-block responsive-box-shadow">
-   
+    <p style="margin:0 0 10px 0">Change materials and/or number of workers to recalculate project's duration and cost:</p>
     <ProjectSettings
         bind:foundationMaterialValue={project.FoundationMaterial}
         bind:wallMaterialValue={project.WallMaterial}
@@ -102,7 +102,7 @@
         style="margin-top: 10px;text-align: left;background-color: #2D62E8; color: white; align-self: flex-end;"
         class="apply-button"
         variant="filled" on:click={updateProject}>
-        <Label>APPLY</Label>
+        <Label>recalculate</Label>
     </Button>
 </div>
 

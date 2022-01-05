@@ -30,7 +30,7 @@
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionCost)}</td>
         </tr>
         <tr>
-            <td>Construction Cost</td>
+            <td>Job Cost</td>
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionJobCost)}</td>
         </tr>
         <tr>
@@ -69,7 +69,7 @@
             <div class="property-value">{currency + project.ConstructionCost}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Build Cost</div>
+            <div class="property-name">Job Cost</div>
             <div class="property-value">{currency + project.ConstructionJobCost}</div>
         </div>
         <div class="property-details-grid-cell">

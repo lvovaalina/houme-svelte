@@ -38,7 +38,7 @@
         {name: 'Area', columnId: 'LivingArea'},
         {name: 'Margin', style:'text-align: right;'},
         {name: 'Project Cost', style:'text-align: right;'},
-        {name: 'Build cost', style:'text-align: right;'},
+        {name: 'Job cost', style:'text-align: right;'},
         {name: 'Material cost', style:'text-align: right;'},
         {name: 'Workers', style:'text-align: right;'},
         {name: ''},
@@ -284,7 +284,7 @@
                     <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
                 </div>
                 <div class="property-details-grid-cell">
-                    <div class="property-name">Build Cost</div>
+                    <div class="property-name">Job Cost</div>
                     <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
                 </div>
                 <div class="property-details-grid-cell">

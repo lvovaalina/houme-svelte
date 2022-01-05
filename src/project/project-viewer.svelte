@@ -573,7 +573,7 @@
                     </ProjectCost>
                 </div>
 
-                <div class="{active == 'Model' ? 'details-tab' : 'hidden-forge'}">
+                <div class="{active == 'Model' ? 'details-tab' : 'hidden'}">
                     <div class="details-padding"></div>
                     <ForgeViewer urn={project.Filename}></ForgeViewer>
                 </div>

@@ -134,7 +134,7 @@
             padding: 0 12px;
         }
 
-        :global(.project-dashboard-link, .dashboard-icon, .project-name) {
+        :global(.project-dashboard-link, .dashboard-icon, .project-name, .project-arrow) {
             display: none;
         }
 

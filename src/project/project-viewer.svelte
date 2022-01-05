@@ -329,6 +329,11 @@
             let props = stageMap.get(element.ConstructionJobMaterial.Job.StageName);
 
             let timestamp = timestamps.get(element.ConstructionJobMaterial.Job.JobCode);
+            
+            let jobName = element.ConstructionJobMaterial.Job.SubStageName;
+            if (element.ConstructionJobMaterial.Job.SubStageName != element.ConstructionJobMaterial.Job.JobName) {
+                jobName += ': ' + element.ConstructionJobMaterial.Job.JobName;
+            }
 
             materialsVM.push({
                 name: element.ConstructionJobMaterial.MaterialName,
@@ -336,8 +341,7 @@
                 nominalCost: element.ConstructionJobMaterial.MaterialCost,
                 volume: property.PropertyValue,
                 propertyUnit: element.ConstructionJobMaterial.Job.Property.PropertyUnit,
-                jobName: element.ConstructionJobMaterial.Job.SubStageName
-                    + ': ' + element.ConstructionJobMaterial.Job.JobName,
+                jobName: jobName,
                 color: props.color,
                 date: timestamp.from,
             })

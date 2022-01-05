@@ -159,7 +159,7 @@
 <div class="dashboard" use:watchResize={handleResize}>
     {#if dataLoaded}
     <div class="project-table-header">
-        <h1>Projects({projectsCount})</h1>
+        <h1>Projects</h1> <!-- ({projectsCount})</h1> -->
         <div class="solo-demo-container solo-container">
             <Paper class="solo-paper" elevation={6}>
                 <Icon class="material-icons">search</Icon>
@@ -412,6 +412,14 @@
 
     @media only screen and (max-width:839px)
     {
+        .property-name {
+            font-size: 10px;
+        }
+
+        .property-value {
+            font-size: 14px;
+        }
+
         .project-drid-responsive {
             padding: 0 12px;
             box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.06), 0px 1px 1px rgba(0, 0, 0, 0.06);
@@ -422,6 +430,8 @@
 
         .project-grid-header-name {
             font-size: 18px;
+            font-weight: 500;
+            margin-left: 25px;
         }
 
         .project-grid-header {
@@ -484,12 +494,13 @@
         .projects-table-container {
             display: none;
         }
-    }
 
-    @media only screen and (max-width:459px)
-    {
-        .property-details-grid-cell, .project-cover-container {
-            width: 33%;
+        :global(.project-link-container a) {
+            font-size: 14px;
+        }
+
+        .solo-demo-container {
+            padding: 5px 0;
         }
     }
 </style>

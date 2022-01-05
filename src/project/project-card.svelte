@@ -146,7 +146,11 @@
 
         .property-details-grid-cell {
             width: 33%;
-            margin: 8px 0;
+            margin-bottom: 16px;
+        }
+
+        .property-details-grid-cell:last-of-type {
+            margin-bottom: 0;
         }
 
         .property-table {
@@ -155,10 +159,11 @@
 
         :global(.property-name) {
             text-transform: uppercase;
-            font-size: 14px;
             opacity: 70%;
+            font-size: 13px;
+            font-weight: 500;
         }
-
+        
         .card-header-container-responsive {
             height: 43px;
             background-color: #F5F7FA;
@@ -171,7 +176,7 @@
         }
 
         .card-header-container-responsive h3 {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             margin-bottom: 8px;
         }
@@ -182,7 +187,11 @@
 
         .materials-block, .property-table-container {
             margin: 0 -14px;
-            padding: 14px;
+            padding: 16px 14px;
+        }
+
+        :global(.project-settings .mdc-select__anchor) {
+            height: 38px;
         }
     }
 </style>

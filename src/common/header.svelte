@@ -51,13 +51,12 @@
                     </a>
                     {#if !!projectName}
                         <Link class="project-dashboard-link" 
-                            style="color: rgba(21, 40, 89, .7);margin-bottom: 0;margin-left: 20px;"
+                            style="color: rgba(0, 0, 0, .55);margin-bottom: 0;margin-left: 20px;"
                             to="/">
                             <h2>Project Dashboard</h2>
                         </Link>
-                        <div
-                            class="dashboard-link">
-                            <i style="border-color: rgba(21, 40, 89, .7);padding: 3px;" class="arrow right"></i>
+                        <div class="project-arrow">
+                            <i style="border-color: rgba(0, 0, 0, .55);padding: 3px;" class="arrow right"></i>
                         </div>
                         <h2 class="project-name">{projectName}</h2>
                     {/if}
@@ -79,19 +78,18 @@
 
 <style>
     .user-info {
-        color: rgba(21, 40, 89, .7);
+        color: rgba(0,100,200, .7);
         display: flex;
         align-items: center;
     }
 
-    :global(.dashboard-link) {
-        border-color: rgba(21, 40, 89, 0.7);
+    :global(.project-arrow) {
         padding: 3px;
         margin-bottom: 2px;
     }
 
     :global(.user-info .mdc-button__label) {
-        color: rgba(21, 40, 89, .7);
+        color: rgba(0,100,200, .7);
     }
 
     :global(.top-app-bar-container .header) {
@@ -106,7 +104,7 @@
     }
 
     :global(.project-dashboard-link:hover) {
-        color: rgba(21, 40, 89) !important;
+        color: #2D62E8 !important;
     }
 
     :global(.project-dashboard-link h2) {
@@ -115,7 +113,7 @@
     }
 
     h2.project-name {
-        color: rgba(21, 40, 89);
+        color: #2D62E8;
         text-transform: uppercase;
         margin-left: 10px;
     }

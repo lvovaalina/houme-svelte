@@ -47,7 +47,7 @@
         </tr>
         <tr>
             <td>Margin</td>
-            <td class="numeric-row">{currency + project.Margin}</td>
+            <td class="numeric-row">{currency + numberWithCommas(project.Margin)}</td>
         </tr>
     </table>
 
@@ -61,20 +61,20 @@
             <div class="property-value">{project.LivingArea.replace(" sq.m.", "")}&#13217;</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Margin</div>
-            <div class="property-value">{currency + project.Margin}</div>
+            <div class="property-name">Margin</div>(
+            <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
         </div>
         <div class="property-details-grid-cell">
             <div class="property-name">Project Cost</div>
-            <div class="property-value">{currency + project.ConstructionCost}</div>
+            <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
         </div>
         <div class="property-details-grid-cell">
             <div class="property-name">Job Cost</div>
-            <div class="property-value">{currency + project.ConstructionJobCost}</div>
+            <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
         </div>
         <div class="property-details-grid-cell">
             <div class="property-name">Material Cost</div>
-            <div class="property-value">{currency + project.ConstructionMaterialCost}</div>
+            <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
         </div>
         <div class="property-details-grid-cell">
             <div class="property-name">Workers</div>

@@ -29,9 +29,6 @@
 
     function colStyle(col) {
         let style;
-        if (col == 'Duration' || col == 'Workers' ) {
-            style = 'text-align:right;';
-        }
 
         if (col == 'Stage') {
             style = 'padding-left: 0';
@@ -73,12 +70,12 @@
                         
                     </Cell>
                     <Cell>{currency + numberWithCommas(stage.stageCost)}</Cell>
-                    <Cell numeric>{stage.duration} days</Cell>
+                    <Cell>{stage.duration} days</Cell>
                     <Cell>{stage.propertyName}</Cell>
                     <Cell>
                         {stage.propertyValue + (stage.propertyUnit === 'sq.m.' || stage.propertyUnit === '-' ? '' : stage.propertyUnit)}{#if stage.propertyUnit === 'sq.m.'}&#13217{/if}
                     </Cell>
-                    <Cell numeric>{stage.workersCount}</Cell>
+                    <Cell>{stage.workersCount}</Cell>
                     
                 </Row>
                 {#if stage.tasks && stage.tasks.length !== 0}
@@ -90,12 +87,12 @@
                                 </div>
                             </Cell>
                             <Cell>{currency + numberWithCommas(task.cost)}</Cell>
-                            <Cell numeric>{task.duration} days</Cell>
+                            <Cell>{task.duration} days</Cell>
                             <Cell>{task.propertyName}</Cell>
                             <Cell>
                                 {task.propertyValue + (task.propertyUnit === 'sq.m.' || task.propertyUnit === '-' ? '' : task.propertyUnit)}{#if task.propertyUnit === 'sq.m.'}&#13217{/if}
                             </Cell>
-                            <Cell numeric>{task.workersCount}</Cell>
+                            <Cell>{task.workersCount}</Cell>
                         </Row>
                     {/each}
                 {/if}
@@ -136,6 +133,7 @@
         /* -header height -tab header height container bottom padding */
         height: calc(100vh - 64px - 76px - 20px);
         border: none;
+        padding-right: 25px;
     }
 
     /*@media (max-width: 839px) {*/
@@ -180,6 +178,7 @@
         :global(.project-stages, .project-materials)
         {
             height: calc(100vh - 38px - 39px - 12px - 46px);
+            padding-right: 12px;
         }
 
         :global(.project-stages th:first-of-type:before) {

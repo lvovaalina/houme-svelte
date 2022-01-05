@@ -228,7 +228,7 @@
                         <Cell numeric>{project.Workers}</Cell>
                         <Cell>
                             <div use:Ripple={{ surface: true }} class="project-link-container">
-                                <Link style="color: rgb(21, 40, 89)" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
+                                <Link style="color: #2D62E8" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
                             </div>
                         </Cell>
                     </Row>
@@ -320,12 +320,12 @@
 
 <style>
     .project-link-container {
-        color: rgb(21, 40, 89);
+        color: #2D62E8;
         height: 36px;
         display: flex;
         align-items: center;
         padding: 0 15px;
-        border: 1px solid #e0e1e2;
+        border: 1px solid #2D62E8;
         border-radius: 4px;
     }
 
@@ -430,7 +430,7 @@
         }
 
         .project-link-container {
-            background-color: rgb(21, 40, 89);
+            background-color: #2D62E8;
             justify-content: center;
         }
 

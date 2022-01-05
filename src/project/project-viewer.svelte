@@ -535,12 +535,12 @@
                     <div class="project-view-buttons-container">
                         {#each headerTabs as tab, index}
                         <div use:Ripple={{ surface: true }}
-                        class={
-                            active === tab.name ? getBorderRadius(index, tabs) + " tab-link-container active"
-                                : getBorderRadius(index, tabs) + " tab-link-container"}>
+                            class={
+                                active === tab.name ? getBorderRadius(index, tabs) + " tab-link-container active"
+                                    : getBorderRadius(index, tabs) + " tab-link-container"}>
                             <Link
                                 class="tab-link"
-                                style={active === tab.name ? "color:#182956" : "color: #5D6989"}
+                                style={active === tab.name ? "color:rgb(0,100,200);" : "color: rgba(0, 0, 0, .87);"}
                                 to="/view/{project.ProjectId}/{tab.urlPart}">
                                 {tab.name}
                             </Link>
@@ -609,7 +609,7 @@
     }
 
     .tab-link-container {
-        color: rgb(21, 40, 89);
+        color: #2D62E8;
         height: 36px;
         display: flex;
         align-items: center;
@@ -689,11 +689,11 @@
     }
 
     :global(.tab-button .mdc-button__ripple::before, .tab-button .mdc-button__ripple::after) {
-        background-color: rgba(21, 40, 89);
+        background-color: #2D62E8;
     }
 
     .tab-link-container.active {
-        border-color: rgba(21, 40, 89);
+        border-color: #2D62E8;
         z-index: 1;
     }
 
@@ -734,12 +734,12 @@
         .tab-link-container {
             border: none;
             border-radius: 0;
-            color: #5D6989;
+            color: rgba(0,100,200, .7);
             width: auto;
         }
 
         :global(.tab-link-container.active a) {
-            border-bottom: 4px solid #182956;
+            border-bottom: 4px solid rgba(0,100,200, .7);
             width: auto;
         }
 

@@ -105,7 +105,7 @@
             {/each}
         </Body>
         <LinearProgress
-            style="background-color:rgb(21, 40, 89);"
+            style="background-color:#2D62E8;"
             indeterminate
             bind:closed={loaded}
             aria-label="Data is being loaded..."

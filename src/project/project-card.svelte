@@ -112,7 +112,10 @@
 
 <style>
     .helper-text {
-        margin: 0 0 10px 0;
+        margin: -16px 0 10px 0;
+        color: rgba(0, 0, 0, 0.55);
+        font-size: 14px;
+        line-height: 18px;
     }
 
     .property-table tr {

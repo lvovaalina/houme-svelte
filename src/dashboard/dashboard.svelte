@@ -32,15 +32,15 @@
     let titleSearch;
     let columns = [
         {name: ''},
-        {name: 'Image', style: 'padding-left: 0'},
+        {name: 'Image', class: 'image-column'},
         {name: 'Title', columnId: 'Name'},
         {name: 'Duration', columnId: 'ConstructionDuration'},
         {name: 'Area', columnId: 'LivingArea'},
-        {name: 'Margin', style:'text-align: right;'},
-        {name: 'Project Cost', style:'text-align: right;'},
-        {name: 'Job cost', style:'text-align: right;'},
-        {name: 'Material cost', style:'text-align: right;'},
-        {name: 'Workers', style:'text-align: right;'},
+        {name: 'Margin' },
+        {name: 'Project Cost' },
+        {name: 'Job Cost' },
+        {name: 'Material Cost' },
+        {name: 'Workers' },
         {name: ''},
     ];
 
@@ -191,7 +191,7 @@
                     {#if index == 0}
                         <Cell style="padding-left: 5px;padding-right: 0;"></Cell>
                     {:else}
-                    <Cell sortable={!!col.columnId ? 'true' : 'false'} style={col.style} columnId={col.columnId}>
+                    <Cell sortable={!!col.columnId ? 'true' : 'false'} class={col.class} columnId={col.columnId}>
                         <Label>{col.name}</Label>
                         {#if !!col.columnId}
                             <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
@@ -206,7 +206,7 @@
                 {#each projectsResult as project, index}
                     <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
                         <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
-                        <Cell style="padding-left:0;">
+                        <Cell style="padding-left:0;" class="image-column-row">
                             <div class="project-cover-container">
                             <Link to="/view/{project.ProjectId}/{detailsUrl}">
                                 <img
@@ -216,16 +216,22 @@
                             </Link>
                             </div>
                         </Cell>
-                        <Cell>
-                            {project.Name}
+                        <Cell style="height:fit-content">
+                            <div class="break-word-style" style="white-space: pre-line;">
+                                {project.Name}
+                            </div>
                         </Cell>
-                        <Cell>{project.ConstructionDuration} days</Cell>
+                        <Cell>
+                            <div class="days-after">
+                                {project.ConstructionDuration}
+                            </div>
+                        </Cell>
                         <Cell>{project.LivingArea} &#13217;</Cell>
-                        <Cell numeric>{currency + numberWithCommas(project.Margin)}</Cell>
-                        <Cell numeric>{currency + numberWithCommas(project.ConstructionCost)}</Cell>
-                        <Cell numeric>{currency + numberWithCommas(project.ConstructionJobCost)}</Cell>
-                        <Cell numeric>{currency + numberWithCommas(project.ConstructionMaterialCost)}</Cell>
-                        <Cell numeric>{project.Workers}</Cell>
+                        <Cell>{currency + numberWithCommas(project.Margin)}</Cell>
+                        <Cell>{currency + numberWithCommas(project.ConstructionCost)}</Cell>
+                        <Cell>{currency + numberWithCommas(project.ConstructionJobCost)}</Cell>
+                        <Cell>{currency + numberWithCommas(project.ConstructionMaterialCost)}</Cell>
+                        <Cell>{project.Workers}</Cell>
                         <Cell>
                             <div use:Ripple={{ surface: true }} class="project-link-container">
                                 <Link style="color: #2D62E8" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
@@ -319,6 +325,14 @@
 </div>
 
 <style>
+    :global(.days-after::after) {
+        content: ' days';
+    }
+
+    :global(.image-column) {
+        padding-left: 0;
+    }
+
     .project-link-container {
         color: #2D62E8;
         height: 36px;
@@ -408,6 +422,65 @@
 
     .projects-grid-responsive {
         display: none;
+    }
+
+    :global(.mdc-data-table__sort-icon-button) {
+        opacity: 1;
+    }
+
+    @media only screen and (max-width:1499px) {
+        :global(.mdc-data-table__header-cell, .mdc-data-table__cell) {
+            padding: 0 10px;
+        }
+    }
+
+    @media only screen and (max-width:1289px)
+    {
+        :global(.image-column-row, .image-column) {
+            display: none;
+        }
+
+        :global(.days-after::after) {
+            content: 'd';
+        }
+
+        .project-link-container {
+            padding: 0 5px;
+            height: 25px;
+        }
+
+        :global(.project-link-container a) {
+            font-size: 12px;
+        }
+    }
+
+    @media only screen and (max-width:1089px) {
+        :global(.mdc-data-table__header-cell, .mdc-data-table__cell) {
+            padding: 0 7px;
+        }
+
+        :global(.mdc-data-table__sort-icon-button) {
+            width: 10px !important;
+            margin-right: 0 !important;
+        }
+    }
+
+    @media only screen and (max-width:989px) {
+        :global(.image-column-row, .image-column) {
+            display: table-cell;
+        }
+
+        .forge-container {
+            display: none;
+        }
+
+        .projects-table-container {
+            border: none;
+        }
+
+        :global(.mdc-data-table__header-cell, .mdc-data-table__cell) {
+            padding: 0 8px;
+        }
     }
 
     @media only screen and (max-width:839px)

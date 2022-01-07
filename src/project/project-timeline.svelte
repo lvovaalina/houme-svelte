@@ -188,7 +188,7 @@
             }
 
             node.addEventListener('mouseenter', onHover);
-            node.addEventListener('mouseleave', onLeave);
+            node.addEventListener('mouseleave scroll', onLeave);
 
             return {
                 destroy() {

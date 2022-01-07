@@ -336,15 +336,16 @@
     .project-link-container {
         color: #2D62E8;
         height: 36px;
-        display: flex;
-        align-items: center;
-        padding: 0 15px;
         border: 1px solid #2D62E8;
         border-radius: 4px;
     }
 
     :global(.project-link-container a) {
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        height: 100%;
     }
 
     :global(.project-cover-container) {
@@ -445,11 +446,11 @@
         }
 
         .project-link-container {
-            padding: 0 5px;
             height: 25px;
         }
 
         :global(.project-link-container a) {
+            padding: 0 5px;
             font-size: 12px;
         }
     }

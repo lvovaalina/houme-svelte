@@ -580,7 +580,9 @@
 
                 <div class="{active == 'Details' ? 'project-card-tab-responsive' : 'hidden'}">
                     {#if dataLoaded}
-                    <ProjectCard bind:project={project} currency={currency} on:apply={updateProject}></ProjectCard>
+                        <ProjectCard bind:project={project} currency={currency} on:apply={updateProject}></ProjectCard>
+                    {:else}
+                        <CircularProgress style="height: 90vh; width: 100px; margin: 0 auto; display: flex;" indeterminate />
                     {/if}
                 </div>
             </Cell>

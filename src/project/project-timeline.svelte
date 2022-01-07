@@ -125,7 +125,6 @@
         if (jobs.length && jobs.length !== 0) {
             rows = [], tasks = [];
             let data = {rows:[], tasks:[]}
-            gantt.$set({...data});
 
             translateStagesToRows();
             translateStagesToTasks();

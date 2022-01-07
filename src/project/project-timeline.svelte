@@ -187,15 +187,17 @@
                 }
             }
 
+            let scrollContainer = document.getElementsByClassName("sg-timeline-body")[0];
+
             node.addEventListener('mouseenter', onHover);
             node.addEventListener('mouseleave', onLeave);
-            window.addEventListener('scroll', onLeave);
+            scrollContainer.addEventListener('scroll', onLeave);
 
             return {
                 destroy() {
                     node.removeEventListener('mouseenter', onHover);
                     node.removeEventListener('mouseleave scroll', onLeave);
-                    window.removeEventListener('scroll', onLeave);
+                    scrollContainer.removeEventListener('scroll', onLeave);
                 }
             }
         },

@@ -188,12 +188,14 @@
             }
 
             node.addEventListener('mouseenter', onHover);
-            node.addEventListener('mouseleave scroll', onLeave);
+            node.addEventListener('mouseleave', onLeave);
+            window.addEventListener('scroll', onLeave);
 
             return {
                 destroy() {
                     node.removeEventListener('mouseenter', onHover);
-                    node.removeEventListener('mouseleave', onLeave);
+                    node.removeEventListener('mouseleave scroll', onLeave);
+                    window.removeEventListener('scroll', onLeave);
                 }
             }
         },

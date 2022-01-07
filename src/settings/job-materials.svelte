@@ -103,8 +103,6 @@
     }
 
     function handleUpdate(event) {
-        console.log(event);
-
         let jobMaterial = event.detail.body;
         let materialCost = parseMaterialCost(jobMaterial.MaterialCost);
         if (materialCost === -1) {
@@ -120,10 +118,10 @@
         }
 
         let materialToUpdate = jobMaterials.find(m => m.ID == jobMaterial.ID);
-        materialToUpdate.materialCost = materialCost;
-        materialToUpdate.materialName = materialName;
+        materialToUpdate.MaterialCost = materialCost;
+        materialToUpdate.MaterialName = jobMaterial.MaterialName;
 
-        fetch(conf.api + '/auth/updateJobNaterial/'+ event.detail.body.ID,
+        fetch(conf.api + '/auth/updateJobMaterial/'+ event.detail.body.ID,
         {
             method: 'PUT',
             body: JSON.stringify(materialToUpdate),
@@ -212,7 +210,6 @@
         material.materialCost = materialCost;
 
         let job = jobs.find(x => x.JobName == material.jobNameValue);
-        console.log(job);
         material.Job = {JobCode: job.JobCode};
 
         fetch(conf.api + '/auth/createMaterial',

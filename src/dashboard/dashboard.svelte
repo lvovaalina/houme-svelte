@@ -15,7 +15,7 @@
     import ForgeViewer from '../project/forge-viewer.svelte';
 
     import { onMount } from 'svelte';
-    import { navigate, Link} from 'svelte-navigator';
+    import { Link } from 'svelte-navigator';
     import { pageTitle } from '../store';
     import { numberWithCommas } from '../utils';
 
@@ -71,6 +71,9 @@
             return result.json();
         })
         .then((resp) => {
+            resp.data.forEach(element => {
+                element.LivingArea = parseInt(element.LivingArea);
+            });
             projects = resp.data;
             
             projectsResult = projects;
@@ -102,17 +105,6 @@
         dataLoadedForSearch = true;
     }
 
-    function navigateToProject(event, projectId) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        if (event.metaKey || event.ctrlKey) {
-            window.open(window.location.origin + '/view/' + projectId + '/model', '_blank');
-        } else {
-            navigate('/view/' + projectId + '/model', {replace: true});
-        }
-    }
-
     function handleSort(event) {
         projectsResult.sort((a, b) => {
             const [aVal, bVal] = [a[sort], b[sort]][
@@ -139,11 +131,9 @@
     function showProjectModel(id) {
         selectedProjectId = id;
         urn = projects.find(x => x.ProjectId == selectedProjectId).Filename;
-        console.log(urn);
     }
 
     function setDetailsUrlPart(){
-        console.log(getWidth());
         if (getWidth() > 839) {
             detailsUrl = '/model';
         } else {
@@ -275,7 +265,7 @@
                 </div>
                 <div class="property-details-grid-cell">
                     <div class="property-name">Area</div>
-                    <div class="property-value">{project.LivingArea.replace(" sq.m.", "")}&#13217;</div>
+                    <div class="property-value">{project.LivingArea}&#13217;</div>
                 </div>
                 <div class="property-details-grid-cell">
                     <div class="property-name">Margin</div>

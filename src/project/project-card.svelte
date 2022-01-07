@@ -23,7 +23,7 @@
     <table class="property-table" aria-label="Project properties" style="width: 100%;">
         <tr>
             <td>Area</td>
-            <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
+            <td class="numeric-row">{project.LivingArea}&#13217;</td>
         </tr>
         <tr>
             <td>Project Cost</td>
@@ -58,7 +58,7 @@
         </div>
         <div class="property-details-grid-cell">
             <div class="property-name">Area</div>
-            <div class="property-value">{project.LivingArea.replace(" sq.m.", "")}&#13217;</div>
+            <div class="property-value">{project.LivingArea}&#13217;</div>
         </div>
         <div class="property-details-grid-cell">
             <div class="property-name">Margin</div>

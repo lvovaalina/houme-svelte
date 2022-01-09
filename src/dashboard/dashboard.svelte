@@ -201,7 +201,7 @@
                             <Link to="/view/{project.ProjectId}/{detailsUrl}">
                                 <img
                                     class="project-image"
-                                    src="{'data:image/png;base64,' + project.ProjectCoverBase64}"
+                                    src="{'data:image/png;base64,' + project.ProjectCover}"
                                     alt="Project {project.Name} cover"/>
                             </Link>
                             </div>

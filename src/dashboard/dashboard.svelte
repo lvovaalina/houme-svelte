@@ -505,6 +505,7 @@
 
         .project-link-container {
             background-color: #2D62E8;
+            display: flex;
             justify-content: center;
         }
 

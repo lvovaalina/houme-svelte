@@ -3,6 +3,7 @@
 	import Settings from "./settings/settings.svelte";
 	import { Router, Route } from "svelte-navigator";
 	import "../public/material-colors.min.css";
+	import "../public/global.css";
 	import { pageTitle, responsive } from './store';
 	import Analytics from './common/analytics.svelte';
 

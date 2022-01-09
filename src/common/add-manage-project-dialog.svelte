@@ -54,10 +54,27 @@
         if (!!files && files.length > 0) {
             let image = files[0];
             let reader = new FileReader();
-            reader.readAsDataURL(image);
-            reader.onload = e => {
-                project.ProjectCoverBase64 = e.target.result;
+            reader.onload = function(e) {
+                var img = document.createElement("img");
+                img.onload = function () {
+                    var canvas = document.createElement("canvas");
+
+                    // var canvas = document.getElementById("canvas");
+                    var ctx = canvas.getContext("2d");
+
+                    // Actual resizing
+                    ctx.drawImage(img, 0, 0, 300, 150);
+
+                    // Show resized image in preview element
+                    let dataurl = canvas.toDataURL(image.type);
+
+                    project.ProjectCoverBase64 = canvas.toDataURL(image.type);
+                }
+                // Dynamically create a canvas element
+                img.src = e.target.result;
+                
             };
+            reader.readAsDataURL(image);
         }
     }
 

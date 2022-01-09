@@ -29,7 +29,7 @@
 <main>
 	<Analytics></Analytics>
 	<Notifications>
-	<Router url="{url}">
+	<Router url="{url}" primary={false}>
 		<Header />
 		<Route path="view/:projectId" let:params>
 			<ProjectViewer projectId={params.projectId} active='Model'></ProjectViewer>

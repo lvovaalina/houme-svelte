@@ -568,7 +568,6 @@
                     <ProjectCost
                             currency={currency}
                             jobs={project.projectJobsCostVM}
-                            estimation={project.ConstructionDuration}
                             bind:loaded={dataLoaded}>
                     </ProjectCost>
                 </div>

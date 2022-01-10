@@ -121,16 +121,20 @@
         dataChanged(jobs);
     }
 
+    let isProcessing = false;
+
     function dataChanged(jobs) {
-        if (jobs.length && jobs.length !== 0) {
+        if (jobs.length && jobs.length !== 0 && !isProcessing) {
+            isProcessing = true;
             rows = [], tasks = [];
-            let data = {rows:[], tasks:[]}
+            let data = {rows:[], tasks:[], headers: []};
+            gantt.$set({...data});
 
             translateStagesToRows();
             translateStagesToTasks();
 
             let to = tasks[tasks.length - 1].to;
-            data = {rows: rows, tasks: tasks, to: to};
+            data = {rows: rows, tasks: tasks, to: to, headers: [{ sticky: true, unit: 'month', format: 'MMM YYYY' }],};
 
             if (projectDuration > 365) {
                 data.minWidth = 2000;
@@ -140,21 +144,21 @@
 
             // wait for gantt element to render before removing clickable headers
             setTimeout(() => {
-                let headerCells = document.getElementsByClassName('column-header-cell');
-
-                let startIndex = 0;
-                headerCells.forEach((el, index) => {
+                let headerRow = document.getElementsByClassName("column-header-row");
+                let headerClone = headerRow[0].cloneNode(true);
+                headerRow[0].parentNode.appendChild(headerClone);
+                headerRow[0].style = 'visibility: hidden; position: absolute;';
+                headerClone.children.forEach((el, index) => {
                     let elClone = el.cloneNode(true);
                     
                     // hack to fix HM-238 without forking repository
                     let headerText = elClone.children[0].innerHTML;
                     if (monthNames.findIndex(x => headerText.startsWith(x)) >= 0) {
                         let monthNumber = (index)%12;
-                        elClone.children[0].innerHTML = monthNames[monthNumber] + headerText.substring(3);
+                        el.children[0].innerHTML = monthNames[monthNumber] + headerText.substring(3);
                     }
-
-                    el.parentNode.replaceChild(elClone, el);
                 });
+                isProcessing = false;
             });
         }
     }
@@ -302,7 +306,6 @@
         flex-grow: 1;
         overflow: auto;
 	    border: #efefef 1px solid;
-        height: calc(100vh - 64px - 76px - 20px);
     }
 
     :global(#example-gantt .column-header-cell) {

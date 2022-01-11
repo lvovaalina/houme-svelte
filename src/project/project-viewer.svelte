@@ -1,16 +1,17 @@
 <script>
-    import LayoutGrid, { Cell} from '@smui/layout-grid'
+    import LayoutGrid, { Cell} from '@smui/layout-grid';
+    import CircularProgress from '@smui/circular-progress';
     import ForgeViewer from './forge-viewer.svelte';
     import ProjectTimeline from './project-timeline.svelte';
     import ProjectCost from './project-cost.svelte';
     import Ripple from '@smui/ripple';
     import { navigate, Link } from "svelte-navigator";
-    import Button, {Label} from '@smui/button';
     import { onMount } from 'svelte';
     import { stageColorMap, stageMap, time } from '../utils';
-    import ProjectSettings from '../project/project-settings.svelte';
+    import ProjectCard from '../project/project-card.svelte';
     import ProjectMaterials from '../project/project-materials.svelte';
-    import { pageTitle, projectStored, propertiesStored } from '../store';
+    import { pageTitle, projectStored, propertiesStored, responsive } from '../store';
+    import { watchResize } from "svelte-watch-resize";
 
     import { getNotificationsContext } from 'svelte-notifications';
     const { addNotification } = getNotificationsContext();
@@ -23,15 +24,32 @@
         {name: 'Timeline', urlPart: 'timeline'},
         {name: 'Jobs', urlPart: 'jobs'},
         {name: 'Materials', urlPart: 'materials'},
-    ]
+    ];
 
+    let tabsResponsive = [
+        {name: 'Details', urlPart: 'details'},
+        {name: 'Model', urlPart: 'model'},
+        {name: 'Timeline', urlPart: 'timeline'},
+        {name: 'Jobs', urlPart: 'jobs'},
+        {name: 'Materials', urlPart: 'materials'},
+    ];
+
+    let headerTabs = [];
+    let responsiveHeight = 0;
+
+    function getWidth() {
+        return Math.max(
+            document.body.scrollWidth,
+            document.documentElement.scrollWidth,
+            document.body.offsetWidth,
+            document.documentElement.offsetWidth,
+            document.documentElement.clientWidth
+        );
+    }
     export let currency = '$';
     
     import { config } from '../config';
     let conf = new config();
-    function setActive(value) {
-		navigate('/view/' + projectId + '/' + value.urlPart, { replace: true });
-    }
 
     let project = {};
     export let propertiesMap = new Map();
@@ -311,6 +329,11 @@
             let props = stageMap.get(element.ConstructionJobMaterial.Job.StageName);
 
             let timestamp = timestamps.get(element.ConstructionJobMaterial.Job.JobCode);
+            
+            let jobName = element.ConstructionJobMaterial.Job.SubStageName;
+            if (element.ConstructionJobMaterial.Job.SubStageName != element.ConstructionJobMaterial.Job.JobName) {
+                jobName += ': ' + element.ConstructionJobMaterial.Job.JobName;
+            }
 
             materialsVM.push({
                 name: element.ConstructionJobMaterial.MaterialName,
@@ -318,8 +341,7 @@
                 nominalCost: element.ConstructionJobMaterial.MaterialCost,
                 volume: property.PropertyValue,
                 propertyUnit: element.ConstructionJobMaterial.Job.Property.PropertyUnit,
-                jobName: element.ConstructionJobMaterial.Job.SubStageName
-                    + ': ' + element.ConstructionJobMaterial.Job.JobName,
+                jobName: jobName,
                 color: props.color,
                 date: timestamp.from,
             })
@@ -396,6 +418,10 @@
         });
 
     onMount(() => {
+        if ($responsive) {
+            responsiveHeight = document.documentElement.clientHeight - 38 - 39 - 12 - 46;
+        }
+
         pageTitle.set({
             title: 'Project View ' + active,
         });
@@ -410,7 +436,25 @@
                 })
             dataLoaded = true;
         }
+
+        setHeaderTabs();
     });
+
+    function setHeaderTabs() {
+        if (getWidth() > 839) {
+            headerTabs = tabs;
+        } else {
+            headerTabs = tabsResponsive;
+        }
+    }
+
+    function handleResize() {
+        setHeaderTabs();
+
+        if (active == 'Details' && getWidth() > 839) {
+            navigate('/view/' + project.ProjectId, {replace: true});
+        }
+    }
 
     async function updateProject(event) {
         dataLoaded = false;
@@ -473,94 +517,80 @@
     }
 </script>
 
+<div use:watchResize={handleResize}></div>
 <div class="project-viewer">
     <div class="project-view-content">
+
         <LayoutGrid class="project-content-grid">
-            <Cell span={9} class="project-view-content-details">
+            <Cell span={9} class="project-view-content-details" style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}>
+
+                {#if dataLoaded}
+                <div class="project-name-container-responsive">
+                    <Link
+                        class="dashboard-link"
+                        to="/">
+                        <i class="arrow left"></i>
+                    </Link>
+                    <h2 class="project-name-responsive">{project.Name}</h2>
+                </div>
+                {/if}
+
                 <div class="project-view-header">
                     <div class="project-view-buttons-container">
-                        {#each tabs as tab, index}
+                        {#each headerTabs as tab, index}
                         <div use:Ripple={{ surface: true }}
-                        class={
-                            active === tab.name ? getBorderRadius(index, tabs) + " tab-link-container active"
-                                : getBorderRadius(index, tabs) + " tab-link-container"}>
-                            <Link class="tab-link" style="color: rgb(21, 40, 89);" to="/view/{project.ProjectId}/{tab.urlPart}">{tab.name}</Link>
+                            class={
+                                active === tab.name ? getBorderRadius(index, tabs) + " tab-link-container active"
+                                    : getBorderRadius(index, tabs) + " tab-link-container"}>
+                            <Link
+                                class="tab-link"
+                                style={active === tab.name ? "color:rgb(0,100,200);" : "color: rgba(0, 0, 0, .87);"}
+                                to="/view/{project.ProjectId}/{tab.urlPart}">
+                                {tab.name}
+                            </Link>
                         </div>
                         {/each}
                     </div>
                 </div>
-                <div class="{active == 'Timeline' ? '' : 'hidden'}">
+
+                <div class="{active == 'Timeline' ? 'details-tab' : 'hidden'}">
+                    <div class="details-padding"></div>
                     <ProjectTimeline projectDuration={project.ConstructionDuration} currency={currency} jobs={project.projectJobsTimelineVM}></ProjectTimeline>
                 </div>
 
-                <div class="{active == 'Materials' ? '' : 'hidden'}">
+                <div class="{active == 'Materials' ? 'details-tab' : 'hidden'}">
+                    <div class="details-padding"></div>
                     <ProjectMaterials currency={currency} materials={project.projectMaterialsVM}></ProjectMaterials>
                 </div>
                 
-                <div class="{active == 'Jobs' ? '' : 'hidden'}">
-                <ProjectCost
-                        currency={currency}
-                        jobs={project.projectJobsCostVM}
-                        estimation={project.ConstructionDuration}
-                        bind:loaded={dataLoaded}>
-                </ProjectCost>
+                <div class="{active == 'Jobs' ? 'details-tab' : 'hidden'}">
+                    <div class="details-padding"></div>
+                    <ProjectCost
+                            currency={currency}
+                            jobs={project.projectJobsCostVM}
+                            bind:loaded={dataLoaded}>
+                    </ProjectCost>
                 </div>
 
-                <div class="{active == 'Model' ? '' : 'hidden-forge'}">
+                <div class="{active == 'Model' ? 'details-tab' : 'hidden'}">
+                    <div class="details-padding"></div>
                     <ForgeViewer urn={project.Filename}></ForgeViewer>
                 </div>
+
+                <div class="{active == 'Details' ? 'project-card-tab-responsive' : 'hidden'}">
+                    {#if dataLoaded}
+                        <ProjectCard bind:project={project} currency={currency} on:apply={updateProject}></ProjectCard>
+                    {:else}
+                        <CircularProgress style="height: 90vh; width: 100px; margin: 0 auto; display: flex;" indeterminate />
+                    {/if}
+                </div>
             </Cell>
-            <Cell span={3}>
+            <Cell span={3} class="project-card-cell">
                 <div class="project-card">
                     {#if dataLoaded}
-                    <h3 class="card-header" style="margin-top: 0;">Project Details</h3>
-                    <table class="property-table" aria-label="Project properties" style="width: 100%;">
-                        <tr>
-                            <td>Area</td>
-                            <td class="numeric-row">{project.LivingArea.replace(" sq.m.", "")}&#13217;</td>
-                        </tr>
-                        <tr>
-                            <td>Project Cost</td>
-                            <td class="numeric-row">{currency + project.ConstructionCost}</td>
-                        </tr>
-                        <tr>
-                            <td>Construction Cost</td>
-                            <td class="numeric-row">{currency + project.ConstructionJobCost}</td>
-                        </tr>
-                        <tr>
-                            <td>Materials Cost</td>
-                            <td class="numeric-row">{currency + project.ConstructionMaterialCost}</td>
-                        </tr>
-                        <tr>
-                            <td>Project Duration</td>
-                            <td class="numeric-row">{project.ConstructionDuration} days</td>
-                        </tr>
-                        <tr>
-                            <td>Workers</td>
-                            <td class="numeric-row">{project.Workers}</td>
-                        </tr>
-                        <tr>
-                            <td>Margin</td>
-                            <td class="numeric-row">{currency + project.Margin}</td>
-                        </tr>
-                    </table>
-                    <div class="divider"/>
-                    <div class="materials-block">
-                        <h3 class="card-header">Options</h3>
-                        <ProjectSettings
-                            bind:foundationMaterialValue={project.FoundationMaterial}
-                            bind:wallMaterialValue={project.WallMaterial}
-                            bind:finishMaterialValue={project.FinishMaterial}
-                            bind:roofingMaterialValue={project.RoofingMaterial}
-                            bind:constructionWorkersNumberValue={project.ConstructionWorkersNumber}>
-                        </ProjectSettings>
-                    </div>
-
-                    <Button
-                        style="margin-top: 10px;text-align: left;background-color: #152859; color: white; align-self: flex-end;"
-                        variant="filled" on:click={updateProject}>
-                        <Label >APPLY</Label>
-                    </Button>
+                        <ProjectCard bind:project={project} currency={currency} on:apply={updateProject}></ProjectCard>
+                    {:else}
+                        <CircularProgress style="height: 90vh; width: 100px; margin: 0 auto;" indeterminate />
                     {/if}
                 </div>
             </Cell>
@@ -569,6 +599,10 @@
 </div>
 
 <style>
+    .project-card-tab-responsive, .project-name-container-responsive {
+        display: none;
+    }
+
     :global(.tab-link) {
         font-weight: 500;
         font-size: 14px;
@@ -578,8 +612,9 @@
         height:100%;
         width:100%;
     }
+
     .tab-link-container {
-        color: rgb(21, 40, 89);
+        color: #2D62E8;
         height: 36px;
         display: flex;
         align-items: center;
@@ -606,6 +641,7 @@
     .hidden-forge {
         position: absolute;
         top: -500px;
+        left: -500px;
     }
 
     .divider {
@@ -619,10 +655,6 @@
     .numeric-row {
         text-align: right;
         font-weight: 500;
-    }
-
-    .property-table tr {
-        height: 30px;
     }
 
     .property-table {
@@ -653,7 +685,7 @@
     }
 
     .project-card {
-        padding: 20px 24px 0;
+        padding: 20px 0 0 0;
 
         display: flex;
         flex-direction: column;
@@ -662,11 +694,12 @@
     }
 
     :global(.tab-button .mdc-button__ripple::before, .tab-button .mdc-button__ripple::after) {
-        background-color: rgba(21, 40, 89);
+        background-color: #2D62E8;
     }
 
     .tab-link-container.active {
-        border-color: rgba(21, 40, 89);
+        border-color: #2D62E8;
+        z-index: 1;
     }
 
     :global(.project-view-content-details) {
@@ -677,5 +710,89 @@
 
     :global(.project-content-grid) {
         padding: 0;
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        .details-tab {
+            margin: 0 -12px;
+        }
+
+        .details-padding {
+            background-color: #F5F7FA;
+            opacity: 70%;
+            height: 12px;
+            width: 100vw;
+        }
+
+        .tab-link:first-of-type {
+            justify-content: start;
+        }
+
+        .project-view-buttons-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 14px;
+        }
+
+        .tab-link-container {
+            border: none;
+            border-radius: 0;
+            color: rgba(0,100,200, .7);
+            width: auto;
+        }
+
+        :global(.tab-link-container.active a) {
+            border-bottom: 4px solid rgba(0,100,200, .7);
+            width: auto;
+        }
+
+        .project-card-tab-responsive {
+            display: block;
+        }
+
+        .project-name-container-responsive {
+            display: flex;
+            align-items: center;
+            margin: 14px 0 6px;
+        }
+
+        .project-name-container-responsive h2 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .project-name-container-responsive i {
+            margin: 2px 10px 2px 4px;
+        }
+
+        .project-card {
+            display: none;
+            
+        }
+
+        :global(.project-card-cell) {
+            display: none;
+        }
+
+        :global(.project-view-content-details) {
+            /* -header height -tab header height container bottom padding */
+            height: calc(100vh - 38px);
+            border: none;
+        }
+
+        .project-viewer {
+            padding: 0 12px;
+        }
+
+        .project-view-header {
+            margin-bottom: 14px;
+            padding: 0;
+            margin: 10px -14px 0;
+            /*box-shadow: 0 4px 2px -2px gray;*/
+            box-shadow:  2px 2px rgba(0, 0, 0, 0.06), 0px 1px 1px rgba(0, 0, 0, 0.06);
+        }
     }
 </style>

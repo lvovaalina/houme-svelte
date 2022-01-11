@@ -4,12 +4,16 @@
     import { time } from '../utils';
     import moment from 'moment';
 
+    import { responsive } from '../store';
+    import { numberWithCommas } from '../utils';
+
     export let currency;
     export let projectDuration;
 
     let gantt;
     let currentStart = time('01-01');
     let currentEnd = time('12-31');
+    let responsiveHeight = '';
 
     export let jobs = [];
     let rows = [];
@@ -17,10 +21,10 @@
 
     let taskColors = ['orange', 'green', 'blue'];
     let monthNames = [
-        "January", "February", "March",
-        "April", "May", "June", "July",
-        "August", "September", "October",
-        "November", "December"];
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Oct",
+        "Nov", "Dec"];
 
     function translateStagesToTasks() {
         function addTask(task, resourceId, color) {
@@ -117,17 +121,20 @@
         dataChanged(jobs);
     }
 
+    let isProcessing = false;
+
     function dataChanged(jobs) {
-        if (jobs.length && jobs.length !== 0) {
+        if (jobs.length && jobs.length !== 0 && !isProcessing) {
+            isProcessing = true;
             rows = [], tasks = [];
-            let data = {rows:[], tasks:[]}
+            let data = {rows:[], tasks:[], headers: []};
             gantt.$set({...data});
 
             translateStagesToRows();
             translateStagesToTasks();
 
             let to = tasks[tasks.length - 1].to;
-            data = {rows: rows, tasks: tasks, to: to};
+            data = {rows: rows, tasks: tasks, to: to, headers: [{ sticky: true, unit: 'month', format: 'MMM YYYY' }],};
 
             if (projectDuration > 365) {
                 data.minWidth = 2000;
@@ -137,22 +144,21 @@
 
             // wait for gantt element to render before removing clickable headers
             setTimeout(() => {
-                let headerCells = document.getElementsByClassName('column-header-cell');
-
-                let startIndex = 0;
-                headerCells.forEach((el, index) => {
+                let headerRow = document.getElementsByClassName("column-header-row");
+                let headerClone = headerRow[0].cloneNode(true);
+                headerRow[0].parentNode.appendChild(headerClone);
+                headerRow[0].style = 'visibility: hidden; position: absolute;';
+                headerClone.children.forEach((el, index) => {
                     let elClone = el.cloneNode(true);
                     
                     // hack to fix HM-238 without forking repository
                     let headerText = elClone.children[0].innerHTML;
-                    if (monthNames.findIndex(x => x == headerText) >= 0) {
-                        startIndex = startIndex == 0 ? index : startIndex;
-                        let monthNumber = (index - startIndex)%12;
-                        elClone.children[0].innerHTML = monthNames[monthNumber];
+                    if (monthNames.findIndex(x => headerText.startsWith(x)) >= 0) {
+                        let monthNumber = (index)%12;
+                        el.children[0].innerHTML = monthNames[monthNumber] + headerText.substring(3);
                     }
-
-                    el.parentNode.replaceChild(elClone, el);
                 });
+                isProcessing = false;
             });
         }
     }
@@ -161,7 +167,7 @@
         dateAdapter: new MomentSvelteGanttDateAdapter(moment),
         rows: [],
         tasks: [],
-        headers: [{ sticky: true, unit: 'year', format: 'YYYY' }, { sticky: true, unit: 'month', format: 'MMMM' }],
+        headers: [{ sticky: true, unit: 'month', format: 'MMM YYYY' }],
         fitWidth: true,
         from: currentStart.clone().startOf('year'),
         to: currentEnd,
@@ -184,13 +190,17 @@
                 }
             }
 
+            let scrollContainer = document.getElementsByClassName("sg-timeline-body")[0];
+
             node.addEventListener('mouseenter', onHover);
             node.addEventListener('mouseleave', onLeave);
+            scrollContainer.addEventListener('scroll', onLeave);
 
             return {
                 destroy() {
                     node.removeEventListener('mouseenter', onHover);
-                    node.removeEventListener('mouseleave', onLeave);
+                    node.removeEventListener('mouseleave scroll', onLeave);
+                    scrollContainer.removeEventListener('scroll', onLeave);
                 }
             }
         },
@@ -229,7 +239,7 @@
             </div>
             <div class="sg-popup-item">
                 <div class="sg-popup-item-label">Job Cost:</div>
-                <div class="sg-popup-item-value">${currency + task.cost}</div>
+                <div class="sg-popup-item-value">${currency + numberWithCommas(task.cost)}</div>
             </div>
         `
 
@@ -237,7 +247,7 @@
             div.innerHTML += `
             <div class="sg-popup-item">
                     <div class="sg-popup-item-label">Material Cost:</div>
-                    <div class="sg-popup-item-value">${currency + task.materialsCost}</div>
+                    <div class="sg-popup-item-value">${currency + numberWithCommas(task.materialsCost)}</div>
                 </div>
                 <div class="sg-popup-item">
                     <div class="sg-popup-item-label">Materials:</div>
@@ -269,6 +279,10 @@
     }
 
     onMount(() => {
+        if ($responsive) {
+            responsiveHeight = document.documentElement.clientHeight - 38 - 39 - 12 - 46;
+        }
+
         gantt = new SvelteGantt({ 
             // target a DOM element
             target: document.getElementById('example-gantt'), 
@@ -278,12 +292,12 @@
     });
 </script>
 
-<div class="container">
-    <div id="example-gantt"></div>
+<div class="gantt-container" style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}>
+    <div id="example-gantt" style={!!responsiveHeight ? "height:" + responsiveHeight + "px" : ""}></div>
 </div>
 
 <style>
-    .container {
+    .gantt-container {
         /* -header height -tab header height container bottom padding */
         height: calc(100vh - 64px - 76px - 20px);
     }
@@ -301,5 +315,24 @@
     
     :global(.sg-task-reflected .sg-task-content) {
         visibility: hidden;
+    }
+
+    :global(.column-header-cell:hover) {
+        background: none !important;
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        #example-gantt, .gantt-container {
+            height: calc(100vh - 38px - 39px - 12px - 46px);
+        }
+
+        :global(.sg-table, .sg-resize) {
+            display: none !important;
+        }
+
+        :global(.sg-task-content) {
+            font-size: 13px !important;
+        }
     }
 </style>

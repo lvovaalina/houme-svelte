@@ -82,4 +82,18 @@
     :global(.project-settings .mdc-select__anchor) {
         height: 34px;
     }
+
+    .setting-container label {
+        display: inline-block;
+        text-overflow: ellipsis;
+        width: 40%;
+        overflow: hidden;
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        .project-settings {
+            padding: 8px 0;
+        }
+    }
 </style>

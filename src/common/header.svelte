@@ -1,7 +1,6 @@
 <script>
     import TopAppBar, { Row, Section } from "@smui/top-app-bar";
-    import { navigate } from "svelte-navigator";
-    import { Icon } from '@smui/common';
+    import { navigate, Link } from "svelte-navigator";
     import Button, { Label } from "@smui/button";
     import { pageTitle, adminStored, adminAuthentificated } from '../store';
 
@@ -46,16 +45,20 @@
     <div class="top-app-bar-container">
         <TopAppBar class="header" variant="static">
             <Row>
-                <Section style="align-items: center;">
+                <Section class="header-section" style="align-items: center;">
                     <a class="header-logo-link" target="_blink" href="https://houmly.com">
                         <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
                     </a>
                     {#if !!projectName}
-                    <Button class="project-dashboard-link" style="color: rgba(21, 40, 89, .7);margin-bottom: 0;margin-left: 20px;" on:click={() => navigate('/',{replace: true})}>
-                        <Label><h2>Project Dashboard</h2></Label>
-                    </Button>
-                    <Icon style="color: rgba(21, 40, 89); font-size: 20px;" class="material-icons">chevron_right</Icon>
-                    <h2 class="project-name">{projectName}</h2>
+                        <Link class="project-dashboard-link" 
+                            style="color: rgba(0, 0, 0, .55);margin-bottom: 0;margin-left: 20px;"
+                            to="/">
+                            <h2>Project Dashboard</h2>
+                        </Link>
+                        <div class="project-arrow">
+                            <i style="border-color: rgba(0, 0, 0, .55);padding: 3px;" class="arrow right"></i>
+                        </div>
+                        <h2 class="project-name">{projectName}</h2>
                     {/if}
                 </Section>
                 <Section style="justify-content:flex-end">
@@ -75,13 +78,18 @@
 
 <style>
     .user-info {
-        color: rgba(21, 40, 89, .7);
+        color: rgba(0,100,200, .7);
         display: flex;
         align-items: center;
     }
 
+    :global(.project-arrow) {
+        padding: 3px;
+        margin-bottom: 2px;
+    }
+
     :global(.user-info .mdc-button__label) {
-        color: rgba(21, 40, 89, .7);
+        color: rgba(0,100,200, .7);
     }
 
     :global(.top-app-bar-container .header) {
@@ -96,11 +104,16 @@
     }
 
     :global(.project-dashboard-link:hover) {
-        color: rgba(21, 40, 89) !important;
+        color: #2D62E8 !important;
+    }
+
+    :global(.project-dashboard-link h2) {
+        text-transform: uppercase;
+        margin-right: 8px;
     }
 
     h2.project-name {
-        color: rgba(21, 40, 89);
+        color: #2D62E8;
         text-transform: uppercase;
         margin-left: 10px;
     }
@@ -112,5 +125,25 @@
 
     .header-logo-link {
         display: block;
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        :global(.header-section) {
+            padding-left: 0;
+        }
+        :global(.top-app-bar-container .header) {
+            height: 38px;
+            padding: 0 12px;
+        }
+
+        :global(.project-dashboard-link, .dashboard-icon, .project-name, .project-arrow) {
+            display: none;
+        }
+
+        .header-logo, .header-logo-link {
+            width: 120px;
+            height: 24px;
+        }
     }
 </style>

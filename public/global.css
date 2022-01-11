@@ -1,6 +1,6 @@
 /* Theme colors. */
 :root {
-	--mdc-theme-primary: #152859;
+	--mdc-theme-primary: #2D62E8;
 	--mdc-theme-secondary: #676778;
 	--mdc-theme-background: #fff;
 	--mdc-theme-surface: #fff;
@@ -102,7 +102,7 @@ button:focus {
 	right: 10px;
 }
 
-.sg-task.teal, .teal {
+.sg-task.teal, .bef-bg-teal::before, .bg-teal {
 	background-color: #b2dfdb;
 }
 
@@ -118,7 +118,7 @@ button:focus {
 	background-color: #68a7a1;
 }
 
-.sg-task.green, .green {
+.sg-task.green, .bef-bg-green::before, .bg-green {
 	background-color: #c8e6c9;
 }
 
@@ -135,7 +135,7 @@ button:focus {
 }
 
 
-.sg-task.light-green, .light-green {
+.sg-task.light-green, .bef-bg-light-green::before, .bg-light-green {
 	background-color: #dcedc8;
 }
 
@@ -151,7 +151,7 @@ button:focus {
 	background-color: #b5c3a5;
 }
 
-.sg-task.yellow, .yellow {
+.sg-task.yellow, .bef-bg-yellow::before, .bg-yellow {
 	background-color: #fff9c4;
 }
 
@@ -167,7 +167,7 @@ button:focus {
 	background-color: #fff283;
 }
 
-.sg-task.amber, .amber {
+.sg-task.amber, .bef-bg-amber::before, .bg-amber {
 	background-color: #ffecb3;
 }
 
@@ -183,7 +183,7 @@ button:focus {
 	background-color: #efd278;
 }
 
-.sg-task.light-orange, .light-orange {
+.sg-task.light-orange, .bef-bg-light-orange::before, .bg-light-orang {
 	background-color: #ffe0b2;
 }
 
@@ -464,4 +464,40 @@ pre {
 	display: flex;
 	overflow: auto;
 	flex: 1;
+}
+
+/* Arrow */
+.arrow {
+	border: solid black;
+	border-width: 0 2px 2px 0;
+	display: inline-block;
+	padding: 4px;
+}
+
+.right {
+	transform: rotate(-45deg);
+	-webkit-transform: rotate(-45deg);
+}
+
+.left {
+	transform: rotate(135deg);
+	-webkit-transform: rotate(135deg);
+}
+
+.up {
+	transform: rotate(-135deg);
+	-webkit-transform: rotate(-135deg);
+}
+
+.down {
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+}
+
+
+@media only screen and (max-width:839px)
+{
+	.responsive-box-shadow {
+		box-shadow:  0px -1px 0px rgba(100, 100, 111, 0.2), 0px 2px 2px rgba(100, 100, 111, 0.2), 0px 1px 1px rgba(100, 100, 111, 0.2);
+	}
 }

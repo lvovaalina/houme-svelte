@@ -156,6 +156,7 @@
         event.stopPropagation();
 
         project.ProjectCoverBase64 = project.ProjectCoverBase64.replace('data:image/png;base64,', '');
+        project.ProjectCover = '';     
 
         await fetch(conf.api + '/auth/updateProject/'+ project.ProjectId,
         {

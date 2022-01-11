@@ -45,7 +45,7 @@
     <div class="top-app-bar-container">
         <TopAppBar class="header" variant="static">
             <Row>
-                <Section style="align-items: center;">
+                <Section class="header-section" style="align-items: center;">
                     <a class="header-logo-link" target="_blink" href="https://houmly.com">
                         <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
                     </a>
@@ -129,6 +129,9 @@
 
     @media only screen and (max-width:839px)
     {
+        :global(.header-section) {
+            padding-left: 0;
+        }
         :global(.top-app-bar-container .header) {
             height: 38px;
             padding: 0 12px;

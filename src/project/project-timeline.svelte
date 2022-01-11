@@ -306,6 +306,7 @@
         flex-grow: 1;
         overflow: auto;
 	    border: #efefef 1px solid;
+        height: calc(100vh - 64px - 76px - 20px);
     }
 
     :global(#example-gantt .column-header-cell) {

@@ -86,6 +86,7 @@
         event.stopPropagation();
 
         project.ProjectProperties = properties;
+        project.ProjectCoverBase64 = project.ProjectCoverBase64.replace('data:image/png;base64,', '');
 
         await fetch(conf.api + '/auth/create',
         {

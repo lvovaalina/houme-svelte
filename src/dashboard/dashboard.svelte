@@ -244,6 +244,9 @@
         {/if}
     </div>
     <div class="projects-grid-responsive">
+        {#if projectsResult.length === 0}
+            <p style="text-align:center">No projects to view</p>
+        {/if}
         {#each projectsResult as project}
         <div class="details-padding"></div>
         <div class="project-drid-responsive">

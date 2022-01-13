@@ -119,7 +119,7 @@
     }
 
     .header-logo, .header-logo-link {
-        width: 165px;
+        width: 144x;
         height: 33px;
     }
 
@@ -142,7 +142,7 @@
         }
 
         .header-logo, .header-logo-link {
-            width: 120px;
+            width: 105px;
             height: 24px;
         }
     }

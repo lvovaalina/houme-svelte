@@ -69,6 +69,8 @@
                             <Label>Logout</Label>
                         </Button>
                     </div>
+                    {:else}
+                    <a class="contact-link" href="https://houmly.com/contact">Contact</a>
                     {/if}
                 </Section>
             </Row>
@@ -77,6 +79,16 @@
 </div>
 
 <style>
+    .contact-link {
+        color: #000000;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .contact-link:hover {
+        color: #2d62e8;
+    }
+
     .user-info {
         color: rgba(0,100,200, .7);
         display: flex;

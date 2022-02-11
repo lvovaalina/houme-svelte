@@ -12,19 +12,20 @@
     import Tooltip, { Wrapper } from '@smui/tooltip';
     import { watchResize } from "svelte-watch-resize";
 
-    import ForgeViewer from '../project/forge-viewer.svelte';
-
     import { onMount } from 'svelte';
     import { Link } from 'svelte-navigator';
     import { pageTitle } from '../store';
     import { numberWithCommas } from '../utils';
+
+    import UploadModel from '../common/upload-model.svelte';
 
     import { Input } from '@smui/textfield';
     import Paper from '@smui/paper';
     import { Icon } from '@smui/common';
 
     import IconButton from '@smui/icon-button';
-    let urn;
+    let email = null;
+    let name = null;
 
     let currency = '$';
     let detailsUrl = '';
@@ -144,6 +145,7 @@
     function handleResize() {
         setDetailsUrlPart();
     }
+
 </script>
 
 <div class="dashboard" use:watchResize={handleResize}>
@@ -300,13 +302,7 @@
         {/each}
     </div>
     <div class="forge-container">
-        {#if !!selectedProjectId && selectedProjectId > 0}
-            <p style="margin-bottom: -20px;">PROJECT</p>
-            <h2>{projects.find(x => x.ProjectId == selectedProjectId).Name}</h2>
-            <ForgeViewer urn={urn} forgeViewerClass="dashboard-height"></ForgeViewer>
-        {:else}
-        <p style="text-align: center;">Select a project for a quick view</p>
-        {/if}
+       <UploadModel/>
     </div>
     </div>
 
@@ -318,6 +314,14 @@
 </div>
 
 <style>
+    :global(.mdc-notched-outline .mdc-notched-outline--no-label) {
+        border-color: #eeeeee;
+    }
+    :global(.project-upload) {
+        background-color: white !important;
+        color: black !important;
+    }
+
     :global(.days-after::after) {
         content: ' days';
     }
@@ -352,7 +356,7 @@
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;
-        height: calc(100vh - 64px - 76px);
+        /* height: calc(100vh - 64px - 76px); */
     }
 
     .forge-container {

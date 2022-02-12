@@ -150,8 +150,8 @@
 
 <div class="dashboard" use:watchResize={handleResize}>
     {#if dataLoaded}
-    <div class="project-table-header">
-        <h1>Projects</h1> <!-- ({projectsCount})</h1> -->
+    <!-- <div class="project-table-header">
+        <h1>Projects</h1>
         <div class="solo-demo-container solo-container">
             <Paper class="solo-paper" elevation={6}>
                 <Icon class="material-icons">search</Icon>
@@ -167,143 +167,143 @@
                 
             </Paper>
         </div>
-    </div>
+    </div> -->
     <div class="dasboard-content-container">
-    <div class="projects-table-container">
-        <DataTable
-            sortable
-            bind:sort
-            bind:sortDirection
-            on:MDCDataTable:sorted={handleSort}
-            stickyHeader table$aria-label="Project dashboard"
-            class="projects-table">
-            <Head>
-                <Row>
-                {#each columns as col, index}
-                    {#if index == 0}
-                        <Cell style="padding-left: 5px;padding-right: 0;"></Cell>
-                    {:else}
-                    <Cell sortable={!!col.columnId ? 'true' : 'false'} class={col.class} columnId={col.columnId}>
-                        <Label>{col.name}</Label>
-                        {#if !!col.columnId}
-                            <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
+        <div class="forge-container">
+            <UploadModel/>
+         </div>
+        <!-- <div class="projects-table-container">
+            <DataTable
+                sortable
+                bind:sort
+                bind:sortDirection
+                on:MDCDataTable:sorted={handleSort}
+                stickyHeader table$aria-label="Project dashboard"
+                class="projects-table">
+                <Head>
+                    <Row>
+                    {#each columns as col, index}
+                        {#if index == 0}
+                            <Cell style="padding-left: 5px;padding-right: 0;"></Cell>
+                        {:else}
+                        <Cell sortable={!!col.columnId ? 'true' : 'false'} class={col.class} columnId={col.columnId}>
+                            <Label>{col.name}</Label>
+                            {#if !!col.columnId}
+                                <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
+                            {/if}
+                        </Cell>
                         {/if}
-                    </Cell>
-                    {/if}
-                {/each}
-                </Row>
-            </Head>
-            <Body>
-                {#if projectsResult.length !== 0} 
-                {#each projectsResult as project, index}
-                    <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
-                        <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
-                        <Cell style="padding-left:0;" class="image-column-row">
-                            <div class="project-cover-container">
-                            <Link to="/view/{project.ProjectId}/{detailsUrl}">
-                                <img
-                                    class="project-image"
-                                    src="{'data:image/png;base64,' + project.ProjectCover}"
-                                    alt="Project {project.Name} cover"/>
-                            </Link>
-                            </div>
-                        </Cell>
-                        <Cell style="height:fit-content">
-                            <div class="break-word-style" style="white-space: pre-line;">
-                                {project.Name}
-                            </div>
-                        </Cell>
-                        <Cell>
-                            <div class="days-after">
-                                {project.ConstructionDuration}
-                            </div>
-                        </Cell>
-                        <Cell>{project.LivingArea} &#13217;</Cell>
-                        <Cell>{currency + numberWithCommas(project.Margin)}</Cell>
-                        <Cell>{currency + numberWithCommas(project.ConstructionCost)}</Cell>
-                        <Cell>{currency + numberWithCommas(project.ConstructionJobCost)}</Cell>
-                        <Cell>{currency + numberWithCommas(project.ConstructionMaterialCost)}</Cell>
-                        <Cell>{project.Workers}</Cell>
-                        <Cell>
-                            <div use:Ripple={{ surface: true }} class="project-link-container">
-                                <Link style="color: #2D62E8" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
-                            </div>
-                        </Cell>
+                    {/each}
                     </Row>
-            {/each}
-            {/if}
-            </Body>
-            <LinearProgress
-                bind:closed={dataLoadedForSearch}
-                indeterminate
-                aria-label="Data is being loaded..."
-                slot="progress"
-            />
-        </DataTable>
+                </Head>
+                <Body>
+                    {#if projectsResult.length !== 0} 
+                    {#each projectsResult as project, index}
+                        <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
+                            <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
+                            <Cell style="padding-left:0;" class="image-column-row">
+                                <div class="project-cover-container">
+                                <Link to="/view/{project.ProjectId}/{detailsUrl}">
+                                    <img
+                                        class="project-image"
+                                        src="{'data:image/png;base64,' + project.ProjectCover}"
+                                        alt="Project {project.Name} cover"/>
+                                </Link>
+                                </div>
+                            </Cell>
+                            <Cell style="height:fit-content">
+                                <div class="break-word-style" style="white-space: pre-line;">
+                                    {project.Name}
+                                </div>
+                            </Cell>
+                            <Cell>
+                                <div class="days-after">
+                                    {project.ConstructionDuration}
+                                </div>
+                            </Cell>
+                            <Cell>{project.LivingArea} &#13217;</Cell>
+                            <Cell>{currency + numberWithCommas(project.Margin)}</Cell>
+                            <Cell>{currency + numberWithCommas(project.ConstructionCost)}</Cell>
+                            <Cell>{currency + numberWithCommas(project.ConstructionJobCost)}</Cell>
+                            <Cell>{currency + numberWithCommas(project.ConstructionMaterialCost)}</Cell>
+                            <Cell>{project.Workers}</Cell>
+                            <Cell>
+                                <div use:Ripple={{ surface: true }} class="project-link-container">
+                                    <Link style="color: #2D62E8" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
+                                </div>
+                            </Cell>
+                        </Row>
+                {/each}
+                {/if}
+                </Body>
+                <LinearProgress
+                    bind:closed={dataLoadedForSearch}
+                    indeterminate
+                    aria-label="Data is being loaded..."
+                    slot="progress"
+                />
+            </DataTable>
 
-        {#if projectsResult.length === 0}
-        <p style="text-align:center">No projects to view</p>
-        {/if}
-    </div>
-    <div class="projects-grid-responsive">
-        {#if projectsResult.length === 0}
+            {#if projectsResult.length === 0}
             <p style="text-align:center">No projects to view</p>
-        {/if}
-        {#each projectsResult as project}
-        <div class="details-padding"></div>
-        <div class="project-drid-responsive">
-            <div class="project-grid-header">
-                <div class="project-cover-container">
-                    <Link to="/view/{project.ProjectId}/{detailsUrl}">
-                        <img
-                            class="project-image"
-                            src="{'data:image/png;base64,' + project.ProjectCover}"
-                            alt="Project {project.Name} cover"/>
-                    </Link>
+            {/if}
+        </div> -->
+        <div class="projects-grid-responsive">
+            {#if projectsResult.length === 0}
+                <p style="text-align:center">No projects to view</p>
+            {/if}
+            {#each projectsResult as project}
+            <div class="details-padding"></div>
+            <div class="project-drid-responsive">
+                <div class="project-grid-header">
+                    <div class="project-cover-container">
+                        <Link to="/view/{project.ProjectId}/{detailsUrl}">
+                            <img
+                                class="project-image"
+                                src="{'data:image/png;base64,' + project.ProjectCover}"
+                                alt="Project {project.Name} cover"/>
+                        </Link>
+                    </div>
+                    <div class="project-grid-header-name">{project.Name}</div>
                 </div>
-                <div class="project-grid-header-name">{project.Name}</div>
-            </div>
-            <div class="property-grid-responsive">
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Duration</div>
-                    <div class="property-value">{project.ConstructionDuration} days</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Area</div>
-                    <div class="property-value">{project.LivingArea}&#13217;</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Margin</div>
-                    <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Workers</div>
-                    <div class="property-value">{project.Workers}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Project Cost</div>
-                    <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Job Cost</div>
-                    <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Material Cost</div>
-                    <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div use:Ripple={{ surface: true }} class="project-link-container">
-                        <Link style="color:white" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
+                <div class="property-grid-responsive">
+                    <div class="property-details-grid-cell">
+                        <div class="property-name">Duration</div>
+                        <div class="property-value">{project.ConstructionDuration} days</div>
+                    </div>
+                    <div class="property-details-grid-cell">
+                        <div class="property-name">Area</div>
+                        <div class="property-value">{project.LivingArea}&#13217;</div>
+                    </div>
+                    <div class="property-details-grid-cell">
+                        <div class="property-name">Margin</div>
+                        <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
+                    </div>
+                    <div class="property-details-grid-cell">
+                        <div class="property-name">Workers</div>
+                        <div class="property-value">{project.Workers}</div>
+                    </div>
+                    <div class="property-details-grid-cell">
+                        <div class="property-name">Project Cost</div>
+                        <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
+                    </div>
+                    <div class="property-details-grid-cell">
+                        <div class="property-name">Job Cost</div>
+                        <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
+                    </div>
+                    <div class="property-details-grid-cell">
+                        <div class="property-name">Material Cost</div>
+                        <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
+                    </div>
+                    <div class="property-details-grid-cell">
+                        <div use:Ripple={{ surface: true }} class="project-link-container">
+                            <Link style="color:white" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
+                        </div>
                     </div>
                 </div>
             </div>
+            {/each}
         </div>
-        {/each}
-    </div>
-    <div class="forge-container">
-       <UploadModel/>
-    </div>
     </div>
 
     {:else}
@@ -350,9 +350,9 @@
         height: 55px;
     }
 
-    .dasboard-content-container {
+    /* .dasboard-content-container {
         display: flex;
-    }
+    } */
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;

@@ -172,7 +172,7 @@
     <div class="dasboard-content-container">
         <h1>See how other companies plan their processes</h1>
         <div class="project-cards" style="display: flex; justify-content: space-between;">
-            {#each projectsResult as project}
+            {#each projectsResult.slice(0, 3) as project}
             <div class="card-container" style="width: 30%;">
                 <Card class="project-card" style="padding: 15px;">
                     <Link to="/view/{project.ProjectId}/{detailsUrl}">

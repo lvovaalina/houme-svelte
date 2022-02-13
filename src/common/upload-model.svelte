@@ -84,23 +84,27 @@
 
 <div class="upload-model-container">
     {#if !isLoading}
-    <form on:submit|preventDefault={uploadFile}>
+    <h1>Do you want to see your plan?</h1>
+    <form on:submit|preventDefault={uploadFile} style="display:flex">
+        <div style="width:50%">
         {#if errorMessage!= null}
             <p style="color:red;">{errorMessage}</p>
         {/if}
+
         <label for="name">Name</label>
         <Textfield
             id="name" required variant="outlined"
-            style="width:100%; height:40px;" class="text-field"
+            style="width:70%; height:40px;" class="text-field"
             bind:value={name}/>
 
         <label for="email">Email</label>
         <Textfield
             id="email" required variant="outlined"
-            style="width:100%; height:40px;" class="text-field"
+            style="width:70%; height:40px;" class="text-field"
             bind:value={email}/>
+        </div>
 
-        <div class="upload-project-container">
+        <div class="upload-project-container" style="width:50%">
             <Dropzone containerClasses="project-upload" on:drop={handleFilesSelect} multiple="false" accept=".rvt">
                 <p>Drag and drop or Click</p>
             </Dropzone>
@@ -108,11 +112,12 @@
                 <p>File Name: {files.accepted[files.accepted.length - 1].name}</p>
             {/if}
 
-            <Button variant="raised" type="submit">
+            <Button style="margin-top: 15px;" variant="raised" type="submit">
                 <Label>Upload Model</Label>
             </Button>
         </div>
     </form>
+    <h2>Upload your project in any format and see how easy planning process can be</h2>
     {:else}
     <div style="display: flex; justify-content: center;position:absolute;height:90vh;background-color:rgba(255,255,255,0.5);width: 100%;margin-left:-24px;z-index:12;">
         <CircularProgress style="position:absolute; height: 90vh;width:120px;z-index:12;" indeterminate />

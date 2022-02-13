@@ -7,6 +7,7 @@
         Cell,
         Label,
     } from '@smui/data-table';
+    import Card, { PrimaryAction} from "@smui/card";
     import Ripple from '@smui/ripple';
     import LinearProgress from '@smui/linear-progress';
     import Tooltip, { Wrapper } from '@smui/tooltip';
@@ -169,85 +170,29 @@
         </div>
     </div> -->
     <div class="dasboard-content-container">
-        <div class="forge-container">
-            <UploadModel/>
-         </div>
-        <!-- <div class="projects-table-container">
-            <DataTable
-                sortable
-                bind:sort
-                bind:sortDirection
-                on:MDCDataTable:sorted={handleSort}
-                stickyHeader table$aria-label="Project dashboard"
-                class="projects-table">
-                <Head>
-                    <Row>
-                    {#each columns as col, index}
-                        {#if index == 0}
-                            <Cell style="padding-left: 5px;padding-right: 0;"></Cell>
-                        {:else}
-                        <Cell sortable={!!col.columnId ? 'true' : 'false'} class={col.class} columnId={col.columnId}>
-                            <Label>{col.name}</Label>
-                            {#if !!col.columnId}
-                                <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
-                            {/if}
-                        </Cell>
-                        {/if}
-                    {/each}
-                    </Row>
-                </Head>
-                <Body>
-                    {#if projectsResult.length !== 0} 
-                    {#each projectsResult as project, index}
-                        <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
-                            <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
-                            <Cell style="padding-left:0;" class="image-column-row">
-                                <div class="project-cover-container">
-                                <Link to="/view/{project.ProjectId}/{detailsUrl}">
-                                    <img
-                                        class="project-image"
-                                        src="{'data:image/png;base64,' + project.ProjectCover}"
-                                        alt="Project {project.Name} cover"/>
-                                </Link>
-                                </div>
-                            </Cell>
-                            <Cell style="height:fit-content">
-                                <div class="break-word-style" style="white-space: pre-line;">
-                                    {project.Name}
-                                </div>
-                            </Cell>
-                            <Cell>
-                                <div class="days-after">
-                                    {project.ConstructionDuration}
-                                </div>
-                            </Cell>
-                            <Cell>{project.LivingArea} &#13217;</Cell>
-                            <Cell>{currency + numberWithCommas(project.Margin)}</Cell>
-                            <Cell>{currency + numberWithCommas(project.ConstructionCost)}</Cell>
-                            <Cell>{currency + numberWithCommas(project.ConstructionJobCost)}</Cell>
-                            <Cell>{currency + numberWithCommas(project.ConstructionMaterialCost)}</Cell>
-                            <Cell>{project.Workers}</Cell>
-                            <Cell>
-                                <div use:Ripple={{ surface: true }} class="project-link-container">
-                                    <Link style="color: #2D62E8" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
-                                </div>
-                            </Cell>
-                        </Row>
-                {/each}
-                {/if}
-                </Body>
-                <LinearProgress
-                    bind:closed={dataLoadedForSearch}
-                    indeterminate
-                    aria-label="Data is being loaded..."
-                    slot="progress"
-                />
-            </DataTable>
+        <h1>See how other companies plan their processes</h1>
+        <div class="project-cards" style="display: flex; justify-content: space-between;">
+            {#each projectsResult as project}
+            <div class="card-container" style="width: 30%;">
+                <Card class="project-card" style="padding: 15px;">
+                    <Link to="/view/{project.ProjectId}/{detailsUrl}">
+                        <img
+                            class="project-image"
+                            src="{'data:image/png;base64,' + project.ProjectCover}"
+                            style="width: 100%; height: auto;"
+                            alt="Project {project.Name} cover"/>
+                        <h3 style="margin:0">{project.Name}</h3>
+                    </Link>
+                </Card>
+              </div>
+            {/each}
+        </div>
 
-            {#if projectsResult.length === 0}
-            <p style="text-align:center">No projects to view</p>
-            {/if}
-        </div> -->
+        <div class="upload-model-container">
+            <UploadModel />
+         </div>
+
+       
         <div class="projects-grid-responsive">
             {#if projectsResult.length === 0}
                 <p style="text-align:center">No projects to view</p>
@@ -314,6 +259,9 @@
 </div>
 
 <style>
+    :global(.project-card:hover) {
+        background-color: rgba(0, 0, 0, 0.15);
+    }
     :global(.mdc-notched-outline .mdc-notched-outline--no-label) {
         border-color: #eeeeee;
     }

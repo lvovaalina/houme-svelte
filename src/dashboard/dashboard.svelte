@@ -259,9 +259,6 @@
 </div>
 
 <style>
-    :global(.project-card:hover) {
-        background-color: rgba(0, 0, 0, 0.15);
-    }
     :global(.mdc-notched-outline .mdc-notched-outline--no-label) {
         border-color: #eeeeee;
     }

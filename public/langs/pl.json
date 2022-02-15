@@ -1,0 +1,24 @@
+{
+    "header": {
+        "contact": "Kontakt"
+    },
+    "details": {
+        "nav": {
+            "details": "Szczegóły Projektu",
+            "model": "model",
+            "timaline": "timeline",
+            "jobs": "jobs",
+            "materials": "materials"
+        },
+        "projectDetailsCard": {
+            "title": "Szczegóły Projektu",
+            "duration": "Trwanie",
+            "area": "Powierzchnia",
+            "margin": "Waluta",
+            "projectCost": "Koszt projektu",
+            "jobCost": "Koszt budowy",
+            "materialCost": "Koszt materiałów",
+            "workers": "Pracownicy"
+        }
+    }
+}

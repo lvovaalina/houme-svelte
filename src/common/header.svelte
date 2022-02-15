@@ -1,8 +1,9 @@
 <script>
     import TopAppBar, { Row, Section } from "@smui/top-app-bar";
-    import { navigate, Link } from "svelte-navigator";
+    import { Link, navigate } from "svelte-navigator";
     import Button, { Label } from "@smui/button";
     import { pageTitle, adminStored, adminAuthentificated } from '../store';
+    import { _, locale, setupI18n } from '../services/i18n';
 
     export let projectName = '';
     pageTitle.subscribe(value => {
@@ -16,6 +17,20 @@
     adminStored.subscribe(value => {
         admin = value;
     });
+
+    function changeLanguage(lang) {
+        if ($locale != lang) {
+            let path = window.location.pathname;
+            if (lang == 'en') {
+                path = '/en' + (path == '/' ? '' : path);
+            } else {
+                path = path.replace('/en', '');
+            }
+
+            setupI18n({withLocale: lang});
+            window.location = window.location.origin + path;
+        }
+    }
 
     async function logout() {
         fetch(conf.api + '/auth/logout',
@@ -70,7 +85,16 @@
                         </Button>
                     </div>
                     {:else}
-                    <a class="contact-link" href="https://houmly.com/contact">Contact</a>
+                    <a class="contact-link" href="https://houmly.com/contact">{$_('header.contact')}</a>
+
+                    <p class={"lang-label " + ($locale == 'pl' ? 'active' : '')}
+                        on:click={() => changeLanguage('en')}>
+                        EN
+                    </p>
+                    <p class={"lang-label " + ($locale == 'en' ? 'active' : '')}
+                        on:click={() => changeLanguage('pl')}>
+                        PL
+                    </p>
                     {/if}
                 </Section>
             </Row>
@@ -79,10 +103,24 @@
 </div>
 
 <style>
+    .lang-label {
+        color: black;
+        margin: 0 5px;
+    }
+
+    .lang-label.active {
+        cursor: pointer;
+    }
+
+    .lang-label.active:hover {
+        color: rgba(0,100,200);
+    }
+
     .contact-link {
         color: #000000;
         font-size: 16px;
         font-weight: 500;
+        margin-right: 10px;
     }
 
     .contact-link:hover {

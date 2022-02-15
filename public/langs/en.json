@@ -1,0 +1,24 @@
+{
+    "header": {
+        "contact": "Contact"
+    },
+    "details": {
+        "nav": {
+            "details": "details",
+            "model": "model",
+            "timaline": "timeline",
+            "jobs": "jobs",
+            "materials": "materials"
+        },
+        "projectDetailsCard": {
+            "title": "Project Details",
+            "duration": "duration",
+            "area": "area",
+            "margin": "margin",
+            "projectCost": "project cost",
+            "jobCost": "job cost",
+            "materialCost": "material cost",
+            "workers": "workers"
+        }
+    }
+}

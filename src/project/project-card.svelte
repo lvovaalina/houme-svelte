@@ -4,6 +4,7 @@
 
     import { createEventDispatcher } from "svelte";
     import { numberWithCommas } from '../utils';
+    import { _ } from '../services/i18n';
 
     const dispatch = createEventDispatcher();
 
@@ -16,37 +17,37 @@
 </script>
 
 <div class="card-header-container-responsive">
-    <h3 class="card-header" style="margin-top: 0;">Project Details</h3>
+    <h3 class="card-header" style="margin-top: 0;">{$_('details.projectDetailsCard.title')}</h3>
 </div>
 
 <div class="property-table-container responsive-box-shadow">
     <table class="property-table" aria-label="Project properties" style="width: 100%;">
         <tr>
-            <td>Area</td>
+            <td>{$_('details.projectDetailsCard.area')}</td>
             <td class="numeric-row">{project.LivingArea}&#13217;</td>
         </tr>
         <tr>
-            <td>Project Cost</td>
+            <td>{$_('details.projectDetailsCard.projectCost')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionCost)}</td>
         </tr>
         <tr>
-            <td>Job Cost</td>
+            <td>{$_('details.projectDetailsCard.jobCost')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionJobCost)}</td>
         </tr>
         <tr>
-            <td>Materials Cost</td>
+            <td>{$_('details.projectDetailsCard.materialCost')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionMaterialCost)}</td>
         </tr>
         <tr>
-            <td>Project Duration</td>
+            <td>{$_('details.projectDetailsCard.duration')}</td>
             <td class="numeric-row">{project.ConstructionDuration} days</td>
         </tr>
         <tr>
-            <td>Workers</td>
+            <td>{$_('details.projectDetailsCard.workers')}</td>
             <td class="numeric-row">{project.Workers}</td>
         </tr>
         <tr>
-            <td>Margin</td>
+            <td>{$_('details.projectDetailsCard.margin')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.Margin)}</td>
         </tr>
     </table>

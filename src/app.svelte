@@ -7,6 +7,9 @@
 	import { pageTitle, responsive } from './store';
 	import Analytics from './common/analytics.svelte';
 
+
+    import { _, setupI18n, isLocaleLoaded, locale } from './services/i18n';
+
 	import Header from "./common/header.svelte";
 
 	export let url = "";
@@ -19,7 +22,21 @@
 		document.title = value.title + ' | Houmly';
 	});
 
+	let lang = '';
+
+	$: if (!$isLocaleLoaded) {
+		let langSetting = 'pl';
+		if (window.location.pathname.includes("en")) {
+			langSetting = 'en';
+			lang = langSetting + '/';
+			console.log(langSetting);
+		}
+        setupI18n({ withLocale: langSetting });
+		console.log($locale);
+    }
+
 	onMount(() => {
+		
 		if (window.screen.width < 839) {
 			responsive.set(true);
 		}
@@ -29,30 +46,33 @@
 <main>
 	<Analytics></Analytics>
 	<Notifications>
+	{#if $isLocaleLoaded}
 	<Router url="{url}" primary={false}>
 		<Header />
-		<Route path="view/:projectId" let:params>
+		<Route path="{lang}view/:projectId" let:params>
 			<ProjectViewer projectId={params.projectId} active='Model'></ProjectViewer>
 		</Route>
-    	<Route path="/"><Dashboard/></Route>
+    	<Route path="{lang}/"><Dashboard/></Route>
 		<Route path="/settings" component="{Settings}"></Route>
-		<Route path="view/:projectId/model" let:params>
+		<Route path="{lang}view/:projectId/model" let:params>
 			<ProjectViewer projectId={params.projectId} active='Model'></ProjectViewer>
 		</Route>
-		<Route path="view/:projectId/timeline" let:params>
+		<Route path="{lang}view/:projectId/timeline" let:params>
 			<ProjectViewer projectId={params.projectId} active='Timeline'></ProjectViewer>
 		</Route>
-		<Route path="view/:projectId/jobs" let:params>
+		<Route path="{lang}view/:projectId/jobs" let:params>
 			<ProjectViewer projectId={params.projectId} active='Jobs'></ProjectViewer>
 		</Route>
-		<Route path="view/:projectId/materials" let:params>
+		<Route path="{lang}view/:projectId/materials" let:params>
 			<ProjectViewer projectId={params.projectId} active='Materials'></ProjectViewer>
 		</Route>
-		<Route path="view/:projectId/details" let:params>
+		<Route path="{lang}view/:projectId/details" let:params>
 			<ProjectViewer projectId={params.projectId} active='Details'></ProjectViewer>
 		</Route>
 	</Router>
+	{/if}
 	</Notifications>
+
 
 	{#if (envmt != "production") } 
 	<div class="version-container">version: 0.4.16</div>

@@ -1,6 +1,7 @@
 {
     "header": {
-        "contact": "Contact"
+        "contact": "Contact",
+        "dashboard": "Dashboard"
     },
     "monthNames": {
         "jan": "Jan",
@@ -47,7 +48,7 @@
         "nav": {
             "details": "Details",
             "model": "Model",
-            "timaline": "Timeline",
+            "timeline": "Timeline",
             "jobs": "Jobs",
             "materials": "Materials"
         },
@@ -62,6 +63,9 @@
             "workers": "Workers",
             "helperText": "Change materials and/or number of workers to recalculate project's duration and cost:",
             "options": "Options"
+        },
+        "timeline": {
+            "stages": "Stages"
         }
     }
 }

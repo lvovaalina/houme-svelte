@@ -1,6 +1,7 @@
 {
     "header": {
-        "contact": "Kontakt"
+        "contact": "Kontakt",
+        "dashboard": "Panel"
     },
     "monthNames": {
         "jan": "Stycz",
@@ -46,10 +47,10 @@
     "details": {
         "nav": {
             "details": "Szczegóły Projektu",
-            "model": "model",
-            "timaline": "timeline",
-            "jobs": "jobs",
-            "materials": "materials"
+            "model": "Model",
+            "timeline": "Oś czasu",
+            "jobs": "Pracy",
+            "materials": "Materiały"
         },
         "projectDetailsCard": {
             "title": "Szczegóły Projektu",
@@ -62,6 +63,9 @@
             "workers": "Pracownicy",
             "helperText": "Zmień materiały i/lub liczbę pracowników, aby ponownie obliczyć czas trwania i koszt projektu:",
             "options": "Opcje"
+        },
+        "timeline": {
+            "stages": "Etapy"
         }
     }
 }

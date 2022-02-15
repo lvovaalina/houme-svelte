@@ -67,8 +67,8 @@
                     {#if !!projectName}
                         <Link class="project-dashboard-link" 
                             style="color: rgba(0, 0, 0, .55);margin-bottom: 0;margin-left: 20px;"
-                            to="/">
-                            <h2>Project Dashboard</h2>
+                            to={$locale == 'en' ? "/en/" : ""}>
+                            <h2>{$_("header.dashboard")}</h2>
                         </Link>
                         <div class="project-arrow">
                             <i style="border-color: rgba(0, 0, 0, .55);padding: 3px;" class="arrow right"></i>

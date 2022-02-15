@@ -174,7 +174,7 @@
         fitWidth: true,
         from: currentStart.clone().startOf('year'),
         to: currentEnd,
-        tableHeaders: [{ title: 'Stages', property: 'label', width: 140, type: 'tree' }],
+        tableHeaders: [{ title: $_("details.timeline.stages"), property: 'label', width: 140, type: 'tree' }],
         tableWidth: 240,
         minWidth: 1000,
         columnUnit: 'day',

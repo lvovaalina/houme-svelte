@@ -13,25 +13,29 @@
     import { pageTitle, projectStored, propertiesStored, responsive } from '../store';
     import { watchResize } from "svelte-watch-resize";
 
+    import { _, locale } from "../services/i18n";
+
     import { getNotificationsContext } from 'svelte-notifications';
     const { addNotification } = getNotificationsContext();
 
     export let projectId;
     export let active = 'Model';
 
+    let lang = $locale == 'en' ? '/en' : '';
+
     let tabs = [
-        {name: 'Model', urlPart: 'model'},
-        {name: 'Timeline', urlPart: 'timeline'},
-        {name: 'Jobs', urlPart: 'jobs'},
-        {name: 'Materials', urlPart: 'materials'},
+        {localizedName: $_("details.nav.model"), name: 'Model', urlPart: 'model'},
+        {localizedName: $_("details.nav.timeline"), name: 'Timeline', urlPart: 'timeline'},
+        {localizedName: $_("details.nav.jobs"), name: 'Jobs', urlPart: 'jobs'},
+        {localizedName: $_("details.nav.materials"), name: 'Materials', urlPart: 'materials'},
     ];
 
     let tabsResponsive = [
-        {name: 'Details', urlPart: 'details'},
-        {name: 'Model', urlPart: 'model'},
-        {name: 'Timeline', urlPart: 'timeline'},
-        {name: 'Jobs', urlPart: 'jobs'},
-        {name: 'Materials', urlPart: 'materials'},
+        {localizedName: $_("details.nav.details"), name: 'Details', urlPart: 'details'},
+        {localizedName: $_("details.nav.model"), name: 'Model', urlPart: 'model'},
+        {localizedName: $_("details.nav.timeline"), name: 'Timeline', urlPart: 'timeline'},
+        {localizedName: $_("details.nav.jobs"), name: 'Jobs', urlPart: 'jobs'},
+        {localizedName: $_("details.nav.materials"), name: 'Materials', urlPart: 'materials'},
     ];
 
     let headerTabs = [];
@@ -545,8 +549,8 @@
                             <Link
                                 class="tab-link"
                                 style={active === tab.name ? "color:rgb(0,100,200);" : "color: rgba(0, 0, 0, .87);"}
-                                to="/view/{project.ProjectId}/{tab.urlPart}">
-                                {tab.name}
+                                to={lang + "/view/" + project.ProjectId+ "/" + tab.urlPart}>
+                                {tab.localizedName}
                             </Link>
                         </div>
                         {/each}

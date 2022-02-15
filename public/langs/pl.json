@@ -2,6 +2,47 @@
     "header": {
         "contact": "Kontakt"
     },
+    "monthNames": {
+        "jan": "Stycz",
+        "feb": "Luty",
+        "mar": "Mar",
+        "apr": "Kwiec",
+        "may": "Maj",
+        "jun": "Czerw",
+        "jul": "Lip",
+        "aug": "Sierp",
+        "sep": "Wrzes",
+        "oct": "Pazdz",
+        "nov": "Listop",
+        "dec": "Grudz"
+    },
+    "projectOptions": {
+        "workers": "Pracownicy",
+        "foundation": "Fundamenta",
+        "wall": "Ściany",
+        "finish": "Materiał wykończeniowy",
+        "roofing": "Zadaszenie",
+
+        "ribbon": "Wstążka",
+        "pile": "Pal",
+        "plate": "Talerz",
+
+        "CLT": "CLT",
+        "foamBlock": "Foam block",
+        "brick": "Brick",
+        "frame": "Frame",
+        
+        "plaster": "Plaster",
+        "ventfacade": "Ventfacade",
+
+        "fold": "Fold",
+        "softRoof": "Soft Roof",
+        "roofTiles": "Roof Tiles",
+
+        "max": "Maximum",
+        "min": "Minimum",
+        "opt": "Optimal"
+    },
     "details": {
         "nav": {
             "details": "Szczegóły Projektu",
@@ -18,7 +59,9 @@
             "projectCost": "Koszt projektu",
             "jobCost": "Koszt budowy",
             "materialCost": "Koszt materiałów",
-            "workers": "Pracownicy"
+            "workers": "Pracownicy",
+            "helperText": "Zmień materiały i/lub liczbę pracowników, aby ponownie obliczyć czas trwania i koszt projektu:",
+            "options": "Opcje"
         }
     }
 }

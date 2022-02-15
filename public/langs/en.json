@@ -2,23 +2,66 @@
     "header": {
         "contact": "Contact"
     },
+    "monthNames": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Aug",
+        "sep": "Sep",
+        "oct": "Oct",
+        "nov": "Nov",
+        "dec": "Dec"
+    },
+    "projectOptions": {
+        "workers": "Workers",
+        "foundation": "Foundation",
+        "wall": "Wall",
+        "finish": "Finish",
+        "roofing": "Roofing",
+
+        "ribbon": "Ribbon",
+        "pile": "Pile",
+        "plate": "Plate",
+
+        "CLT": "CLT",
+        "foamBlock": "Foam block",
+        "brick": "Brick",
+        "frame": "Frame",
+        
+        "plaster": "Plaster",
+        "ventfacade": "Ventfacade",
+
+        "fold": "Fold",
+        "softRoof": "Soft Roof",
+        "roofTiles": "Roof Tiles",
+
+        "max": "Maximum",
+        "min": "Minimum",
+        "opt": "Optimal"
+    },
     "details": {
         "nav": {
-            "details": "details",
-            "model": "model",
-            "timaline": "timeline",
-            "jobs": "jobs",
-            "materials": "materials"
+            "details": "Details",
+            "model": "Model",
+            "timaline": "Timeline",
+            "jobs": "Jobs",
+            "materials": "Materials"
         },
         "projectDetailsCard": {
             "title": "Project Details",
-            "duration": "duration",
-            "area": "area",
-            "margin": "margin",
-            "projectCost": "project cost",
-            "jobCost": "job cost",
-            "materialCost": "material cost",
-            "workers": "workers"
+            "duration": "Duration",
+            "area": "Area",
+            "margin": "Margin",
+            "projectCost": "Project Cost",
+            "jobCost": "Job Cost",
+            "materialCost": "Material Cost",
+            "workers": "Workers",
+            "helperText": "Change materials and/or number of workers to recalculate project's duration and cost:",
+            "options": "Options"
         }
     }
 }

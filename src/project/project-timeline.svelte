@@ -7,6 +7,8 @@
     import { responsive } from '../store';
     import { numberWithCommas } from '../utils';
 
+    import { _ } from '../services/i18n';
+
     export let currency;
     export let projectDuration;
 
@@ -20,6 +22,7 @@
     let tasks = [];
 
     let taskColors = ['orange', 'green', 'blue'];
+    let monthNamesLocalized = Object.values($_("monthNames"));
     let monthNames = [
         "Jan", "Feb", "Mar",
         "Apr", "May", "Jun", "Jul",
@@ -155,7 +158,7 @@
                     let headerText = elClone.children[0].innerHTML;
                     if (monthNames.findIndex(x => headerText.startsWith(x)) >= 0) {
                         let monthNumber = (index)%12;
-                        el.children[0].innerHTML = monthNames[monthNumber] + headerText.substring(3);
+                        el.children[0].innerHTML = monthNamesLocalized[monthNumber] + headerText.substring(3);
                     }
                 });
                 isProcessing = false;

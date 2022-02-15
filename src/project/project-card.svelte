@@ -86,11 +86,11 @@
 
 <div class="divider"/>
 <div class="card-header-container-responsive">
-    <h3 class="card-header">Options</h3>
+    <h3 class="card-header">{$_('details.projectDetailsCard.options')}</h3>
 </div>
 
 <div class="materials-block responsive-box-shadow">
-    <p class="helper-text">Change materials and/or number of workers to recalculate project's duration and cost:</p>
+    <p class="helper-text">{$_('details.projectDetailsCard.helperText')}</p>
     <ProjectSettings
         bind:foundationMaterialValue={project.FoundationMaterial}
         bind:wallMaterialValue={project.WallMaterial}

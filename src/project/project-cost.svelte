@@ -4,6 +4,7 @@
     import { onMount } from "svelte";
     import { responsive } from '../store';
     import { numberWithCommas } from '../utils';
+    import { _ } from '../services/i18n';
 
     export let jobs = [];
 
@@ -11,7 +12,7 @@
     export let currency;
     let responsiveHeight = 0;
 
-    let columns = ['Stage', 'Cost',  'Duration', 'Property Name', 'Volume', 'Workers'];
+    let columns = Object.values($_("details.jobs"));
 
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);

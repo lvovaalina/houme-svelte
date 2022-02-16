@@ -62,7 +62,24 @@
             "materialCost": "Koszt materiałów",
             "workers": "Pracownicy",
             "helperText": "Zmień materiały i/lub liczbę pracowników, aby ponownie obliczyć czas trwania i koszt projektu:",
-            "options": "Opcje"
+            "options": "Opcje",
+            "recalculate": "Przeliczyć"
+        },
+        "jobs": {
+            "stage": "Etap",
+            "cost": "Koszt",
+            "duration": "Duration",
+            "propertyName": "Property Name",
+            "volume": "Volume",
+            "workers": "Workers"
+        },
+        "materials": {
+            "material": "Material",
+            "cost": "Cost",
+            "volume": "Ilość",
+            "nominalCost": "Nominal Cost",
+            "inStockByDate": "In stock by Date",
+            "inSteps": "In Steps"
         },
         "timeline": {
             "stages": "Etapy"

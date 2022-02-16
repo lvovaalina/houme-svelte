@@ -62,10 +62,27 @@
             "materialCost": "Material Cost",
             "workers": "Workers",
             "helperText": "Change materials and/or number of workers to recalculate project's duration and cost:",
-            "options": "Options"
+            "options": "Options",
+            "recalculate": "recalculate"
         },
         "timeline": {
             "stages": "Stages"
+        },
+        "jobs": {
+            "stage": "Stage",
+            "cost": "Cost",
+            "duration": "Duration",
+            "propertyName": "Property Name",
+            "volume": "Volume",
+            "workers": "Workers"
+        },
+        "materials": {
+            "material": "Material",
+            "cost": "Cost",
+            "volume": "Volume",
+            "nominalCost": "Nominal Cost",
+            "inStockByDate": "In stock by Date",
+            "inSteps": "In Steps"
         }
     }
 }

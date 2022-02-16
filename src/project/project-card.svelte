@@ -103,7 +103,7 @@
         style="margin-top: 10px;text-align: left;background-color: #2D62E8; color: white; align-self: flex-end;"
         class="apply-button"
         variant="filled" on:click={updateProject}>
-        <Label>recalculate</Label>
+        <Label>{$_("details.projectDetailsCard.recalculate")}</Label>
     </Button>
 </div>
 

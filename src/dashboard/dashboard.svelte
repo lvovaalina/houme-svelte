@@ -9,6 +9,9 @@
     import { pageTitle } from '../store';
     import { numberWithCommas } from '../utils';
 
+    import { _, locale } from "../services/i18n";
+    let lang = $locale == 'en' ? '/en' : '';
+
     let currency = '$';
     let detailsUrl = '';
 
@@ -98,79 +101,36 @@
 <div class="dashboard" use:watchResize={handleResize}>
     {#if dataLoaded}
     <div class="dasboard-content-container">
-        <h1>See how other companies plan their processes</h1>
-        <div class="project-cards" style="display: flex; justify-content: space-between;">
-            {#each projectsResult.slice(0, 3) as project}
-            <div class="card-container" style="width: 30%;">
+        <div class="project-cards" style="display: flex;">
+            {#each projectsResult as project}
+            <div class="card-container">
                 <Card class="project-card" style="padding: 15px;">
-                    <Link to="/view/{project.ProjectId}/{detailsUrl}">
+                    <Link to="{lang}/view/{project.ProjectId}/{detailsUrl}" style="color:#6B6D76">
                         <img
                             class="project-image"
                             src="{'data:image/png;base64,' + project.ProjectCover}"
                             style="width: 100%; height: auto;"
                             alt="Project {project.Name} cover"/>
                         <h3 style="margin:0">{project.Name}</h3>
+                        <p style="margin-top: 5px;">
+                            {currency + project.ConstructionCost} &#183; {project.LivingArea}&#13217; &#183; {project.ConstructionDuration} days
+                        </p>
+                        <div class="get-plan-link-container" style="margin-left:0">
+                            <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/{detailsUrl}">See Project</Link>
+                        </div>
                     </Link>
                 </Card>
               </div>
             {/each}
         </div>
-       
-        <div class="projects-grid-responsive">
-            {#if projectsResult.length === 0}
-                <p style="text-align:center">No projects to view</p>
-            {/if}
-            {#each projectsResult as project}
-            <div class="details-padding"></div>
-            <div class="project-drid-responsive">
-                <div class="project-grid-header">
-                    <div class="project-cover-container">
-                        <Link to="/view/{project.ProjectId}/{detailsUrl}">
-                            <img
-                                class="project-image"
-                                src="{'data:image/png;base64,' + project.ProjectCover}"
-                                alt="Project {project.Name} cover"/>
-                        </Link>
-                    </div>
-                    <div class="project-grid-header-name">{project.Name}</div>
+        <div class="upload-project-link-container">
+            <h1>Want to see your construction plan?</h1>
+            <p>Upload your project and we will email you the construction 
+                plan with Gantt diagram and materials you will need!</p>
+
+                <div class="get-plan-link-container">
+                    <Link to="{lang}/upload">Get Plan</Link>
                 </div>
-                <div class="property-grid-responsive">
-                    <div class="property-details-grid-cell">
-                        <div class="property-name">Duration</div>
-                        <div class="property-value">{project.ConstructionDuration} days</div>
-                    </div>
-                    <div class="property-details-grid-cell">
-                        <div class="property-name">Area</div>
-                        <div class="property-value">{project.LivingArea}&#13217;</div>
-                    </div>
-                    <div class="property-details-grid-cell">
-                        <div class="property-name">Margin</div>
-                        <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
-                    </div>
-                    <div class="property-details-grid-cell">
-                        <div class="property-name">Workers</div>
-                        <div class="property-value">{project.Workers}</div>
-                    </div>
-                    <div class="property-details-grid-cell">
-                        <div class="property-name">Project Cost</div>
-                        <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
-                    </div>
-                    <div class="property-details-grid-cell">
-                        <div class="property-name">Job Cost</div>
-                        <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
-                    </div>
-                    <div class="property-details-grid-cell">
-                        <div class="property-name">Material Cost</div>
-                        <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
-                    </div>
-                    <div class="property-details-grid-cell">
-                        <div use:Ripple={{ surface: true }} class="project-link-container">
-                            <Link style="color:white" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/each}
         </div>
     </div>
 
@@ -182,6 +142,64 @@
 </div>
 
 <style>
+    .card-container {
+        width: 45%;
+        margin-bottom: 15px;
+    }
+
+    .upload-project-link-container {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+        padding: 0 50px;
+        padding-top: 35vh;
+    }
+
+    .upload-project-link-container p {
+        margin: 0 0 15px 0;
+        color: #6B6D76;
+        font-size: 16px;
+    }
+
+    .upload-project-link-container h1 {
+        margin-bottom: 5px;
+    }
+
+    .get-plan-link-container {
+        height: 38px;
+        border: 1px solid rgba(0,100,200);
+        border-radius: 5px;
+        background-color:  rgba(0,100,200);
+        margin-left: 15px;
+        width: fit-content;
+    }
+
+    :global(.get-plan-link-container a) {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        height: 100%;
+        width: fit-content;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .project-cards {
+        width: 70%;
+        /* border-right: 1px solid #eeeeee; */
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        padding-top: 15px;
+    }
+
+    :global(.project-card h3) {
+        color: black; /*!important;*/
+    }
+
     :global(.mdc-notched-outline .mdc-notched-outline--no-label) {
         border-color: #eeeeee;
     }
@@ -218,9 +236,9 @@
         height: 55px;
     }
 
-    /* .dasboard-content-container {
+    .dasboard-content-container {
         display: flex;
-    } */
+    }
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;

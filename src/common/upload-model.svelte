@@ -5,13 +5,24 @@
     import Card, { Content } from '@smui/card';
     import { pageTitle } from '../store';
     import CircularProgress from '@smui/circular-progress';
+    import { Link } from 'svelte-navigator';
+    import { _, locale } from "../services/i18n";
 
     import { config } from '../config';
+import { onMount } from 'svelte';
+
     let conf = new config();
+
+    let projectsResult = [];
+    let projects = [];
 
     pageTitle.set({
         title: 'Get plan',
-    })
+    });
+
+    let currency = '$';
+    let lang = $locale == 'en' ? '/en' : '';
+
 
     let isLoading = false;
     let isFileLoading = false;
@@ -23,6 +34,26 @@
         accepted: [],
         rejected: []
     };
+
+    onMount(() => {
+        fetch(conf.api + '/getProjects')
+        .then((result) => {
+            if (result.ok) {
+                console.log("get projects successfully");
+            }
+
+            return result.json();
+        })
+        .then((resp) => {
+            resp.data.forEach(element => {
+                element.LivingArea = parseInt(element.LivingArea);
+            });
+            projects = resp.data;
+            
+            projectsResult = projects;
+            //dataLoaded = true;
+        });
+    })
 
     function handleFilesSelect(e) {
         const { acceptedFiles, fileRejections } = e.detail;
@@ -172,11 +203,50 @@
     </div>
     <div>
         <h2>See how companies plan their process</h2>
+        <div class="project-cards" style="display: flex;">
+            {#each projectsResult.slice(0, 3) as project}
+            <div class="card-container">
+                <Card class="project-card" style="padding: 15px;">
+                    <Link to="{lang}/view/{project.ProjectId}/" style="color:#6B6D76">
+                        <img
+                            class="project-image"
+                            src="{'data:image/png;base64,' + project.ProjectCover}"
+                            style="width: 100%; height: auto;"
+                            alt="Project {project.Name} cover"/>
+                        <h3 style="margin:0">{project.Name}</h3>
+                        <p style="margin-top: 5px; text-align: left;">
+                            {currency + project.ConstructionCost} &#183; {project.LivingArea}&#13217; &#183; {project.ConstructionDuration} days
+                        </p>
+                        <div class="get-plan-link-container" style="margin-left:0">
+                            <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/">See Project</Link>
+                        </div>
+                    </Link>
+                </Card>
+              </div>
+            {/each}
+        </div>
     </div>
    
 </div>
 
 <style>
+    .get-plan-link-container {
+        height: 38px;
+        border: 1px solid rgba(0,100,200);
+        border-radius: 5px;
+        background-color:  rgba(0,100,200);
+        margin-left: 15px;
+        width: fit-content;
+    }
+    .card-container {
+        margin-bottom: 15px;
+    }
+
+    .project-cards {
+        width: 100%;
+        justify-content: space-around;
+    }
+
     .accepted-file-container {
         border: 1px solid #D9DEE7;
         border-radius: 5px;

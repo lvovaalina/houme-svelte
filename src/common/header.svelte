@@ -123,6 +123,7 @@
         align-items: center;
         padding: 0 15px;
         height: 100%;
+        font-size: 15px;
     }
 
     .lang-label {
@@ -136,7 +137,7 @@
         color: rgba(0,100,200);
     }
 
-    .lang-label.active:hover {
+    .lang-label:hover {
         color: rgba(0,100,200);
     }
 

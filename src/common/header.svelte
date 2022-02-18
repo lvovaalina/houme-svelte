@@ -87,14 +87,19 @@
                     {:else}
                     <a class="contact-link" href="https://houmly.com/contact">{$_('header.contact')}</a>
 
-                    <p class={"lang-label " + ($locale == 'pl' ? 'active' : '')}
+                    <p class={"lang-label " + ($locale == 'en' ? 'active' : '')}
                         on:click={() => changeLanguage('en')}>
                         EN
                     </p>
-                    <p class={"lang-label " + ($locale == 'en' ? 'active' : '')}
+                    <p class={"lang-label " + ($locale == 'pl' ? 'active' : '')}
                         on:click={() => changeLanguage('pl')}>
                         PL
                     </p>
+                     {#if !!projectName}
+                            <div class="get-plan-link-container">
+                                <Link to="/upload">Get Plan</Link>
+                            </div>
+                        {/if}
                     {/if}
                 </Section>
             </Row>
@@ -103,13 +108,32 @@
 </div>
 
 <style>
+    .get-plan-link-container {
+        height: 38px;
+        border: 1px solid rgba(0,100,200);
+        border-radius: 5px;
+        background-color:  rgba(0,100,200);
+        margin-left: 15px;
+    }
+
+    :global(.get-plan-link-container a) {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        height: 100%;
+    }
+
     .lang-label {
         color: black;
         margin: 0 5px;
+        cursor: pointer;
     }
 
     .lang-label.active {
-        cursor: pointer;
+        cursor: initial;
+        color: rgba(0,100,200);
     }
 
     .lang-label.active:hover {

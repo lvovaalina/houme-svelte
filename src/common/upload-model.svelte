@@ -45,7 +45,8 @@
         let formData = new FormData();
 
         if (!email) {
-            errorMessage = "Please fill in name and email to send a file."
+            errorMessage = "Please fill in name and email to send a file.";
+            isFileLoading = false;
             return;
         }
 
@@ -55,7 +56,8 @@
         // }
 
         if (!file) {
-            errorMessage = "Please attach file to send."
+            errorMessage = "Please attach file to send.";
+            isFileLoading = false;
             return;
         }
 

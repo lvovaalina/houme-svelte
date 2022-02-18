@@ -161,7 +161,7 @@
                     style="height:48px; width: 100%; margin-top: 15px;" class="text-field"
                     label="Email"
                     bind:value={email}/>
-                <Button style="width: 100%; height:48px;" variant="raised" on:click={uploadFile}>
+                <Button disabled={!email || !files.accepted || files.accepted == 0} style="width: 100%; height:48px;" variant="raised" on:click={uploadFile}>
                     <Label>Get Plan</Label>
                 </Button>
             {/if}

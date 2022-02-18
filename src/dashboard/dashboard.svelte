@@ -1,16 +1,7 @@
 <script>
     import CircularProgress from '@smui/circular-progress';
-    import DataTable, {
-        Head,
-        Body,
-        Row,
-        Cell,
-        Label,
-    } from '@smui/data-table';
     import Card, { PrimaryAction} from "@smui/card";
     import Ripple from '@smui/ripple';
-    import LinearProgress from '@smui/linear-progress';
-    import Tooltip, { Wrapper } from '@smui/tooltip';
     import { watchResize } from "svelte-watch-resize";
 
     import { onMount } from 'svelte';
@@ -18,40 +9,15 @@
     import { pageTitle } from '../store';
     import { numberWithCommas } from '../utils';
 
-    import UploadModel from '../common/upload-model.svelte';
-
-    import { Input } from '@smui/textfield';
-    import Paper from '@smui/paper';
-    import { Icon } from '@smui/common';
-
-    import IconButton from '@smui/icon-button';
-    let email = null;
-    let name = null;
-
     let currency = '$';
     let detailsUrl = '';
 
     let titleSearch;
-    let columns = [
-        {name: ''},
-        {name: 'Image', class: 'image-column'},
-        {name: 'Title', columnId: 'Name'},
-        {name: 'Duration', columnId: 'ConstructionDuration'},
-        {name: 'Area', columnId: 'LivingArea'},
-        {name: 'Margin' },
-        {name: 'Project Cost' },
-        {name: 'Job Cost' },
-        {name: 'Material Cost' },
-        {name: 'Workers' },
-        {name: ''},
-    ];
 
     export let projects = [];
     let projectsResult = [];
-    let projectsCount;
 
     let dataLoaded = false;
-    let dataLoadedForSearch = false;
 
     import { config } from '../config';
     let conf = new config();
@@ -79,9 +45,7 @@
             projects = resp.data;
             
             projectsResult = projects;
-            projectsCount = projects.length;
             dataLoaded = true;
-            dataLoadedForSearch = true;
         });
 
         pageTitle.set({
@@ -107,19 +71,6 @@
         dataLoadedForSearch = true;
     }
 
-    function handleSort(event) {
-        projectsResult.sort((a, b) => {
-            const [aVal, bVal] = [a[sort], b[sort]][
-                sortDirection === 'ascending' ? 'slice' : 'reverse'
-            ]();
-            if (typeof aVal === 'string' && typeof bVal === 'string') {
-                return aVal.localeCompare(bVal);
-            }
-            return Number(aVal) - Number(bVal);
-        });
-        projectsResult = projectsResult;
-    }
-
     function getWidth() {
         return Math.max(
             document.body.scrollWidth,
@@ -128,11 +79,6 @@
             document.documentElement.offsetWidth,
             document.documentElement.clientWidth
         );
-    }
-
-    function showProjectModel(id) {
-        selectedProjectId = id;
-        urn = projects.find(x => x.ProjectId == selectedProjectId).Filename;
     }
 
     function setDetailsUrlPart(){
@@ -151,24 +97,6 @@
 
 <div class="dashboard" use:watchResize={handleResize}>
     {#if dataLoaded}
-    <!-- <div class="project-table-header">
-        <h1>Projects</h1>
-        <div class="solo-demo-container solo-container">
-            <Paper class="solo-paper" elevation={6}>
-                <Icon class="material-icons">search</Icon>
-                <Wrapper>
-                    <Input
-                        bind:value={titleSearch}
-                        on:keydown={handleKeyDown}
-                        placeholder="Search by Title"
-                        class="solo-input"
-                    />
-                    <Tooltip>Press Enter to Search</Tooltip>
-                </Wrapper>
-                
-            </Paper>
-        </div>
-    </div> -->
     <div class="dasboard-content-container">
         <h1>See how other companies plan their processes</h1>
         <div class="project-cards" style="display: flex; justify-content: space-between;">
@@ -187,11 +115,6 @@
               </div>
             {/each}
         </div>
-
-        <div class="upload-model-container">
-            <UploadModel />
-         </div>
-
        
         <div class="projects-grid-responsive">
             {#if projectsResult.length === 0}

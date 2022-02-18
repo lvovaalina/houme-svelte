@@ -6,6 +6,7 @@
 	import "../public/global.css";
 	import { pageTitle, responsive } from './store';
 	import Analytics from './common/analytics.svelte';
+	import UploadModel from './common/upload-model.svelte';
 
 
     import { _, setupI18n, isLocaleLoaded, locale } from './services/i18n';
@@ -32,7 +33,6 @@
 			console.log(langSetting);
 		}
         setupI18n({ withLocale: langSetting });
-		console.log($locale);
     }
 
 	onMount(() => {
@@ -68,6 +68,9 @@
 		</Route>
 		<Route path="{lang}view/:projectId/details" let:params>
 			<ProjectViewer projectId={params.projectId} active='Details'></ProjectViewer>
+		</Route>
+		<Route path="{lang}/upload" let:params>
+			<UploadModel />
 		</Route>
 	</Router>
 	{/if}

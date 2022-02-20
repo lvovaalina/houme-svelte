@@ -84,5 +84,21 @@
             "inStockByDate": "In stock by Date",
             "inSteps": "In Steps"
         }
+    },
+    "getYourPlan": {
+        "title": "Get your plan",
+        "subTitle": "Upload your project and we will email you the construction plan with Gantt diagram and materials you will need!",
+        "click": "Click to upload",
+        "drag": "or drag and drop",
+        "maxSize": "Max size 300 MB",
+        "email": "Email",
+        "uploadButtonLabel": "Get Plan",
+        "projetsHeader": "See how companies plan their process",
+        "seeProjectButtonLabel": "See Project",
+        "thankYouHeader": "Thank you!",
+        "thankYouSubheader": "We will get back to you as soon as possible",
+        "uploadMore": "Upload More",
+        "uploadError": "Could not upload file!",
+        "uploadErrorHelpMessage": "Please check file size and extension."
     }
 }

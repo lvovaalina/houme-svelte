@@ -9,7 +9,7 @@
     import { _, locale } from "../services/i18n";
 
     import { config } from '../config';
-import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
 
     let conf = new config();
 
@@ -137,17 +137,17 @@ import { onMount } from 'svelte';
     <Card class="upload-model-card">
         <Content style="padding: 50px 90px;">
             {#if !showSuccessMessage}
-                <h1>Get your plan</h1>
+                <h1>{$_("getYourPlan.title")}</h1>
             {/if}
            
             {#if showSuccessMessage}
                 <div style="text-align:center;">
                     <img alt="check" src="/check.svg" />
-                    <h1>Thank you!</h1>
+                    <h1>{$_("getYourPlan.thankYouHeader")}</h1>
                     <!-- <h1>Successfully uploaded project!</h1> -->
-                    <p>We will get back to you as soon as possible</p>
+                    <p>{$_("getYourPlan.thankYouSubheader")}</p>
                     <Button style="border-color:#2D62E8;height: 48px;" on:click={()=>showSuccessMessage=false} variant="outlined">
-                        <Label>Upload More</Label>
+                        <Label>{$_("getYourPlan.uploadMore")}</Label>
                     </Button>
                 </div>
             {:else if isFileLoading}
@@ -155,27 +155,26 @@ import { onMount } from 'svelte';
                     <CircularProgress style="height: 200px; width: 100px;" indeterminate />
                 </div>
             {:else if !showSuccessMessage}
-                <p style="margin: 10px -40px;">Upload your project and we will email you the construction 
-                    plan with Gantt diagram and materials you will need!</p>
+                <p style="margin: 10px -40px;">{$_("getYourPlan.subTitle")}</p>
                 <Dropzone containerClasses="project-upload" on:drop={handleFilesSelect}
                     maxSize="{300 * 1024 * 1024}" multiple="false"
                     accept=".rvt, .dwg, .dwf, .dxfm, .3ds, .png, .pdf, .jpg, .ifc, .bcf">
                     <img alt="upload model to cloud" src="/upload-cloud.svg"/>
                     <div style="display: flex;">
-                        <p style="color: rgba(0,100,200)">Click to upload&nbsp;</p>
-                        <p>or drag and drop</p>
+                        <p style="color: rgba(0,100,200)">{$_("getYourPlan.click")}</p>&nbsp;
+                        <p>{$_("getYourPlan.drag")}</p>
                     </div>
                     <p style="margin:0;font-size: 12px; line-height: 16.8px; text-align: center;">
                         rvt, dwg, dwf, dxf, 3ds, png, pdf, jpg, ifc, bcf
                     </p>
                     <p style="margin:0;font-size: 12px; line-height: 16.8px; text-align: center;">
-                        Max size 300 Mb
+                        {$_("getYourPlan.maxSize")}
                     </p>
                 </Dropzone>
                 {#if (files.rejected.length !== 0)}
                     <div class="accepted-file-container">
-                        <p style="color:red;">Could not upload file!</p>
-                        <p>Please check file size and extension.</p>
+                        <p style="color:red;">{$_("getYourPlan.uploadError")}</p>
+                        <p>{$_("getYourPlan.uploadErrorHelpMessage")}</p>
                     </div>
                     
                 {:else if (files.accepted.length !== 0)} 
@@ -190,10 +189,10 @@ import { onMount } from 'svelte';
                 <Textfield
                     id="email" required variant="outlined"
                     style="height:48px; width: 100%; margin-top: 15px;" class="text-field"
-                    label="Email"
+                    label="{$_("getYourPlan.email")}"
                     bind:value={email}/>
                 <Button disabled={!email || !files.accepted || files.accepted == 0} style="width: 100%; height:48px;" variant="raised" on:click={uploadFile}>
-                    <Label>Get Plan</Label>
+                    <Label>{$_("getYourPlan.uploadButtonLabel")}</Label>
                 </Button>
             {/if}
 
@@ -202,7 +201,7 @@ import { onMount } from 'svelte';
     
     </div>
     <div>
-        <h2>See how companies plan their process</h2>
+        <h2>{$_("getYourPlan.projectsHeader")}</h2>
         <div class="project-cards" style="display: flex;">
             {#each projectsResult.slice(0, 3) as project}
             <div class="card-container">
@@ -218,7 +217,7 @@ import { onMount } from 'svelte';
                             {currency + project.ConstructionCost} &#183; {project.LivingArea}&#13217; &#183; {project.ConstructionDuration} days
                         </p>
                         <div class="get-plan-link-container" style="margin-left:0">
-                            <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/">See Project</Link>
+                            <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/">{$_("getYourPlan.seeProjectButtonLabel")}</Link>
                         </div>
                     </Link>
                 </Card>

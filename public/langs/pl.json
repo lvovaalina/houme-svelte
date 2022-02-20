@@ -84,5 +84,21 @@
         "timeline": {
             "stages": "Etapy"
         }
+    },
+    "getYourPlan": {
+        "title": "Zdobądź swój plan",
+        "subTitle": "Prześlij swój projekt, a my wyślemy Ci plan budowy z diagramem Gantta i potrzebnymi materiałami!",
+        "click": "Kliknij, aby przesłać",
+        "drag": "lub przeciągnij i upuść",
+        "maxSize": "Maksymalny rozmiar 300 MB",
+        "email": "E-mail",
+        "uploadButtonLabel": "Uzyskaj Plan",
+        "projectsHeader": "Zobacz, jak firmy planują swój proces",
+        "seeProjectButtonLabel": "Zobacz projekt",
+        "thankYouHeader": "Dziękuję!",
+        "thankYouSubheader": "Odezwiemy się tak szybko, jak to możliwe",
+        "uploadMore": "Załaduj więcej",
+        "uploadError": "Nie można przesłać pliku!",
+        "uploadErrorHelpMessage": "Sprawdź rozmiar i rozszerzenie pliku."
     }
 }

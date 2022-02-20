@@ -116,7 +116,7 @@
                             {currency + project.ConstructionCost} &#183; {project.LivingArea}&#13217; &#183; {project.ConstructionDuration} days
                         </p>
                         <div class="get-plan-link-container" style="margin-left:0">
-                            <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/{detailsUrl}">See Project</Link>
+                            <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/{detailsUrl}">{$_("dashboard.seeProjectButtonLabel")}</Link>
                         </div>
                     </Link>
                 </Card>
@@ -124,12 +124,11 @@
             {/each}
         </div>
         <div class="upload-project-link-container">
-            <h1>Want to see your construction plan?</h1>
-            <p>Upload your project and we will email you the construction 
-                plan with Gantt diagram and materials you will need!</p>
+            <h1>{$_("dashboard.title")}</h1>
+            <p>{$_("dashboard.subtitle")}</p>
 
                 <div class="get-plan-link-container">
-                    <Link to="{lang}/upload">Get Plan</Link>
+                    <Link to="{lang}/upload">{$_("dashboard.uploadButtonLabel")}</Link>
                 </div>
         </div>
     </div>

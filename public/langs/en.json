@@ -100,5 +100,11 @@
         "uploadMore": "Upload More",
         "uploadError": "Could not upload file!",
         "uploadErrorHelpMessage": "Please check file size and extension."
+    },
+    "dahboard": {
+        "title": "Want to see your construction plan?",
+        "subtitle": "Upload your project and we will email you the construction plan with Gantt diagram and materials you will need!",
+        "seeProjectButtonLabel": "See Project",
+        "uploadButtonLabel": "Get Plan"
     }
 }

@@ -94,11 +94,17 @@
         "email": "E-mail",
         "uploadButtonLabel": "Uzyskaj Plan",
         "projectsHeader": "Zobacz, jak firmy planują swój proces",
-        "seeProjectButtonLabel": "Zobacz projekt",
+        "seeProjectButtonLabel": "Zobacz Projekt",
         "thankYouHeader": "Dziękuję!",
         "thankYouSubheader": "Odezwiemy się tak szybko, jak to możliwe",
         "uploadMore": "Załaduj więcej",
         "uploadError": "Nie można przesłać pliku!",
         "uploadErrorHelpMessage": "Sprawdź rozmiar i rozszerzenie pliku."
+    },
+    "dashboard": {
+        "title": "Chcesz zobaczyć swój plan budowy?",
+        "subtitle": "Prześlij swój projekt, a my wyślemy Ci plan budowy z diagramem Gantta i potrzebnymi materiałami!",
+        "seeProjectButtonLabel": "Zobacz Projekt",
+        "uploadButtonLabel": "Uzyskaj Plan"
     }
 }

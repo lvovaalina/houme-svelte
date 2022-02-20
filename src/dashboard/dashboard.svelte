@@ -113,7 +113,7 @@
                             alt="Project {project.Name} cover"/>
                         <h3 style="margin:0">{project.Name}</h3>
                         <p style="margin-top: 5px;">
-                            {currency + project.ConstructionCost} &#183; {project.LivingArea}&#13217; &#183; {project.ConstructionDuration} days
+                            {currency + numberWithCommas(project.ConstructionCost)} &#183; {project.LivingArea}&#13217; &#183; {project.ConstructionDuration} {$_("units.days")}
                         </p>
                         <div class="get-plan-link-container" style="margin-left:0">
                             <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/{detailsUrl}">{$_("dashboard.seeProjectButtonLabel")}</Link>

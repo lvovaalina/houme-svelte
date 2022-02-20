@@ -1,4 +1,15 @@
 import moment from 'moment';
+import 'moment/locale/pl';
+
+export function setTimeLocale(lang) {
+    console.log("LANG: ", lang)
+    if (lang == '') {
+        console.log("ssddsdsds");
+        moment.locale('pl');
+    } else {
+        moment.locale('en')
+    }
+}
 
 export function time(input) {
     return moment('2021-' + input, 'YYYY-MM-DD');
@@ -33,46 +44,46 @@ export let stageColorMap = new Map([
         'Subfloor/Floor System',
         {color: 'light-green' /*'light-blue'*/, code: 'fs'}
     ],
-    [
-        'Stairs',
-        {color: 'yellow' /*'cyan'*/, code: 'st'}
-    ],
-    [
-        'Exterior decoration of the house',
-        {color: 'yellow' /*'teal'*/, code: 'exdec'}
-    ],
-    [
-        'Floor',
-        {color:  'yellow' /*'green'*/, code: 'flr'}
-    ],
-    [
-        'Electrical wiring',
-        {color:  'yellow' /*'light-green'*/, code: 'ewr'}
-    ],
-    [
-        'Plumbing',
-        {color: 'yellow' /*'brown'*/, code: 'pm'}
-    ],
-    [
-        'Interior decoration of the house',
-        {color:  'yellow' /*'lime'*/, code: 'intdec'}
-    ],
-    [
-        'Doors',
-        {color:  'yellow' /*'yellow'*/, code: 'drs'}
-    ],
-    [
-        'Kitchen assembly, equipment installation',
-        {color: 'amber' /*'amber'*/, code: 'ka'}
-    ],
-    [
-        'Lighting, switches',
-        {color: 'amber' /*'orange'*/, code: 'ls'}
-    ],
-    [
-        'Furnishing',
-        {color: 'amber' /*'deep-orange'*/, code: 'fr'}
-    ],
+    // [
+    //     'Stairs',
+    //     {color: 'yellow' /*'cyan'*/, code: 'st'}
+    // ],
+    // [
+    //     'Exterior decoration of the house',
+    //     {color: 'yellow' /*'teal'*/, code: 'exdec'}
+    // ],
+    // [
+    //     'Floor',
+    //     {color:  'yellow' /*'green'*/, code: 'flr'}
+    // ],
+    // [
+    //     'Electrical wiring',
+    //     {color:  'yellow' /*'light-green'*/, code: 'ewr'}
+    // ],
+    // [
+    //     'Plumbing',
+    //     {color: 'yellow' /*'brown'*/, code: 'pm'}
+    // ],
+    // [
+    //     'Interior decoration of the house',
+    //     {color:  'yellow' /*'lime'*/, code: 'intdec'}
+    // ],
+    // [
+    //     'Doors',
+    //     {color:  'yellow' /*'yellow'*/, code: 'drs'}
+    // ],
+    // [
+    //     'Kitchen assembly, equipment installation',
+    //     {color: 'amber' /*'amber'*/, code: 'ka'}
+    // ],
+    // [
+    //     'Lighting, switches',
+    //     {color: 'amber' /*'orange'*/, code: 'ls'}
+    // ],
+    // [
+    //     'Furnishing',
+    //     {color: 'amber' /*'deep-orange'*/, code: 'fr'}
+    // ],
     [
         'Commissioning works',
         {color: 'light-orange'/*'brown'*/, code: 'cwr'}
@@ -92,14 +103,14 @@ export let stageMap = new Map([
         'Box',
         {color: 'light-green', code: 'box'}
     ],
-    [
-        'Interior',
-        {color: 'yellow', code: 'int'}
-    ],
-    [
-        'Furnishing',
-        {color: 'amber', code: 'frn'}
-    ],
+    // [
+    //     'Interior',
+    //     {color: 'yellow', code: 'int'}
+    // ],
+    // [
+    //     'Furnishing',
+    //     {color: 'amber', code: 'frn'}
+    // ],
     [
         'Commissioning works',
         {color: 'light-orange', code: 'cw'}

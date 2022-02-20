@@ -7,7 +7,7 @@
     import Ripple from '@smui/ripple';
     import { navigate, Link } from "svelte-navigator";
     import { onMount } from 'svelte';
-    import { stageColorMap, stageMap, time } from '../utils';
+    import { stageColorMap, stageMap, time, setTimeLocale } from '../utils';
     import ProjectCard from '../project/project-card.svelte';
     import ProjectMaterials from '../project/project-materials.svelte';
     import { pageTitle, projectStored, propertiesStored, responsive } from '../store';
@@ -422,6 +422,8 @@
         });
 
     onMount(() => {
+        setTimeLocale(lang);
+
         if ($responsive) {
             responsiveHeight = document.documentElement.clientHeight - 38 - 39 - 12 - 46;
         }

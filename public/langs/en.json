@@ -66,7 +66,13 @@
             "recalculate": "recalculate"
         },
         "timeline": {
-            "stages": "Stages"
+            "stages": "Stages",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "workers": "Workers",
+            "jobCost": "Job Cost",
+            "materialCost": "Material Cost",
+            "materials": "Materials"
         },
         "jobs": {
             "stage": "Stage",
@@ -101,10 +107,13 @@
         "uploadError": "Could not upload file!",
         "uploadErrorHelpMessage": "Please check file size and extension."
     },
-    "dahboard": {
+    "dashboard": {
         "title": "Want to see your construction plan?",
         "subtitle": "Upload your project and we will email you the construction plan with Gantt diagram and materials you will need!",
         "seeProjectButtonLabel": "See Project",
         "uploadButtonLabel": "Get Plan"
+    },
+    "units": {
+        "days": "days"
     }
 }

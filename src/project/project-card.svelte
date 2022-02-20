@@ -40,7 +40,7 @@
         </tr>
         <tr>
             <td>{$_('details.projectDetailsCard.duration')}</td>
-            <td class="numeric-row">{project.ConstructionDuration} days</td>
+            <td class="numeric-row">{project.ConstructionDuration} {$_("units.days")}</td>
         </tr>
         <tr>
             <td>{$_('details.projectDetailsCard.workers')}</td>
@@ -55,7 +55,7 @@
     <div class="property-grid-responsive">
         <div class="property-details-grid-cell">
             <div class="property-name">Duration</div>
-            <div class="property-value">{project.ConstructionDuration} days</div>
+            <div class="property-value">{project.ConstructionDuration} {$_("units.days")}</div>
         </div>
         <div class="property-details-grid-cell">
             <div class="property-name">Area</div>

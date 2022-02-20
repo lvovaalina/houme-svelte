@@ -4,18 +4,18 @@
         "dashboard": "Panel"
     },
     "monthNames": {
-        "jan": "Stycz",
-        "feb": "Luty",
+        "jan": "Sty",
+        "feb": "Lut",
         "mar": "Mar",
-        "apr": "Kwiec",
+        "apr": "Kwi",
         "may": "Maj",
-        "jun": "Czerw",
+        "jun": "Cze",
         "jul": "Lip",
-        "aug": "Sierp",
-        "sep": "Wrzes",
-        "oct": "Pazdz",
-        "nov": "Listop",
-        "dec": "Grudz"
+        "aug": "Sie",
+        "sep": "Wrz",
+        "oct": "Paź",
+        "nov": "Lis",
+        "dec": "Gru"
     },
     "projectOptions": {
         "workers": "Pracownicy",
@@ -46,7 +46,7 @@
     },
     "details": {
         "nav": {
-            "details": "Szczegóły Projektu",
+            "details": "Detale",
             "model": "Model",
             "timeline": "Oś czasu",
             "jobs": "Pracy",
@@ -82,7 +82,13 @@
             "inSteps": "In Steps"
         },
         "timeline": {
-            "stages": "Etapy"
+            "stages": "Etapy",
+            "startDate": "Data Rozpoczęcia",
+            "endDate": "Data Zakonczenia",
+            "workers": "Pracownicy",
+            "jobCost": "Koszt Pracy",
+            "materialCost": "Koszt Materiału",
+            "materials": "Materiały"
         }
     },
     "getYourPlan": {
@@ -106,5 +112,8 @@
         "subtitle": "Prześlij swój projekt, a my wyślemy Ci plan budowy z diagramem Gantta i potrzebnymi materiałami!",
         "seeProjectButtonLabel": "Zobacz Projekt",
         "uploadButtonLabel": "Uzyskaj Plan"
+    },
+    "units": {
+        "days": "dni"
     }
 }

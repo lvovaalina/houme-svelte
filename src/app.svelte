@@ -7,6 +7,7 @@
 	import { pageTitle, responsive } from './store';
 	import Analytics from './common/analytics.svelte';
 	import UploadModel from './common/upload-model.svelte';
+	import NotFound from './common/not-found.svelte';
 
 
     import { _, setupI18n, isLocaleLoaded, locale } from './services/i18n';
@@ -71,6 +72,9 @@
 		</Route>
 		<Route path="{lang}/upload" let:params>
 			<UploadModel />
+		</Route>
+		<Route path="*">
+			<NotFound />
 		</Route>
 	</Router>
 	{/if}

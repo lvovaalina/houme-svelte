@@ -11,14 +11,14 @@
 
     import { config } from '../config';
     import { onMount } from 'svelte';
-
+ 
     let conf = new config();
 
     let projectsResult = [];
     let projects = [];
 
     pageTitle.set({
-        title: 'Get plan',
+        title: $_("getYourPlan.pageTitle"),
     });
 
     let currency = '$';

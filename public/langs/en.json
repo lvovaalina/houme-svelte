@@ -45,6 +45,7 @@
         "opt": "Optimal"
     },
     "details": {
+        "pageTitle": "Project View",
         "nav": {
             "details": "Details",
             "model": "Model",
@@ -92,6 +93,7 @@
         }
     },
     "getYourPlan": {
+        "pageTitle": "Get Plan",
         "title": "Get your plan",
         "subTitle": "Upload your project and we will email you the construction plan with Gantt diagram and materials you will need!",
         "click": "Click to upload",
@@ -108,6 +110,7 @@
         "uploadErrorHelpMessage": "Please check file size and extension."
     },
     "dashboard": {
+        "pageTitle": "Dashboard",
         "title": "Want to see your construction plan?",
         "subtitle": "Upload your project and we will email you the construction plan with Gantt diagram and materials you will need!",
         "seeProjectButtonLabel": "See Project",

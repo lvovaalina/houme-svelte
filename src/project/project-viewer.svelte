@@ -405,7 +405,7 @@
 
                 projectStored.set(project);
                 pageTitle.set({
-                    title: 'Project View ' + newValActive,
+                    title: $_("details.pageTitle") + ' | ' + newValActive,
                     projectName: project.Name,
                 })
 
@@ -418,7 +418,7 @@
 
     $:newValActive = active
     $:pageTitle.set({
-            title: 'Project View ' + newValActive
+            title: $_("details.pageTitle") + ' | ' + newValActive
         });
 
     onMount(() => {
@@ -429,7 +429,7 @@
         }
 
         pageTitle.set({
-            title: 'Project View ' + active,
+            title: $_("details.pageTitle") + '|' + active,
         });
         if ($projectStored.ProjectId != projectId) {
             getProject(projectId);
@@ -437,7 +437,7 @@
             project = $projectStored;
             properties = $propertiesStored;
             pageTitle.set({
-                    title: 'Project View ' + newValActive,
+                    title: $_("details.pageTitle") + '|' + newValActive,
                     projectName: project.Name,
                 })
             dataLoaded = true;

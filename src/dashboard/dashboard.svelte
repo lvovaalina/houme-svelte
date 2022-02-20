@@ -52,7 +52,7 @@
         });
 
         pageTitle.set({
-            title: 'Project Dashboard',
+            title: $_("dashboard.pageTitle"),
             projectName: ''
         });
     });

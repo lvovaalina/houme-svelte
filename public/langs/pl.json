@@ -45,6 +45,7 @@
         "opt": "Optimal"
     },
     "details": {
+        "pageTitle": "Widok Projektu",
         "nav": {
             "details": "Detale",
             "model": "Model",
@@ -92,6 +93,7 @@
         }
     },
     "getYourPlan": {
+        "pageTitle": "Zdobądź Plan",
         "title": "Zdobądź swój plan",
         "subTitle": "Prześlij swój projekt, a my wyślemy Ci plan budowy z diagramem Gantta i potrzebnymi materiałami!",
         "click": "Kliknij, aby przesłać",
@@ -108,6 +110,7 @@
         "uploadErrorHelpMessage": "Sprawdź rozmiar i rozszerzenie pliku."
     },
     "dashboard": {
+        "pageTitle": "Panel",
         "title": "Chcesz zobaczyć swój plan budowy?",
         "subtitle": "Prześlij swój projekt, a my wyślemy Ci plan budowy z diagramem Gantta i potrzebnymi materiałami!",
         "seeProjectButtonLabel": "Zobacz Projekt",

@@ -71,7 +71,7 @@
                         
                     </Cell>
                     <Cell>{currency + numberWithCommas(stage.stageCost)}</Cell>
-                    <Cell>{stage.duration} days</Cell>
+                    <Cell>{stage.duration} {$_("units.days")}</Cell>
                     <Cell>{stage.propertyName}</Cell>
                     <Cell>
                         {stage.propertyValue + (stage.propertyUnit === 'sq.m.' || stage.propertyUnit === '-' ? '' : stage.propertyUnit)}{#if stage.propertyUnit === 'sq.m.'}&#13217{/if}
@@ -88,7 +88,7 @@
                                 </div>
                             </Cell>
                             <Cell>{currency + numberWithCommas(task.cost)}</Cell>
-                            <Cell>{task.duration} days</Cell>
+                            <Cell>{task.duration} {$_("units.days")}</Cell>
                             <Cell>{task.propertyName}</Cell>
                             <Cell>
                                 {task.propertyValue + (task.propertyUnit === 'sq.m.' || task.propertyUnit === '-' ? '' : task.propertyUnit)}{#if task.propertyUnit === 'sq.m.'}&#13217{/if}

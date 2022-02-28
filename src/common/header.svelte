@@ -97,7 +97,7 @@
                     </p>
                      {#if !!projectName}
                             <div class="get-plan-link-container">
-                                <Link to="/upload">Get Plan</Link>
+                                <Link to="/upload">{$_("dashboard.uploadButtonLabel")}</Link>
                             </div>
                         {/if}
                     {/if}

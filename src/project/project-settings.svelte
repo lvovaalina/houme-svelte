@@ -8,8 +8,8 @@
     let wallMaterial = [{name: $_('projectOptions.CLT'), value: "CLT"}, {name: $_('projectOptions.foamBlock'), value: "Foam block"}, {name: $_('projectOptions.brick'), value: "Brick"}, {name: $_('projectOptions.frame'), value: "Frame"}];
     export let wallMaterialValue = '';
 
-    let finishMaterial = [{name: $_('projectOptions.plaster'), value: "Plaster"}, {name: $_('projectOptions.ventfacade'), value:"Ventfacade"}];
-    export let finishMaterialValue = '';
+    // let finishMaterial = [{name: $_('projectOptions.plaster'), value: "Plaster"}, {name: $_('projectOptions.ventfacade'), value:"Ventfacade"}];
+    // export let finishMaterialValue = '';
 
     let roofingMaterial = [{name: $_('projectOptions.fold'), value: "Fold"}, {name: $_('projectOptions.softRoof'), value: "Soft Roof"}, {name: $_('projectOptions.roofTiles'), value: "Roof Tiles"}]
     export let roofingMaterialValue = '';
@@ -45,14 +45,14 @@
                 {/each}
             </Select>
         </div>
-        <div class="setting-container">
+        <!-- <div class="setting-container">
             <label for="finish-material">{$_('projectOptions.finish')}</label>
             <Select id="finish-material" class="material-select" variant="outlined" bind:value={finishMaterialValue}>
                 {#each finishMaterial as material}
                 <Option value={material.value}>{material.name}</Option>
                 {/each}
             </Select>
-        </div>
+        </div> -->
         <div class="setting-container">
             <label for="roofing-material">{$_('projectOptions.roofing')}</label>
             <Select id="roofing-material" class="material-select" variant="outlined" bind:value={roofingMaterialValue}>

@@ -54,31 +54,31 @@
 
     <div class="property-grid-responsive">
         <div class="property-details-grid-cell">
-            <div class="property-name">Duration</div>
+            <div class="property-name">{$_('details.projectDetailsCard.duration')}</div>
             <div class="property-value">{project.ConstructionDuration} {$_("units.days")}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Area</div>
+            <div class="property-name">{$_('details.projectDetailsCard.area')}</div>
             <div class="property-value">{project.LivingArea}&#13217;</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Margin</div>
+            <div class="property-name">{$_('details.projectDetailsCard.margin')}</div>
             <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Project Cost</div>
+            <div class="property-name">{$_('details.projectDetailsCard.projectCost')}</div>
             <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Job Cost</div>
+            <div class="property-name">{$_('details.projectDetailsCard.jobCost')}</div>
             <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Material Cost</div>
+            <div class="property-name">{$_('details.projectDetailsCard.materialCost')}</div>
             <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Workers</div>
+            <div class="property-name">{$_('details.projectDetailsCard.workers')}</div>
             <div class="property-value">{project.Workers}</div>
         </div>
     </div>

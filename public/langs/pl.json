@@ -29,16 +29,16 @@
         "plate": "Talerz",
 
         "CLT": "CLT",
-        "foamBlock": "Foam block",
-        "brick": "Brick",
-        "frame": "Frame",
+        "foamBlock": "Blok piankowy",
+        "brick": "Cegła",
+        "frame": "Rama",
         
         "plaster": "Plaster",
         "ventfacade": "Ventfacade",
 
-        "fold": "Fold",
-        "softRoof": "Soft Roof",
-        "roofTiles": "Roof Tiles",
+        "fold": "Na rąbek",
+        "softRoof": "Miękki dach",
+        "roofTiles": "Dachówki",
 
         "max": "Maximum",
         "min": "Minimum",
@@ -69,18 +69,18 @@
         "jobs": {
             "stage": "Etap",
             "cost": "Koszt",
-            "duration": "Duration",
-            "propertyName": "Property Name",
-            "volume": "Volume",
-            "workers": "Workers"
+            "duration": "Trwanie",
+            "propertyName": "Nazwa właściwości",
+            "volume": "Ilość",
+            "workers": "Pracownicy"
         },
         "materials": {
             "material": "Material",
             "cost": "Cost",
             "volume": "Ilość",
-            "nominalCost": "Nominal Cost",
-            "inStockByDate": "In stock by Date",
-            "inSteps": "In Steps"
+            "nominalCost": "Koszt nominalny",
+            "inStockByDate": "W magazynie według daty",
+            "inSteps": "W krokach"
         },
         "timeline": {
             "stages": "Etapy",

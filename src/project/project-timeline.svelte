@@ -151,7 +151,6 @@
                     
                     //hack to fix HM-238 without forking repository
                     let headerText = elClone.children[0].innerHTML;
-                    console.log(monthNamesLocalized);
                     if (monthNamesLocalized.findIndex(x => headerText.toLowerCase().startsWith(x.toLowerCase())) >= 0) {
                         let monthNumber = (index)%12;
                         el.children[0].innerHTML = monthNamesLocalized[monthNumber] + headerText.substring(3);

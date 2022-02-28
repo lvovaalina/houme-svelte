@@ -4,9 +4,11 @@
     import { onMount } from "svelte";
     import { responsive } from '../store';
     import { numberWithCommas } from '../utils';
-    import { _ } from '../services/i18n';
+    import { _, locale } from '../services/i18n';
 
     export let jobs = [];
+
+    let isEN = $locale == 'en';
 
     export let loaded = false;
     export let currency;
@@ -84,7 +86,7 @@
                         <Row class="hidden-subtasks {stage.code}">
                             <Cell style="padding: 0;">
                                 <div class={"task-container bef-bg-" + stage.color }>
-                                    <div style="padding-left: 16px;" class="break-word-style">{task.name}</div>
+                                    <div style="padding-left: 16px;" class="break-word-style">{isEN ? task.name : task.namePL}</div>
                                 </div>
                             </Cell>
                             <Cell>{currency + numberWithCommas(task.cost)}</Cell>

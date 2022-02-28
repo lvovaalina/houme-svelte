@@ -254,14 +254,14 @@
 
                         let timestamp = timestamps.get(st.Job.JobCode);
 
-                        let materials = reducedMaterialsByJobName[st.Job.JobName];
+                        let materials = reducedMaterialsByJobName[isEN ? st.Job.JobName : st.Job.JobNamePL];
                         let subtaskMaterials = [];
                         let materialCost = 0;
                         if (!!materials && materials.length > 0) {
                             materials.forEach(m => {
                                 materialCost += parseInt(m.MaterialCost);
                                 subtaskMaterials.push({
-                                    name: m.ConstructionJobMaterial.MaterialName,
+                                    name: isEN ? m.ConstructionJobMaterial.MaterialName : m.ConstructionJobMaterial.MaterialNamePL,
                                 });
                             });
                         }

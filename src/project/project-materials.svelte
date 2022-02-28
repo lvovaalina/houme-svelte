@@ -3,13 +3,14 @@
     import { onMount } from "svelte";
     import { responsive } from '../store';
     import { numberWithCommas } from '../utils';
+    import { _ } from '../services/i18n';
 
     export let materials = [];
     export let currency;
 
     let responsiveHeight = 0;
 
-    let columns = ['Material', 'Cost', 'Volume', 'Nominal Cost', 'In stock by Date', 'In Steps'];
+    let columns = Object.values($_("details.materials"));
 
     onMount(() => {
         if ($responsive) {

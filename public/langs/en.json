@@ -1,0 +1,122 @@
+{
+    "header": {
+        "contact": "Contact",
+        "dashboard": "Dashboard"
+    },
+    "monthNames": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Aug",
+        "sep": "Sep",
+        "oct": "Oct",
+        "nov": "Nov",
+        "dec": "Dec"
+    },
+    "projectOptions": {
+        "workers": "Workers",
+        "foundation": "Foundation",
+        "wall": "Wall",
+        "finish": "Finish",
+        "roofing": "Roofing",
+
+        "ribbon": "Ribbon",
+        "pile": "Pile",
+        "plate": "Plate",
+
+        "CLT": "CLT",
+        "foamBlock": "Foam block",
+        "brick": "Brick",
+        "frame": "Frame",
+        
+        "plaster": "Plaster",
+        "ventfacade": "Ventfacade",
+
+        "fold": "Fold",
+        "softRoof": "Soft Roof",
+        "roofTiles": "Roof Tiles",
+
+        "max": "Maximum",
+        "min": "Minimum",
+        "opt": "Optimal"
+    },
+    "details": {
+        "pageTitle": "Project View",
+        "nav": {
+            "details": "Details",
+            "model": "Model",
+            "timeline": "Timeline",
+            "jobs": "Jobs",
+            "materials": "Materials"
+        },
+        "projectDetailsCard": {
+            "title": "Project Details",
+            "duration": "Duration",
+            "area": "Area",
+            "margin": "Margin",
+            "projectCost": "Project Cost",
+            "jobCost": "Job Cost",
+            "materialCost": "Material Cost",
+            "workers": "Workers",
+            "helperText": "Change materials and/or number of workers to recalculate project's duration and cost:",
+            "options": "Options",
+            "recalculate": "recalculate"
+        },
+        "timeline": {
+            "stages": "Stages",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "workers": "Workers",
+            "jobCost": "Job Cost",
+            "materialCost": "Material Cost",
+            "materials": "Materials"
+        },
+        "jobs": {
+            "stage": "Stage",
+            "cost": "Cost",
+            "duration": "Duration",
+            "propertyName": "Property Name",
+            "volume": "Volume",
+            "workers": "Workers"
+        },
+        "materials": {
+            "material": "Material",
+            "cost": "Cost",
+            "volume": "Volume",
+            "nominalCost": "Nominal Cost",
+            "inStockByDate": "In stock by Date",
+            "inSteps": "In Steps"
+        }
+    },
+    "getYourPlan": {
+        "pageTitle": "Get Plan",
+        "title": "Get your plan",
+        "subTitle": "Upload your project and we will email you the construction plan with Gantt diagram and materials you will need!",
+        "click": "Click to upload",
+        "drag": "or drag and drop",
+        "maxSize": "Max size 300 MB",
+        "email": "Email",
+        "uploadButtonLabel": "Get Plan",
+        "projetsHeader": "See how companies plan their process",
+        "seeProjectButtonLabel": "See Project",
+        "thankYouHeader": "Thank you!",
+        "thankYouSubheader": "We will get back to you as soon as possible",
+        "uploadMore": "Upload More",
+        "uploadError": "Could not upload file!",
+        "uploadErrorHelpMessage": "Please check file size and extension."
+    },
+    "dashboard": {
+        "pageTitle": "Dashboard",
+        "title": "Want to see your construction plan?",
+        "subtitle": "Upload your project and we will email you the construction plan with Gantt diagram and materials you will need!",
+        "seeProjectButtonLabel": "See Project",
+        "uploadButtonLabel": "Get Plan"
+    },
+    "units": {
+        "days": "days"
+    }
+}

@@ -7,11 +7,13 @@
     import Ripple from '@smui/ripple';
     import { navigate, Link } from "svelte-navigator";
     import { onMount } from 'svelte';
-    import { stageColorMap, stageMap, time } from '../utils';
+    import { stageColorMap, stageMap, time, setTimeLocale } from '../utils';
     import ProjectCard from '../project/project-card.svelte';
     import ProjectMaterials from '../project/project-materials.svelte';
     import { pageTitle, projectStored, propertiesStored, responsive } from '../store';
     import { watchResize } from "svelte-watch-resize";
+
+    import { _, locale } from "../services/i18n";
 
     import { getNotificationsContext } from 'svelte-notifications';
     const { addNotification } = getNotificationsContext();
@@ -19,19 +21,22 @@
     export let projectId;
     export let active = 'Model';
 
+    let lang = $locale == 'en' ? '/en' : '';
+    let isEN = $locale == 'en';
+
     let tabs = [
-        {name: 'Model', urlPart: 'model'},
-        {name: 'Timeline', urlPart: 'timeline'},
-        {name: 'Jobs', urlPart: 'jobs'},
-        {name: 'Materials', urlPart: 'materials'},
+        {localizedName: $_("details.nav.model"), name: 'Model', urlPart: 'model'},
+        {localizedName: $_("details.nav.timeline"), name: 'Timeline', urlPart: 'timeline'},
+        {localizedName: $_("details.nav.jobs"), name: 'Jobs', urlPart: 'jobs'},
+        {localizedName: $_("details.nav.materials"), name: 'Materials', urlPart: 'materials'},
     ];
 
     let tabsResponsive = [
-        {name: 'Details', urlPart: 'details'},
-        {name: 'Model', urlPart: 'model'},
-        {name: 'Timeline', urlPart: 'timeline'},
-        {name: 'Jobs', urlPart: 'jobs'},
-        {name: 'Materials', urlPart: 'materials'},
+        {localizedName: $_("details.nav.details"), name: 'Details', urlPart: 'details'},
+        {localizedName: $_("details.nav.model"), name: 'Model', urlPart: 'model'},
+        {localizedName: $_("details.nav.timeline"), name: 'Timeline', urlPart: 'timeline'},
+        {localizedName: $_("details.nav.jobs"), name: 'Jobs', urlPart: 'jobs'},
+        {localizedName: $_("details.nav.materials"), name: 'Materials', urlPart: 'materials'},
     ];
 
     let headerTabs = [];
@@ -114,17 +119,21 @@
     }
 
     function createProjectJobsVM() {
-        let reducedJobsByStageName = reduceByJobPropertyValue(project.ProjectJobs, "StageName");
+        let reducedJobsByStageName =
+            reduceByJobPropertyValue(project.ProjectJobs, isEN ? "StageName" : "StageNamePL");
 
-        let reducedJobsBySubStageName = reduceByJobPropertyValue(project.ProjectJobs, "SubStageName");
+        let reducedJobsBySubStageName =
+            reduceByJobPropertyValue(project.ProjectJobs, isEN ? "SubStageName" : "SubStageNamePL");
 
-        let reducedMaterialsByJobName = reduceByConstructionMaterialPropertyValue(project.ProjectMaterials, "JobName");
+        let reducedMaterialsByJobName =
+            reduceByConstructionMaterialPropertyValue(project.ProjectMaterials, isEN ? "JobName" : "JobNamePL");
 
         let jobsVM = [];
         let jobsTinelineVM = [];
 
         Object.entries(reducedJobsBySubStageName).forEach(([stage, jobs]) => {
             let props = stageColorMap.get(stage);
+            console.log(stage);
             let stageVM =  {
                 name: stage,
                 color: props.color,
@@ -145,13 +154,14 @@
                 if (job.Job.JobName != stage && jobs.length != 1) {
                     let newTask = {
                         name: job.Job.JobName,
+                        namePL: job.Job.JobNamePL,
                         duration: job.ConstructionDurationInDays,
                         cost: job.ConstructionCost,
                         workersCount: job.ConstructionWorkers
                     }
 
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
-                        newTask.propertyName = job.Job.Property.PropertyName;
+                        newTask.propertyName = isEN ? job.Job.Property.PropertyName : job.Job.Property.PropertyNamePL;
                         newTask.propertyUnit = job.Job.Property.PropertyUnit;
                         newTask.propertyValue = projectProperty.PropertyValue;
                     } else {
@@ -165,14 +175,18 @@
                 
                 if (jobs.length == 1) {
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
-                        stageVM.propertyName = job.Job.Property.PropertyName;
+                        stageVM.propertyName = isEN ? job.Job.Property.PropertyName : job.Job.Property.PropertyNamePL;
                         stageVM.propertyUnit = job.Job.Property.PropertyUnit;
                         stageVM.propertyValue = projectProperty.PropertyValue;
                         isPropertySetForStage = true;
                     }
 
-                    if (job.Job.JobName != stage) {
+                    if (isEN && job.Job.JobName != stage) {
                         stageVM.name = stageVM.name + ' (' + job.Job.JobName + ')';
+                    }
+
+                    if (!isEN && job.Job.JobNamePL != stage) {
+                        stageVM.name = stageVM.name + ' (' + job.Job.JobNamePL + ')';
                     }
                 }
             });
@@ -213,7 +227,7 @@
 
                 let projectProperty = propertiesMap.get(jobs[0].PropertyCode);
                 if (projectProperty && projectProperty.Job && projectProperty.Job.Property) {
-                    stageVM.propertyName = projectProperty.Job.Property.PropertyName;
+                    stageVM.propertyName = isEN ? projectProperty.Job.Property.PropertyName : projectProperty.Job.Property.PropertyNamePL;
                     stageVM.propertyUnit = projectProperty.Job.Property.PropertyUnit;
                     stageVM.propertyValue = projectProperty.PropertyValue;
                 } else {
@@ -225,7 +239,7 @@
                 let stageDuration = 0, stageCost = 0, stageWorkers = 0;
                 let tasks = [];
 
-                let jobTaskMap = reduceByJobPropertyValue(jobs, "SubStageName");
+                let jobTaskMap = reduceByJobPropertyValue(jobs, isEN ? "SubStageName" : "SubStageNamePL");
 
                 Object.entries(jobTaskMap).forEach(([subStageName, subtasks]) => {
                     let newTask = {
@@ -240,20 +254,20 @@
 
                         let timestamp = timestamps.get(st.Job.JobCode);
 
-                        let materials = reducedMaterialsByJobName[st.Job.JobName];
+                        let materials = reducedMaterialsByJobName[isEN ? st.Job.JobName : st.Job.JobNamePL];
                         let subtaskMaterials = [];
                         let materialCost = 0;
                         if (!!materials && materials.length > 0) {
                             materials.forEach(m => {
                                 materialCost += parseInt(m.MaterialCost);
                                 subtaskMaterials.push({
-                                    name: m.ConstructionJobMaterial.MaterialName,
+                                    name: isEN ? m.ConstructionJobMaterial.MaterialName : m.ConstructionJobMaterial.MaterialNamePL,
                                 });
                             });
                         }
 
                         let subtask = {
-                            name: st.Job.JobName,
+                            name: isEN ? st.Job.JobName : st.Job.JobNamePL,
                             duration: st.ConstructionDurationInDays,
                             cost: st.ConstructionCost,
                             workersCount: st.ConstructionWorkers,
@@ -265,7 +279,7 @@
 
                         let projectProperty = propertiesMap.get(st.PropertyCode);
                         if (projectProperty && projectProperty.Job.Property) {
-                            subtask.propertyName = projectProperty.Job.Property.PropertyName;
+                            subtask.propertyName = isEN ? projectProperty.Job.Property.PropertyName : projectProperty.Job.Property.PropertyNamePL;
                             subtask.propertyUnit = projectProperty.Job.Property.PropertyUnit;
                             subtask.propertyValue = projectProperty.PropertyValue;
                         } else {
@@ -278,7 +292,16 @@
                         stageCost += subtask.cost;
                         stageWorkers += subtask.workersCount;
 
-                        if (subStageName !== st.Job.JobName) {
+                        if (isEN && subStageName !== st.Job.JobName) {
+                            if (subStageName === stage) {
+                                tasks.push(subtask);
+                            } else {
+                                addTask = true;
+                                dur += subtask.duration;
+                                cost += subtask.cost;
+                                workCount = subtask.workersCount;
+                            }
+                        } else if (!isEN && subStageName !== st.Job.JobNamePL) {
                             if (subStageName === stage) {
                                 tasks.push(subtask);
                             } else {
@@ -329,14 +352,23 @@
             let props = stageMap.get(element.ConstructionJobMaterial.Job.StageName);
 
             let timestamp = timestamps.get(element.ConstructionJobMaterial.Job.JobCode);
-            
-            let jobName = element.ConstructionJobMaterial.Job.SubStageName;
-            if (element.ConstructionJobMaterial.Job.SubStageName != element.ConstructionJobMaterial.Job.JobName) {
-                jobName += ': ' + element.ConstructionJobMaterial.Job.JobName;
+
+            let jobName;
+            if (isEN) {
+                jobName = element.ConstructionJobMaterial.Job.SubStageName;
+                if (element.ConstructionJobMaterial.Job.SubStageName != element.ConstructionJobMaterial.Job.JobName) {
+                    jobName += ': ' + element.ConstructionJobMaterial.Job.JobName;
+                }
+            } else {
+                jobName = element.ConstructionJobMaterial.Job.SubStageNamePL;
+                if (element.ConstructionJobMaterial.Job.SubStageNamePL != element.ConstructionJobMaterial.Job.JobNamePL) {
+                    jobName += ': ' + element.ConstructionJobMaterial.Job.JobNamePL;
+                }
             }
+            
 
             materialsVM.push({
-                name: element.ConstructionJobMaterial.MaterialName,
+                name: isEN ? element.ConstructionJobMaterial.MaterialName : element.ConstructionJobMaterial.MaterialNamePL,
                 cost: element.MaterialCost,
                 nominalCost: element.ConstructionJobMaterial.MaterialCost,
                 volume: property.PropertyValue,
@@ -401,7 +433,7 @@
 
                 projectStored.set(project);
                 pageTitle.set({
-                    title: 'Project View ' + newValActive,
+                    title: $_("details.pageTitle") + ' | ' + newValActive,
                     projectName: project.Name,
                 })
 
@@ -414,16 +446,18 @@
 
     $:newValActive = active
     $:pageTitle.set({
-            title: 'Project View ' + newValActive
+            title: $_("details.pageTitle") + ' | ' + newValActive
         });
 
     onMount(() => {
+        setTimeLocale(lang);
+
         if ($responsive) {
             responsiveHeight = document.documentElement.clientHeight - 38 - 39 - 12 - 46;
         }
 
         pageTitle.set({
-            title: 'Project View ' + active,
+            title: $_("details.pageTitle") + '|' + active,
         });
         if ($projectStored.ProjectId != projectId) {
             getProject(projectId);
@@ -431,7 +465,7 @@
             project = $projectStored;
             properties = $propertiesStored;
             pageTitle.set({
-                    title: 'Project View ' + newValActive,
+                    title: $_("details.pageTitle") + '|' + newValActive,
                     projectName: project.Name,
                 })
             dataLoaded = true;
@@ -545,8 +579,8 @@
                             <Link
                                 class="tab-link"
                                 style={active === tab.name ? "color:rgb(0,100,200);" : "color: rgba(0, 0, 0, .87);"}
-                                to="/view/{project.ProjectId}/{tab.urlPart}">
-                                {tab.name}
+                                to={lang + "/view/" + project.ProjectId+ "/" + tab.urlPart}>
+                                {tab.localizedName}
                             </Link>
                         </div>
                         {/each}

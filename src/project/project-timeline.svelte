@@ -7,6 +7,8 @@
     import { responsive } from '../store';
     import { numberWithCommas } from '../utils';
 
+    import { _ } from '../services/i18n';
+
     export let currency;
     export let projectDuration;
 
@@ -20,11 +22,7 @@
     let tasks = [];
 
     let taskColors = ['orange', 'green', 'blue'];
-    let monthNames = [
-        "Jan", "Feb", "Mar",
-        "Apr", "May", "Jun", "Jul",
-        "Aug", "Sep", "Oct",
-        "Nov", "Dec"];
+    let monthNamesLocalized = Object.values($_("monthNames"));
 
     function translateStagesToTasks() {
         function addTask(task, resourceId, color) {
@@ -151,11 +149,11 @@
                 headerClone.children.forEach((el, index) => {
                     let elClone = el.cloneNode(true);
                     
-                    // hack to fix HM-238 without forking repository
+                    //hack to fix HM-238 without forking repository
                     let headerText = elClone.children[0].innerHTML;
-                    if (monthNames.findIndex(x => headerText.startsWith(x)) >= 0) {
+                    if (monthNamesLocalized.findIndex(x => headerText.toLowerCase().startsWith(x.toLowerCase())) >= 0) {
                         let monthNumber = (index)%12;
-                        el.children[0].innerHTML = monthNames[monthNumber] + headerText.substring(3);
+                        el.children[0].innerHTML = monthNamesLocalized[monthNumber] + headerText.substring(3);
                     }
                 });
                 isProcessing = false;
@@ -171,7 +169,7 @@
         fitWidth: true,
         from: currentStart.clone().startOf('year'),
         to: currentEnd,
-        tableHeaders: [{ title: 'Stages', property: 'label', width: 140, type: 'tree' }],
+        tableHeaders: [{ title: $_("details.timeline.stages"), property: 'label', width: 140, type: 'tree' }],
         tableWidth: 240,
         minWidth: 1000,
         columnUnit: 'day',
@@ -226,19 +224,19 @@
         div.innerHTML = `
             <div class="sg-popup-title">${task.label}</div>
             <div class="sg-popup-item">
-                <div class="sg-popup-item-label">Start Date:</div>
+                <div class="sg-popup-item-label">${$_("details.timeline.startDate")}:</div>
                 <div class="sg-popup-item-value">${task.from.format('D MMM YYYY')}</div>
             </div>
             <div class="sg-popup-item">
-                <div class="sg-popup-item-label">End Date:</div>
+                <div class="sg-popup-item-label">${$_("details.timeline.endDate")}:</div>
                 <div class="sg-popup-item-value">${task.to.format('D MMM YYYY')}</div>
             </div>
             <div class="sg-popup-item">
-                <div class="sg-popup-item-label">Workers:</div>
+                <div class="sg-popup-item-label">${$_("details.timeline.workers")}:</div>
                 <div class="sg-popup-item-value">${task.workers}</div>
             </div>
             <div class="sg-popup-item">
-                <div class="sg-popup-item-label">Job Cost:</div>
+                <div class="sg-popup-item-label">${$_("details.timeline.jobCost")}:</div>
                 <div class="sg-popup-item-value">${currency + numberWithCommas(task.cost)}</div>
             </div>
         `
@@ -246,11 +244,11 @@
         if (!!task.materialsList) {
             div.innerHTML += `
             <div class="sg-popup-item">
-                    <div class="sg-popup-item-label">Material Cost:</div>
+                    <div class="sg-popup-item-label">${$_("details.timeline.materialCost")}:</div>
                     <div class="sg-popup-item-value">${currency + numberWithCommas(task.materialsCost)}</div>
                 </div>
                 <div class="sg-popup-item">
-                    <div class="sg-popup-item-label">Materials:</div>
+                    <div class="sg-popup-item-label">${$_("details.timeline.materials")}:</div>
                     <div class="sg-popup-item-value" style="text-align: right;">${task.materialsList}</div>
                 </div>
             `

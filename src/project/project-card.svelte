@@ -4,6 +4,7 @@
 
     import { createEventDispatcher } from "svelte";
     import { numberWithCommas } from '../utils';
+    import { _ } from '../services/i18n';
 
     const dispatch = createEventDispatcher();
 
@@ -16,68 +17,68 @@
 </script>
 
 <div class="card-header-container-responsive">
-    <h3 class="card-header" style="margin-top: 0;">Project Details</h3>
+    <h3 class="card-header" style="margin-top: 0;">{$_('details.projectDetailsCard.title')}</h3>
 </div>
 
 <div class="property-table-container responsive-box-shadow">
     <table class="property-table" aria-label="Project properties" style="width: 100%;">
         <tr>
-            <td>Area</td>
+            <td>{$_('details.projectDetailsCard.area')}</td>
             <td class="numeric-row">{project.LivingArea}&#13217;</td>
         </tr>
         <tr>
-            <td>Project Cost</td>
+            <td>{$_('details.projectDetailsCard.projectCost')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionCost)}</td>
         </tr>
         <tr>
-            <td>Job Cost</td>
+            <td>{$_('details.projectDetailsCard.jobCost')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionJobCost)}</td>
         </tr>
         <tr>
-            <td>Materials Cost</td>
+            <td>{$_('details.projectDetailsCard.materialCost')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.ConstructionMaterialCost)}</td>
         </tr>
         <tr>
-            <td>Project Duration</td>
-            <td class="numeric-row">{project.ConstructionDuration} days</td>
+            <td>{$_('details.projectDetailsCard.duration')}</td>
+            <td class="numeric-row">{project.ConstructionDuration} {$_("units.days")}</td>
         </tr>
         <tr>
-            <td>Workers</td>
+            <td>{$_('details.projectDetailsCard.workers')}</td>
             <td class="numeric-row">{project.Workers}</td>
         </tr>
         <tr>
-            <td>Margin</td>
+            <td>{$_('details.projectDetailsCard.margin')}</td>
             <td class="numeric-row">{currency + numberWithCommas(project.Margin)}</td>
         </tr>
     </table>
 
     <div class="property-grid-responsive">
         <div class="property-details-grid-cell">
-            <div class="property-name">Duration</div>
-            <div class="property-value">{project.ConstructionDuration} days</div>
+            <div class="property-name">{$_('details.projectDetailsCard.duration')}</div>
+            <div class="property-value">{project.ConstructionDuration} {$_("units.days")}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Area</div>
+            <div class="property-name">{$_('details.projectDetailsCard.area')}</div>
             <div class="property-value">{project.LivingArea}&#13217;</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Margin</div>
+            <div class="property-name">{$_('details.projectDetailsCard.margin')}</div>
             <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Project Cost</div>
+            <div class="property-name">{$_('details.projectDetailsCard.projectCost')}</div>
             <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Job Cost</div>
+            <div class="property-name">{$_('details.projectDetailsCard.jobCost')}</div>
             <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Material Cost</div>
+            <div class="property-name">{$_('details.projectDetailsCard.materialCost')}</div>
             <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
         </div>
         <div class="property-details-grid-cell">
-            <div class="property-name">Workers</div>
+            <div class="property-name">{$_('details.projectDetailsCard.workers')}</div>
             <div class="property-value">{project.Workers}</div>
         </div>
     </div>
@@ -85,11 +86,11 @@
 
 <div class="divider"/>
 <div class="card-header-container-responsive">
-    <h3 class="card-header">Options</h3>
+    <h3 class="card-header">{$_('details.projectDetailsCard.options')}</h3>
 </div>
 
 <div class="materials-block responsive-box-shadow">
-    <p class="helper-text">Change materials and/or number of workers to recalculate project's duration and cost:</p>
+    <p class="helper-text">{$_('details.projectDetailsCard.helperText')}</p>
     <ProjectSettings
         bind:foundationMaterialValue={project.FoundationMaterial}
         bind:wallMaterialValue={project.WallMaterial}
@@ -102,7 +103,7 @@
         style="margin-top: 10px;text-align: left;background-color: #2D62E8; color: white; align-self: flex-end;"
         class="apply-button"
         variant="filled" on:click={updateProject}>
-        <Label>recalculate</Label>
+        <Label>{$_("details.projectDetailsCard.recalculate")}</Label>
     </Button>
 </div>
 

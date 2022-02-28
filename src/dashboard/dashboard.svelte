@@ -1,55 +1,26 @@
 <script>
     import CircularProgress from '@smui/circular-progress';
-    import DataTable, {
-        Head,
-        Body,
-        Row,
-        Cell,
-        Label,
-    } from '@smui/data-table';
+    import Card, { PrimaryAction} from "@smui/card";
     import Ripple from '@smui/ripple';
-    import LinearProgress from '@smui/linear-progress';
-    import Tooltip, { Wrapper } from '@smui/tooltip';
     import { watchResize } from "svelte-watch-resize";
-
-    import ForgeViewer from '../project/forge-viewer.svelte';
 
     import { onMount } from 'svelte';
     import { Link } from 'svelte-navigator';
     import { pageTitle } from '../store';
     import { numberWithCommas } from '../utils';
 
-    import { Input } from '@smui/textfield';
-    import Paper from '@smui/paper';
-    import { Icon } from '@smui/common';
-
-    import IconButton from '@smui/icon-button';
-    let urn;
+    import { _, locale } from "../services/i18n";
+    let lang = $locale == 'en' ? '/en' : '';
 
     let currency = '$';
     let detailsUrl = '';
 
     let titleSearch;
-    let columns = [
-        {name: ''},
-        {name: 'Image', class: 'image-column'},
-        {name: 'Title', columnId: 'Name'},
-        {name: 'Duration', columnId: 'ConstructionDuration'},
-        {name: 'Area', columnId: 'LivingArea'},
-        {name: 'Margin' },
-        {name: 'Project Cost' },
-        {name: 'Job Cost' },
-        {name: 'Material Cost' },
-        {name: 'Workers' },
-        {name: ''},
-    ];
 
     export let projects = [];
     let projectsResult = [];
-    let projectsCount;
 
     let dataLoaded = false;
-    let dataLoadedForSearch = false;
 
     import { config } from '../config';
     let conf = new config();
@@ -77,13 +48,11 @@
             projects = resp.data;
             
             projectsResult = projects;
-            projectsCount = projects.length;
             dataLoaded = true;
-            dataLoadedForSearch = true;
         });
 
         pageTitle.set({
-            title: 'Project Dashboard',
+            title: $_("dashboard.pageTitle"),
             projectName: ''
         });
     });
@@ -105,19 +74,6 @@
         dataLoadedForSearch = true;
     }
 
-    function handleSort(event) {
-        projectsResult.sort((a, b) => {
-            const [aVal, bVal] = [a[sort], b[sort]][
-                sortDirection === 'ascending' ? 'slice' : 'reverse'
-            ]();
-            if (typeof aVal === 'string' && typeof bVal === 'string') {
-                return aVal.localeCompare(bVal);
-            }
-            return Number(aVal) - Number(bVal);
-        });
-        projectsResult = projectsResult;
-    }
-
     function getWidth() {
         return Math.max(
             document.body.scrollWidth,
@@ -126,11 +82,6 @@
             document.documentElement.offsetWidth,
             document.documentElement.clientWidth
         );
-    }
-
-    function showProjectModel(id) {
-        selectedProjectId = id;
-        urn = projects.find(x => x.ProjectId == selectedProjectId).Filename;
     }
 
     function setDetailsUrlPart(){
@@ -144,170 +95,42 @@
     function handleResize() {
         setDetailsUrlPart();
     }
+
 </script>
 
 <div class="dashboard" use:watchResize={handleResize}>
     {#if dataLoaded}
-    <div class="project-table-header">
-        <h1>Projects</h1> <!-- ({projectsCount})</h1> -->
-        <div class="solo-demo-container solo-container">
-            <Paper class="solo-paper" elevation={6}>
-                <Icon class="material-icons">search</Icon>
-                <Wrapper>
-                    <Input
-                        bind:value={titleSearch}
-                        on:keydown={handleKeyDown}
-                        placeholder="Search by Title"
-                        class="solo-input"
-                    />
-                    <Tooltip>Press Enter to Search</Tooltip>
-                </Wrapper>
-                
-            </Paper>
-        </div>
-    </div>
     <div class="dasboard-content-container">
-    <div class="projects-table-container">
-        <DataTable
-            sortable
-            bind:sort
-            bind:sortDirection
-            on:MDCDataTable:sorted={handleSort}
-            stickyHeader table$aria-label="Project dashboard"
-            class="projects-table">
-            <Head>
-                <Row>
-                {#each columns as col, index}
-                    {#if index == 0}
-                        <Cell style="padding-left: 5px;padding-right: 0;"></Cell>
-                    {:else}
-                    <Cell sortable={!!col.columnId ? 'true' : 'false'} class={col.class} columnId={col.columnId}>
-                        <Label>{col.name}</Label>
-                        {#if !!col.columnId}
-                            <IconButton style="margin-bottom: 0; font-size: 16px;" class="material-icons">arrow_upward</IconButton>
-                        {/if}
-                    </Cell>
-                    {/if}
-                {/each}
-                </Row>
-            </Head>
-            <Body>
-                {#if projectsResult.length !== 0} 
-                {#each projectsResult as project, index}
-                    <Row style="cursor: pointer" on:click={showProjectModel(project.ProjectId)}>
-                        <Cell style="padding-left: 5px;padding-right: 0;">{index + 1}</Cell>
-                        <Cell style="padding-left:0;" class="image-column-row">
-                            <div class="project-cover-container">
-                            <Link to="/view/{project.ProjectId}/{detailsUrl}">
-                                <img
-                                    class="project-image"
-                                    src="{'data:image/png;base64,' + project.ProjectCover}"
-                                    alt="Project {project.Name} cover"/>
-                            </Link>
-                            </div>
-                        </Cell>
-                        <Cell style="height:fit-content">
-                            <div class="break-word-style" style="white-space: pre-line;">
-                                {project.Name}
-                            </div>
-                        </Cell>
-                        <Cell>
-                            <div class="days-after">
-                                {project.ConstructionDuration}
-                            </div>
-                        </Cell>
-                        <Cell>{project.LivingArea} &#13217;</Cell>
-                        <Cell>{currency + numberWithCommas(project.Margin)}</Cell>
-                        <Cell>{currency + numberWithCommas(project.ConstructionCost)}</Cell>
-                        <Cell>{currency + numberWithCommas(project.ConstructionJobCost)}</Cell>
-                        <Cell>{currency + numberWithCommas(project.ConstructionMaterialCost)}</Cell>
-                        <Cell>{project.Workers}</Cell>
-                        <Cell>
-                            <div use:Ripple={{ surface: true }} class="project-link-container">
-                                <Link style="color: #2D62E8" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
-                            </div>
-                        </Cell>
-                    </Row>
-            {/each}
-            {/if}
-            </Body>
-            <LinearProgress
-                bind:closed={dataLoadedForSearch}
-                indeterminate
-                aria-label="Data is being loaded..."
-                slot="progress"
-            />
-        </DataTable>
-
-        {#if projectsResult.length === 0}
-        <p style="text-align:center">No projects to view</p>
-        {/if}
-    </div>
-    <div class="projects-grid-responsive">
-        {#if projectsResult.length === 0}
-            <p style="text-align:center">No projects to view</p>
-        {/if}
-        {#each projectsResult as project}
-        <div class="details-padding"></div>
-        <div class="project-drid-responsive">
-            <div class="project-grid-header">
-                <div class="project-cover-container">
-                    <Link to="/view/{project.ProjectId}/{detailsUrl}">
+        <div class="project-cards" style="display: flex;">
+            {#each projectsResult as project}
+            <div class="card-container">
+                <Card class="project-card" style="padding: 15px;">
+                    <Link to="{lang}/view/{project.ProjectId}/{detailsUrl}" style="color:#6B6D76">
                         <img
                             class="project-image"
                             src="{'data:image/png;base64,' + project.ProjectCover}"
+                            style="width: 100%; height: auto;"
                             alt="Project {project.Name} cover"/>
+                        <h3 style="margin:0">{project.Name}</h3>
+                        <p style="margin-top: 5px;">
+                            {currency + numberWithCommas(project.ConstructionCost)} &#183; {project.LivingArea}&#13217; &#183; {project.ConstructionDuration} {$_("units.days")}
+                        </p>
+                        <div class="get-plan-link-container" style="margin-left:0">
+                            <Link style="font-size: 16px;" to="{lang}/view/{project.ProjectId}/{detailsUrl}">{$_("dashboard.seeProjectButtonLabel")}</Link>
+                        </div>
                     </Link>
-                </div>
-                <div class="project-grid-header-name">{project.Name}</div>
-            </div>
-            <div class="property-grid-responsive">
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Duration</div>
-                    <div class="property-value">{project.ConstructionDuration} days</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Area</div>
-                    <div class="property-value">{project.LivingArea}&#13217;</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Margin</div>
-                    <div class="property-value">{currency + numberWithCommas(project.Margin)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Workers</div>
-                    <div class="property-value">{project.Workers}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Project Cost</div>
-                    <div class="property-value">{currency + numberWithCommas(project.ConstructionCost)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Job Cost</div>
-                    <div class="property-value">{currency + numberWithCommas(project.ConstructionJobCost)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div class="property-name">Material Cost</div>
-                    <div class="property-value">{currency + numberWithCommas(project.ConstructionMaterialCost)}</div>
-                </div>
-                <div class="property-details-grid-cell">
-                    <div use:Ripple={{ surface: true }} class="project-link-container">
-                        <Link style="color:white" to="/view/{project.ProjectId}/{detailsUrl}">DETAILS</Link>
-                    </div>
-                </div>
-            </div>
+                </Card>
+              </div>
+            {/each}
         </div>
-        {/each}
-    </div>
-    <div class="forge-container">
-        {#if !!selectedProjectId && selectedProjectId > 0}
-            <p style="margin-bottom: -20px;">PROJECT</p>
-            <h2>{projects.find(x => x.ProjectId == selectedProjectId).Name}</h2>
-            <ForgeViewer urn={urn} forgeViewerClass="dashboard-height"></ForgeViewer>
-        {:else}
-        <p style="text-align: center;">Select a project for a quick view</p>
-        {/if}
-    </div>
+        <div class="upload-project-link-container">
+            <h1>{$_("dashboard.title")}</h1>
+            <p>{$_("dashboard.subtitle")}</p>
+
+                <div class="get-plan-link-container">
+                    <Link to="{lang}/upload">{$_("dashboard.uploadButtonLabel")}</Link>
+                </div>
+        </div>
     </div>
 
     {:else}
@@ -318,6 +141,72 @@
 </div>
 
 <style>
+    .card-container {
+        width: 45%;
+        margin-bottom: 15px;
+    }
+
+    .upload-project-link-container {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        flex-direction: column;
+        padding: 0 50px;
+        padding-top: 35vh;
+    }
+
+    .upload-project-link-container p {
+        margin: 0 0 15px 0;
+        color: #6B6D76;
+        font-size: 16px;
+    }
+
+    .upload-project-link-container h1 {
+        margin-bottom: 5px;
+    }
+
+    .get-plan-link-container {
+        height: 38px;
+        border: 1px solid rgba(0,100,200);
+        border-radius: 5px;
+        background-color:  rgba(0,100,200);
+        margin-left: 15px;
+        width: fit-content;
+    }
+
+    :global(.get-plan-link-container a) {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        height: 100%;
+        width: fit-content;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .project-cards {
+        width: 70%;
+        /* border-right: 1px solid #eeeeee; */
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        padding-top: 15px;
+    }
+
+    :global(.project-card h3) {
+        color: black; /*!important;*/
+    }
+
+    :global(.mdc-notched-outline .mdc-notched-outline--no-label) {
+        border-color: #eeeeee;
+    }
+    :global(.project-upload) {
+        background-color: white !important;
+        color: black !important;
+    }
+
     :global(.days-after::after) {
         content: ' days';
     }
@@ -352,7 +241,7 @@
 
     .projects-table-container {
         border-right: 1px solid #d3d3d1;
-        height: calc(100vh - 64px - 76px);
+        /* height: calc(100vh - 64px - 76px); */
     }
 
     .forge-container {

@@ -4,14 +4,17 @@
     import { onMount } from "svelte";
     import { responsive } from '../store';
     import { numberWithCommas } from '../utils';
+    import { _, locale } from '../services/i18n';
 
     export let jobs = [];
+
+    let isEN = $locale == 'en';
 
     export let loaded = false;
     export let currency;
     let responsiveHeight = 0;
 
-    let columns = ['Stage', 'Cost',  'Duration', 'Property Name', 'Volume', 'Workers'];
+    let columns = Object.values($_("details.jobs"));
 
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);
@@ -70,7 +73,7 @@
                         
                     </Cell>
                     <Cell>{currency + numberWithCommas(stage.stageCost)}</Cell>
-                    <Cell>{stage.duration} days</Cell>
+                    <Cell>{stage.duration} {$_("units.days")}</Cell>
                     <Cell>{stage.propertyName}</Cell>
                     <Cell>
                         {stage.propertyValue + (stage.propertyUnit === 'sq.m.' || stage.propertyUnit === '-' ? '' : stage.propertyUnit)}{#if stage.propertyUnit === 'sq.m.'}&#13217{/if}
@@ -83,11 +86,11 @@
                         <Row class="hidden-subtasks {stage.code}">
                             <Cell style="padding: 0;">
                                 <div class={"task-container bef-bg-" + stage.color }>
-                                    <div style="padding-left: 16px;" class="break-word-style">{task.name}</div>
+                                    <div style="padding-left: 16px;" class="break-word-style">{isEN ? task.name : task.namePL}</div>
                                 </div>
                             </Cell>
                             <Cell>{currency + numberWithCommas(task.cost)}</Cell>
-                            <Cell>{task.duration} days</Cell>
+                            <Cell>{task.duration} {$_("units.days")}</Cell>
                             <Cell>{task.propertyName}</Cell>
                             <Cell>
                                 {task.propertyValue + (task.propertyUnit === 'sq.m.' || task.propertyUnit === '-' ? '' : task.propertyUnit)}{#if task.propertyUnit === 'sq.m.'}&#13217{/if}

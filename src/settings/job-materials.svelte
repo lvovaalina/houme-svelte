@@ -27,6 +27,7 @@
         jobNameValue: '',
         peoprtyName: '',
         materialName: '',
+        materialNamePL: '',
         materialCost: ''
     }
 
@@ -120,6 +121,7 @@
         let materialToUpdate = jobMaterials.find(m => m.ID == jobMaterial.ID);
         materialToUpdate.MaterialCost = materialCost;
         materialToUpdate.MaterialName = jobMaterial.MaterialName;
+        materialToUpdate.MaterialNamePL = jobMaterial.MaterialNamePL;
 
         fetch(conf.api + '/auth/updateJobMaterial/'+ event.detail.body.ID,
         {
@@ -171,6 +173,7 @@
                 jobNameValue: '',
                 peoprtyName: '',
                 materialName: '',
+                materialNamePL: '',
                 materialCost: ''
             }
 
@@ -254,6 +257,7 @@
         {name: 'SubStageName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'JobName', show: true, edit: false, width: '150px', tooltip: true},
         {name: 'MaterialName', show: true, edit: true, width: '150px', tooltip: true},
+        {name: 'MaterialNamePL', show: true, edit: true, width: '150px', tooltip: true},
         {name: 'MaterialCost', show: true, edit: true, width: '50px'},
         {name: 'Unit', show: true, edit: false, with: '50px'},
         {name: 'PropertyName', show: true, edit: false, width: '150px', tooltip: true}
@@ -277,6 +281,13 @@
                         class="text-field"
                         bind:value={material.materialName}
                         label="Material Name"/>
+
+                    <Textfield
+                        required 
+                        variant="filled"
+                        class="text-field"
+                        bind:value={material.materialNamePL}
+                        label="Material Name PL"/>
 
                     <Select variant="filled" class="material-select" bind:value={stageName} label='Stage'>
                         {#each stageNames as stage}

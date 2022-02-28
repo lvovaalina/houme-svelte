@@ -1,0 +1,122 @@
+{
+    "header": {
+        "contact": "Kontakt",
+        "dashboard": "Panel"
+    },
+    "monthNames": {
+        "jan": "Sty",
+        "feb": "Lut",
+        "mar": "Mar",
+        "apr": "Kwi",
+        "may": "Maj",
+        "jun": "Cze",
+        "jul": "Lip",
+        "aug": "Sie",
+        "sep": "Wrz",
+        "oct": "Paź",
+        "nov": "Lis",
+        "dec": "Gru"
+    },
+    "projectOptions": {
+        "workers": "Pracownicy",
+        "foundation": "Fundamenta",
+        "wall": "Ściany",
+        "finish": "Materiał wykończeniowy",
+        "roofing": "Zadaszenie",
+
+        "ribbon": "Wstążka",
+        "pile": "Pal",
+        "plate": "Talerz",
+
+        "CLT": "CLT",
+        "foamBlock": "Blok piankowy",
+        "brick": "Cegła",
+        "frame": "Rama",
+        
+        "plaster": "Plaster",
+        "ventfacade": "Ventfacade",
+
+        "fold": "Na rąbek",
+        "softRoof": "Miękki dach",
+        "roofTiles": "Dachówki",
+
+        "max": "Maximum",
+        "min": "Minimum",
+        "opt": "Optimal"
+    },
+    "details": {
+        "pageTitle": "Widok Projektu",
+        "nav": {
+            "details": "Detale",
+            "model": "Model",
+            "timeline": "Oś czasu",
+            "jobs": "Pracy",
+            "materials": "Materiały"
+        },
+        "projectDetailsCard": {
+            "title": "Szczegóły Projektu",
+            "duration": "Trwanie",
+            "area": "Powierzchnia",
+            "margin": "Waluta",
+            "projectCost": "Koszt projektu",
+            "jobCost": "Koszt budowy",
+            "materialCost": "Koszt materiałów",
+            "workers": "Pracownicy",
+            "helperText": "Zmień materiały i/lub liczbę pracowników, aby ponownie obliczyć czas trwania i koszt projektu:",
+            "options": "Opcje",
+            "recalculate": "Przeliczyć"
+        },
+        "jobs": {
+            "stage": "Etap",
+            "cost": "Koszt",
+            "duration": "Trwanie",
+            "propertyName": "Nazwa właściwości",
+            "volume": "Ilość",
+            "workers": "Pracownicy"
+        },
+        "materials": {
+            "material": "Material",
+            "cost": "Cost",
+            "volume": "Ilość",
+            "nominalCost": "Koszt nominalny",
+            "inStockByDate": "W magazynie według daty",
+            "inSteps": "W krokach"
+        },
+        "timeline": {
+            "stages": "Etapy",
+            "startDate": "Data Rozpoczęcia",
+            "endDate": "Data Zakonczenia",
+            "workers": "Pracownicy",
+            "jobCost": "Koszt Pracy",
+            "materialCost": "Koszt Materiału",
+            "materials": "Materiały"
+        }
+    },
+    "getYourPlan": {
+        "pageTitle": "Zdobądź Plan",
+        "title": "Zdobądź swój plan",
+        "subTitle": "Prześlij swój projekt, a my wyślemy Ci plan budowy z diagramem Gantta i potrzebnymi materiałami!",
+        "click": "Kliknij, aby przesłać",
+        "drag": "lub przeciągnij i upuść",
+        "maxSize": "Maksymalny rozmiar 300 MB",
+        "email": "E-mail",
+        "uploadButtonLabel": "Uzyskaj Plan",
+        "projectsHeader": "Zobacz, jak firmy planują swój proces",
+        "seeProjectButtonLabel": "Zobacz Projekt",
+        "thankYouHeader": "Dziękuję!",
+        "thankYouSubheader": "Odezwiemy się tak szybko, jak to możliwe",
+        "uploadMore": "Załaduj więcej",
+        "uploadError": "Nie można przesłać pliku!",
+        "uploadErrorHelpMessage": "Sprawdź rozmiar i rozszerzenie pliku."
+    },
+    "dashboard": {
+        "pageTitle": "Panel",
+        "title": "Chcesz zobaczyć swój plan budowy?",
+        "subtitle": "Prześlij swój projekt, a my wyślemy Ci plan budowy z diagramem Gantta i potrzebnymi materiałami!",
+        "seeProjectButtonLabel": "Zobacz Projekt",
+        "uploadButtonLabel": "Uzyskaj Plan"
+    },
+    "units": {
+        "days": "dni"
+    }
+}

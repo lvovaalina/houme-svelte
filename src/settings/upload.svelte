@@ -24,7 +24,7 @@
         let formData = new FormData();
         formData.append("file", file)
 
-        fetch(conf.api  + '/auth/upload', {
+        fetch(conf.api  + '/auth/forge/upload', {
             method: 'POST',
             body: formData,
             credentials: 'include',

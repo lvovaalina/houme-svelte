@@ -21,12 +21,28 @@
         });
     }
 
+    function handleDelete(event) {
+        fetch(conf.api + '/auth/deleteFile/' + event.detail.body.fileName, {
+            method: 'DELETE',
+            credentials: 'include',
+        })
+        .then((response) => {
+            if (response.ok) {
+                reload();
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
     onMount(() => {
         reload();
     });
 
     const table_config = {
         name: 'Forge files',
+        options: ['DELETE'],
         columns_setting: [
             {name: 'bucketName', show: true, edit: false, width: '50px'},
             {name: 'fileName', show: true, edit: false, width: '50px'},
@@ -39,8 +55,9 @@
 <div class="forge-files-table">
     <h2>Forge Files</h2>
     <SvelteGenericCrudTable
-            table_config={table_config}
-            table_data={forgeFiles}/>
+        table_config={table_config}
+        table_data={forgeFiles}
+        on:delete={handleDelete}/>
 </div>
 
 <style>

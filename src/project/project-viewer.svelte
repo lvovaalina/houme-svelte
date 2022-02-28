@@ -161,7 +161,7 @@
                     }
 
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
-                        newTask.propertyName = job.Job.Property.PropertyName;
+                        newTask.propertyName = isEN ? job.Job.Property.PropertyName : job.Job.Property.PropertyNamePL;
                         newTask.propertyUnit = job.Job.Property.PropertyUnit;
                         newTask.propertyValue = projectProperty.PropertyValue;
                     } else {
@@ -175,7 +175,7 @@
                 
                 if (jobs.length == 1) {
                     if (job.Job.Property && !!job.Job.Property.PropertyCode) {
-                        stageVM.propertyName = job.Job.Property.PropertyName;
+                        stageVM.propertyName = isEN ? job.Job.Property.PropertyName : job.Job.Property.PropertyNamePL;
                         stageVM.propertyUnit = job.Job.Property.PropertyUnit;
                         stageVM.propertyValue = projectProperty.PropertyValue;
                         isPropertySetForStage = true;
@@ -227,7 +227,7 @@
 
                 let projectProperty = propertiesMap.get(jobs[0].PropertyCode);
                 if (projectProperty && projectProperty.Job && projectProperty.Job.Property) {
-                    stageVM.propertyName = projectProperty.Job.Property.PropertyName;
+                    stageVM.propertyName = isEN ? projectProperty.Job.Property.PropertyName : projectProperty.Job.Property.PropertyNamePL;
                     stageVM.propertyUnit = projectProperty.Job.Property.PropertyUnit;
                     stageVM.propertyValue = projectProperty.PropertyValue;
                 } else {
@@ -279,7 +279,7 @@
 
                         let projectProperty = propertiesMap.get(st.PropertyCode);
                         if (projectProperty && projectProperty.Job.Property) {
-                            subtask.propertyName = projectProperty.Job.Property.PropertyName;
+                            subtask.propertyName = isEN ? projectProperty.Job.Property.PropertyName : projectProperty.Job.Property.PropertyNamePL;
                             subtask.propertyUnit = projectProperty.Job.Property.PropertyUnit;
                             subtask.propertyValue = projectProperty.PropertyValue;
                         } else {

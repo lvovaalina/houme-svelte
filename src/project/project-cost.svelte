@@ -19,9 +19,12 @@
     function rowClick(className) {
         let rows = document.getElementsByClassName(className);
         if (rows && rows.length !== 0) {
-            rows.forEach(element => {
-                element.classList.toggle("hidden-subtasks")
-            });
+            for (let row of rows) {
+                row.classList.toggle("hidden-subtasks")
+            }
+            // rows.forEach(element => {
+            //     element.classList.toggle("hidden-subtasks")
+            // });
 
             let row = document.getElementsByClassName(className + '-icon')[0];
             row.classList.toggle('fa-angle-down');

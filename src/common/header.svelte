@@ -62,7 +62,7 @@
             <Row>
                 <Section class="header-section" style="align-items: center;">
                     <a class="header-logo-link" target="_blink" href="https://houmly.com">
-                        <img class="header-logo" src="/houmly-logo.png" alt="Houmly logo"/>
+                        <img class="header-logo" src="/houmly-logo.svg" alt="Houmly logo"/>
                     </a>
                     {#if !!projectName}
                         <Link class="project-dashboard-link" 

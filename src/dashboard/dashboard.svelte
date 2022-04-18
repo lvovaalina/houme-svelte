@@ -123,14 +123,14 @@
               </div>
             {/each}
         </div>
-        <div class="upload-project-link-container">
+        <!-- <div class="upload-project-link-container">
             <h1>{$_("dashboard.title")}</h1>
             <p>{$_("dashboard.subtitle")}</p>
 
                 <div class="get-plan-link-container">
                     <Link to="{lang}/upload">{$_("dashboard.uploadButtonLabel")}</Link>
                 </div>
-        </div>
+        </div> -->
     </div>
 
     {:else}
@@ -142,7 +142,7 @@
 
 <style>
     .card-container {
-        width: 45%;
+        width: 30%;
         margin-bottom: 15px;
     }
 
@@ -187,12 +187,12 @@
     }
 
     .project-cards {
-        width: 70%;
         /* border-right: 1px solid #eeeeee; */
         display: flex;
-        justify-content: space-around;
         flex-wrap: wrap;
         padding-top: 15px;
+        justify-content: space-between;
+        width: 100%;
     }
 
     :global(.project-card h3) {
@@ -346,6 +346,10 @@
             width: 10px !important;
             margin-right: 0 !important;
         }
+
+        .card-container {
+            width: 50%;
+        }
     }
 
     @media only screen and (max-width:989px) {
@@ -458,6 +462,13 @@
 
         .solo-demo-container {
             padding: 5px 0;
+        }
+    }
+
+    @media only screen and (max-width:839px)
+    {
+        .card-container {
+            width: 100%;
         }
     }
 </style>

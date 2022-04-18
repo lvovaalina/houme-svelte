@@ -95,11 +95,11 @@
                         on:click={() => changeLanguage('pl')}>
                         PL
                     </p>
-                     {#if !!projectName}
+                     <!-- {#if !!projectName}
                             <div class="get-plan-link-container">
                                 <Link to="/upload">{$_("dashboard.uploadButtonLabel")}</Link>
                             </div>
-                        {/if}
+                        {/if} -->
                     {/if}
                 </Section>
             </Row>

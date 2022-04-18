@@ -70,9 +70,9 @@
 		<Route path="{lang}view/:projectId/details" let:params>
 			<ProjectViewer projectId={params.projectId} active='Details'></ProjectViewer>
 		</Route>
-		<Route path="{lang}/upload" let:params>
+		<!-- <Route path="{lang}/upload" let:params>
 			<UploadModel />
-		</Route>
+		</Route> -->
 		<Route path="*">
 			<NotFound />
 		</Route>
